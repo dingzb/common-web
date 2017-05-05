@@ -1,0 +1,45 @@
+/*
+*　数据表相关样式，包含查询表单
+*/
+
+.ws-search-btn-group {
+    text-align: right;
+}
+
+.ws-search-btn-group > .btn {
+    margin-bottom: 10px;
+}
+
+.ws-search-btn-group.ws-inline {
+    display: inline-block;
+}
+
+.ws-search-input-group > .form-group {
+    margin-right: 20px;
+    margin-bottom: 10px;
+}
+
+.ws-search-input-group > .form-group label:after {
+    content: ' :';
+    margin-right: 10px;
+}
+
+.ws-datagrid td .btn-link {
+    color: #333333;
+}
+
+.ws-datagrid td .btn-sm {
+    padding: 0 6px;
+}
+
+.ws-datagrid td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ws-datagrid th {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
