@@ -64,6 +64,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity> implements User
             throw new ServiceException(LocaleUtil.getMessage("exception.validate.exist", LocaleUtil.getMessage("system.user.form.username")));
         }
         try {
+
             userEntity = userDao.login(username, StringTools.Md5(password));
         } catch (Exception e) {
             logger.catching(e);

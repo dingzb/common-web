@@ -30,11 +30,13 @@ public class UserAspect {
 
         if (baseQuery != null || baseModel != null) {
             UserModel user = (UserModel) WebUtils.getSessionAttribute(((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest(), AttrName.SESSION_USER);
-            if (baseQuery != null) {
-                baseQuery.setUserId(user.getId());
-            }
-            if (baseModel != null) {
-                baseModel.setUserId(user.getId());
+            if (user != null){
+                if (baseQuery != null) {
+                    baseQuery.setUserId(user.getId());
+                }
+                if (baseModel != null) {
+                    baseModel.setUserId(user.getId());
+                }
             }
         }
 

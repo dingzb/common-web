@@ -1,0 +1,205 @@
+<div ng-controller="taxManageCtrl">
+    <ws-datagrid configuration="datagrid" inner-ctrl="innerCtrl">
+        <div class="collapse" id="showOrHide">
+            <form class="form-inline">
+                <div class="ws-search-input-group">
+                    <div class="form-group">
+                        <label for="name">名称</label>
+                        <input class="form-control input-sm" type="text" placeholder="名称" id="name"
+                               ng-model="searchParams.name">
+                    </div>
+                    <div class="ws-search-btn-group ws-inline">
+                        <button class="btn btn-info btn-sm" type="submit" ng-click="searchGroup()">查询</button>
+                        <button class="btn btn-info btn-sm" type="button" ng-click="resetSearch()">清空</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div>
+            <button class="btn btn-info btn-sm" type="button" ng-click="showAdd()"
+                    ws-permcode="system.permission.group.add">添加
+            </button>
+            <button class="btn btn-info btn-sm" type="button" ng-click="editGroup()"
+                    ws-permcode="system.permission.group.edit">编辑
+            </button>
+            <button class="btn btn-info btn-sm" type="button" ng-click="delGroup()"
+                    ws-permcode="system.permission.group.del">删除
+            </button>
+            <!-- Single button -->
+            <div class="btn-group">
+                <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                    配置权限 <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="" ng-click="showAuthPlace()">场所</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="" ng-click="showAuthAp()">无线接入</a></li>
+                </ul>
+            </div>
+            <button class="btn btn-primary btn-sm pull-right" data-toggle="collapse" data-target="#showOrHide">显示/隐藏表格
+            </button>
+        </div>
+    </ws-datagrid>
+    <!-- 添加业务 -->
+    <div class="modal fade" id="addModal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" data-backdrop="static">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">添加业务</h4>
+                </div>
+                <div class="modal-body">
+                    <form name="addForm" novalidate>
+                        <table class="ws-form-table input-long">
+                            <tr>
+                                <th><label for="add_taxpayer_code">纳税人识别号：</label></th>
+                                <td>
+                                    <input id="add_taxpayer_code" class="form-control input-sm" type="text" name="taxpayerCode"
+                                           placeholder="纳税人识别号"
+                                           ng-model="add.taxpayerCode" required maxlength="10">
+                                    <div ng-messages="addForm.taxpayerCode.$error"
+                                         ng-show="addForm.taxpayerCode.$dirty && addForm.taxpayerCode.$invalid"
+                                         ng-messages-multiple class="ws-form-msg-err">
+                                        <span ng-message="required" class="label label-danger">纳税人识别号为必填项</span>
+                                    </div>
+                                </td>
+                                <th><label for="add_taxpayer_name">纳税人名称：</label></th>
+                                <td>
+                                    <input id="add_taxpayer_name" class="form-control input-sm" type="text" name="taxpayerName"
+                                           placeholder="纳税人名称"
+                                           ng-model="add.taxpayerName" required maxlength="10">
+                                    <div ng-messages="addForm.taxpayerName.$error"
+                                         ng-show="addForm.taxpayerName.$dirty && addForm.taxpayerName.$invalid"
+                                         ng-messages-multiple class="ws-form-msg-err">
+                                        <span ng-message="required" class="label label-danger">纳税人名称为必填项</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th><label for="add_category_type">业务类型：</label></th>
+                                <td>
+                                    <select id="add_category_type" class="form-control input-sm" name="categoryType"
+                                            ng-model="add.categoryTypeId">
+                                        <option value="">请选择</option>
+                                        <option ng-selected="categoryType.id == add.categoryTypeId" ng-repeat="categoryType in categoryTypes"
+                                                value="{{categoryType.id}}" ng-bind="categoryType.name"></option>
+                                    </select>
+                                    <div class="ws-form-msg-err"
+                                         ng-messages="addForm.categoryType.$error"
+                                         ng-show="addForm.categoryType.$dirty && addForm.categoryType.$invalid"
+                                         ng-messages-multiple>
+                                        <span ng-message="required" class="label label-danger">业务类型必选</span>
+                                    </div>
+                                </td>
+                                <th><label for="add_category">业务项目：</label></th>
+                                <td>
+                                    <select id="add_category" class="form-control input-sm" name="category"
+                                            ng-model="add.categoryId">
+                                        <option value="">请选择</option>
+                                        <option ng-selected="category.id == add.categoryId" ng-repeat="category in categories"
+                                                value="{{category.id}}" ng-bind="category.name"></option>
+                                    </select>
+                                    <div class="ws-form-msg-err"
+                                         ng-messages="addForm.category.$error"
+                                         ng-show="addForm.category.$dirty && addForm.category.$invalid"
+                                         ng-messages-multiple>
+                                        <span ng-message="required" class="label label-danger">业务项目必选</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th><label for="add_desc">业务描述：</label></th>
+                                <td colspan="3">
+                                    <textarea id="add_desc" class="form-control" type="text" name="description"
+                                              style="resize: none; height: 100px; width: 500px; margin-top: 10px;"
+                                              placeholder="业务描述" ng-model="add.description" maxlength="500" required></textarea>
+                                    <div ng-messages="addForm.description.$error"
+                                         ng-show="addForm.description.$dirty && addForm.description.$invalid"
+                                         ng-messages-multiple class="ws-form-msg-err">
+                                        <span ng-message="required" class="label label-danger">业务描述为必填项</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-info btn btn-sm" ng-click="reset()">清空</button>
+                    <button type="button" class="btn-info btn btn-sm" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn-info btn btn-sm" ng-click="onSave()">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 编辑用户组 -->
+    <div class="modal fade" id="editModal" role="dialog" data-backdrop="static">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">编辑组</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="editGroup" name="editForm" novalidate>
+                        <div class="form-group"
+                             ng-class="{'has-error has-feedback' : editForm.name.$dirty && editForm.name.$invalid}">
+                            <label class="col-sm-2 control-label" for="edit-name">名称</label>
+                            <div class="col-sm-7">
+                                <input id="edit-name" name="name" type="text" class="form-control input-sm" ng-model="edit.name"
+                                       placeholder="必填，不可重复" disabled="disabled"><span
+                                    class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"
+                                    ng-show="editForm.name.$dirty && editForm.name.$invalid"></span>
+                            </div>
+                            <div class="col-md-3">
+                                <img ng-show="editForm.name.uniqueAajax" alt="" style="width: 16px; height: 16px;"
+                                     src="resources/image/wait.gif">
+                                <p ng-show="editForm.name.$dirty && editForm.name.$invalid" class="form-control-static"
+                                   style="font-size: small; color: #A94442">
+                                    <span class="glyphicon glyphicon-info-sign"></span>&nbsp; <span
+                                        ng-show="editForm.name.$error.required">不能为空</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group"
+                             ng-class="{'has-error has-feedback' : addForm.type.$dirty && addForm.type.$invalid}">
+                            <label class="col-sm-2 control-label" for="add-description">类型</label>
+                            <div class="col-sm-7">
+                                <select disabled="disabled" name="type" class="form-control input-sm"
+                                        ng-model="edit.type" required>
+                                    <option value="">-请选择-</option>
+                                    <option ng-repeat="type in types" value="{{type.id}}" ng-bind="type.name"></option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <p ng-show="addForm.type.$dirty && addForm.type.$invalid" class="form-control-static"
+                                   style="font-size: small; color: #A94442">
+                                    <span class="glyphicon glyphicon-info-sign"></span>&nbsp; <span
+                                        ng-show="addForm.type.$error.required">不能为空</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="edit-description">描述</label>
+                            <div class="col-sm-7">
+                                <input id="edit-description" name="description" type="text" class="form-control input-sm"
+                                       ng-model="edit.description" placeholder="组作用简要说明" maxlength="50">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="btn_Edit1 mb20" style="margin-left: 34%;">
+                    <button type="button" class="btn btn-info btn-sm" ng-click="editReset()">清空</button>
+                    <button type="button" class="btn btn-info btn-sm" data-dismiss="modal" ng-click="editReset()">关闭</button>
+                    <button type="button" class="btn btn-info btn-sm" ng-click="editSave()">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
