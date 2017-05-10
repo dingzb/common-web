@@ -6,11 +6,14 @@ import com.tendyron.wifi.web.entity.business.tax.BusCategoryEntity;
 import com.tendyron.wifi.web.entity.business.tax.BusCategoryTypeEntity;
 import com.tendyron.wifi.web.model.business.tax.BusCategoryTypeModel;
 import com.tendyron.wifi.web.service.BaseServiceImpl;
+import com.tendyron.wifi.web.service.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,15 +29,23 @@ public class BusinessCategoryTypeServiceImpl extends BaseServiceImpl<BusCategory
     private BusinessCategoryTypeDao businessCategoryTypeDao;
 
     @Override
-    public List<BusCategoryTypeModel> list() {
+    @Transactional
+    public List<BusCategoryTypeModel> list() throws ServiceException {
 
-        List<BusCategoryTypeModel> result = new ArrayList<>();
+        List<BusCategoryTypeModel> bcms = new ArrayList<>();
 
         try {
             List<BusCategoryTypeEntity> bces = businessCategoryTypeDao.getList();
+
+            for (BusCategoryTypeEntity bce : bces) {
+                BusCategoryTypeModel bcm = new BusCategoryTypeModel();
+                BeanUtils.copyProperties(bce, bcm);
+                bcms.add(bcm);
+            }
         } catch (Exception e) {
             logger.error("",e);
+            throw new ServiceException();
         }
-        return null;
+        return bcms;
     }
 }
