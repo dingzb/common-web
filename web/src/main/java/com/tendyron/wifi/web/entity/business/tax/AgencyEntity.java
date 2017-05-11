@@ -1,6 +1,7 @@
 package com.tendyron.wifi.web.entity.business.tax;
 
 import com.tendyron.wifi.web.entity.BaseEntity;
+import com.tendyron.wifi.web.entity.system.UserEntity;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -15,6 +16,7 @@ public class AgencyEntity extends BaseEntity {
     private AgencyEntity parent;
     private Set<AgencyEntity> children;
     private Set<BusinessEntity> businesses;
+    private Set<UserEntity> users;
 
     @Column(name = "name", nullable = false, length = 50)
     public String getName() {
@@ -51,5 +53,14 @@ public class AgencyEntity extends BaseEntity {
 
     public void setBusinesses(Set<BusinessEntity> businesses) {
         this.businesses = businesses;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "agency")
+    public Set<UserEntity> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<UserEntity> users) {
+        this.users = users;
     }
 }

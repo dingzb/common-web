@@ -1,6 +1,9 @@
 package com.tendyron.wifi.web.query.business.tax;
 
 import com.tendyron.wifi.web.query.PagingQuery;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
 
 /**
  * Created by Neo on 2017/5/9.
@@ -11,6 +14,15 @@ public class BusinessQuery extends PagingQuery {
     private Boolean hasIssue;
     private String issueId;
     private String agencyId;
+
+    private String taxpayerCode;
+    private String taxpayerName;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    private Date createTimeStart;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    private Date createTimeEnd;
+//    private String[] agencyIds;
 
     public String getContent() {
         return content;
@@ -51,4 +63,44 @@ public class BusinessQuery extends PagingQuery {
     public void setAgencyId(String agencyId) {
         this.agencyId = agencyId;
     }
+
+    public String getTaxpayerCode() {
+        return taxpayerCode;
+    }
+
+    public void setTaxpayerCode(String taxpayerCode) {
+        this.taxpayerCode = taxpayerCode;
+    }
+
+    public String getTaxpayerName() {
+        return taxpayerName;
+    }
+
+    public void setTaxpayerName(String taxpayerName) {
+        this.taxpayerName = taxpayerName;
+    }
+
+    public Date getCreateTimeStart() {
+        return createTimeStart;
+    }
+
+    public void setCreateTimeStart(Date createTimeStart) {
+        this.createTimeStart = createTimeStart;
+    }
+
+    public Date getCreateTimeEnd() {
+        return createTimeEnd;
+    }
+
+    public void setCreateTimeEnd(Date createTimeEnd) {
+        this.createTimeEnd = createTimeEnd;
+    }
+
+//    public String[] getAgencyIds() {
+//        return agencyIds;
+//    }
+//
+//    public void setAgencyIds(String[] agencyIds) {
+//        this.agencyIds = agencyIds;
+//    }
 }

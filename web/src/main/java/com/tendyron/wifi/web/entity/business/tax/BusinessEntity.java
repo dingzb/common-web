@@ -69,7 +69,7 @@ public class BusinessEntity extends BaseEntity {
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(name = "category_id")
     public BusCategoryEntity getCategory() {
         return category;
     }
@@ -78,7 +78,7 @@ public class BusinessEntity extends BaseEntity {
         this.category = category;
     }
 
-    @Column(name = "has_issue", nullable = false)
+    @Column(name = "has_issue")
     public Boolean getHasIssue() {
         return hasIssue;
     }
@@ -88,7 +88,7 @@ public class BusinessEntity extends BaseEntity {
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "issue_id", nullable = false)
+    @JoinColumn(name = "issue_id")
     public BusIssueEntity getIssue() {
         return issue;
     }
@@ -98,7 +98,7 @@ public class BusinessEntity extends BaseEntity {
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "agency_id", nullable = false)
+    @JoinColumn(name = "agency_id")
     public AgencyEntity getAgency() {
         return agency;
     }
@@ -108,7 +108,7 @@ public class BusinessEntity extends BaseEntity {
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "create_user_id", nullable = false)
+    @JoinColumn(name = "create_user_id")
     public UserEntity getCreate() {
         return create;
     }
@@ -118,7 +118,7 @@ public class BusinessEntity extends BaseEntity {
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "check_user_id", nullable = false)
+    @JoinColumn(name = "check_user_id")
     public UserEntity getCheck() {
         return check;
     }
@@ -128,7 +128,7 @@ public class BusinessEntity extends BaseEntity {
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "final_user_id", nullable = false)
+    @JoinColumn(name = "final_user_id")
     public UserEntity getFinalCheck() {
         return finalCheck;
     }
