@@ -24,5 +24,14 @@ angular.module('ws.stateConfig').config(['$stateProvider', function ($stateProvi
                 templateUrl: 'tpls/tax/business/manage.html'
             }
         }
+    }).state('main.tax.statistics', {
+        url: '/statistics'
+    }).state('main.tax.statistics.statement', {
+        url: '/statement',
+        views: {
+            'right@main.tax': {
+                templateUrl: 'tpls/tax/statistics/statement.html'
+            }
+        }
     });
 }]);

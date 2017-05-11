@@ -49,7 +49,8 @@ angular.module('ws.login', []).controller('loginInCtrl', ['$scope', '$http', '$s
             if (data.success) {
                 //保存权限认证信息
                 authorizationServ.set(data.data);
-                $state.go('main.welcome');
+                $state.go('main.tax');
+                // $state.go('main.welcome');
             } else {
                 if (data.message) {
                     $scope.errmsg = data.message;

@@ -45,7 +45,8 @@ angular.module('ws.permission', ['ws.basic', 'ui.router']).constant('wsPermissio
         }
         if ($rootScope.user && state == 'login') {
             evt.preventDefault();
-            $state.go('main.welcome');
+            $state.go('main.tax');
+            // $state.go('main.welcome');
             return;
         }
         console.info('get normal state');

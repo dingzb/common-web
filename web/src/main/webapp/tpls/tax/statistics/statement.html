@@ -1,0 +1,76 @@
+<div ng-controller="taxStatementCtrl">
+    <div>
+        <div class="collapse in" id="showOrHide">
+            <form class="form-inline">
+                <div class="ws-search-input-group">
+                    <div class="form-group">
+                        <label for="taxpayerName">机关</label>
+                        <input class="form-control input-sm" type="text" placeholder="机关" id="taxpayerName"
+                               ng-model="searchParams.taxpayerName">
+                    </div>
+                    <div class="form-group">
+                        <label title="创建时间起" for="createTimeStart">创建时间起</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                            <input size="16" type="text" id="createTimeStart" name="createTimeStart"
+                                   class="form-control input-sm"
+                                   placeholder="年-月-日 时:分" ng-model="searchParams.createTimeStart">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label title="创建时间止" for="createTimeEnd"> 创建时间止</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                            <input size="16" type="text" id="createTimeEnd" ng-init="initDtp()"
+                                   class="form-control input-sm" placeholder="年-月-日 时:分"
+                                   ng-model="searchParams.createTimeEnd">
+                        </div>
+                    </div>
+                    <div class="ws-search-btn-group ws-inline">
+                        <button class="btn btn-info btn-sm" type="submit" ng-click="statement()">查询</button>
+                        <button class="btn btn-info btn-sm" type="button" ng-click="resetSearch()">清空</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div style="padding: 20px;">
+        <table class="ws-statement">
+            <thead>
+            <tr>
+                <th colspan="5" class="ws-heading"><span>税务统计报表</span></th>
+            </tr>
+            <tr>
+                <th colspan="5" class="ws-subheading">统计单位：左云县国家税务局</th>
+            </tr>
+            <tr class="ws-header">
+                <th>主管税务机关</th>
+                <th>业务类型</th>
+                <th>业务项目</th>
+                <th>问题户数</th>
+                <th>问题类型</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="rec in recs">
+                <td rowspan="{{rec.aSpan.i}}" ng-bind="rec.agencyName" ng-if="rec.agencyName"></td>
+                <td rowspan="{{rec.ctSpan.i}}" ng-bind="rec.categoryTypeName" ng-if="rec.categoryTypeName"></td>
+                <td ng-bind="rec.name"></td>
+                <td ng-bind="rec.count"></td>
+                <td>
+                    <span ng-repeat="issue in rec.issueNames">{{issue}} </span>
+                </td>
+            </tr>
+            </tbody>
+            <!--<tfoot>-->
+            <!--<tr>-->
+                <!--<td colspan="5" style="text-align: right">2017年5月11日 16:11</td>-->
+            <!--</tr>-->
+            <!--</tfoot>-->
+        </table>
+    </div>
+</div>
