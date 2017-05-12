@@ -178,7 +178,9 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
                 businessEntity.setHasIssue(false);
                 businessEntity.setIssue(null);
             }
+            businessEntity.setBusTime(business.getBusTime());
             businessEntity.setDescription(business.getDescription());
+
             businessEntity.setModifyTime(new Date());
             businessDao.save(businessEntity);
         } catch (Exception e) {
@@ -213,6 +215,9 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
         try {
             for (String agencyId : query.getAgencyIds()) {
                 bQuery.setAgencyId(agencyId);
+                bQuery.setCreateTimeStart(query.getStartCreate());
+                bQuery.setCreateTimeEnd(query.getEndCreate());
+
                 AgencyEntity agency = agencyDao.getById(agencyId);
                 StatementModel sm = new StatementModel();
                 sm.setAgencyName(agency.getName());

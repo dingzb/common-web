@@ -6,6 +6,7 @@ import com.tendyron.wifi.web.entity.business.tax.BusCategoryEntity;
 import com.tendyron.wifi.web.entity.business.tax.BusIssueEntity;
 import com.tendyron.wifi.web.entity.system.UserEntity;
 import com.tendyron.wifi.web.model.BaseModel;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.FetchType;
@@ -23,16 +24,19 @@ public class BusinessModel extends BaseModel {
     private String taxpayerName;
     private String content;
     private String description;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", locale = "zh", timezone = "GMT+8")
+    private Date busTime;
     private Boolean hasIssue;
 
     private String agencyId;
     private String categoryId;
     private String categoryTypeId;
     private String issueId;
+    private String issueName;
     private String agencyName;
     private String categoryName;
     private String categoryTypeName;
-    private String issueName;
 
     private String createId;
     private String checkId;
@@ -213,5 +217,13 @@ public class BusinessModel extends BaseModel {
 
     public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
+    }
+
+    public Date getBusTime() {
+        return busTime;
+    }
+
+    public void setBusTime(Date busTime) {
+        this.busTime = busTime;
     }
 }

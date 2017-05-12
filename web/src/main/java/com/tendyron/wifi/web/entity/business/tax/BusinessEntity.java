@@ -17,6 +17,7 @@ public class BusinessEntity extends BaseEntity {
     private String taxpayerName;
     private String content;
     private String description;
+    private Date busTime;   //业务发生时间
 
     private Boolean hasIssue;
     private BusIssueEntity issue;
@@ -66,6 +67,15 @@ public class BusinessEntity extends BaseEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Column(name = "bus_time", length = 19)
+    public Date getBusTime() {
+        return busTime;
+    }
+
+    public void setBusTime(Date busTime) {
+        this.busTime = busTime;
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
