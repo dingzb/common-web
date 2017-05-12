@@ -7,6 +7,18 @@
 angular.module('ws.app').controller('taxManageCtrl', ['$rootScope', '$scope', '$http', function ($rootScope, $scope, $http) {
     $scope.searchParams = {};
     $scope.categories = [];
+    $scope.addObj = {};
+    $scope.editObj = {};
+
+    $scope.initDtp = function (e) {
+        $scope.datetimepicker('#add_time').onChange(function (d) {
+            $scope.addObj.busTime = d;
+        });
+        $scope.datetimepicker('#edit_time').onChange(function (d) {
+            $scope.editObj.busTime = d;
+        });
+    };
+
     $http.post('app/tax/business/category/type/list', {}).success(function (data) {
         if (data.success) {
             $scope.categoryTypes = data.data;
@@ -23,7 +35,7 @@ angular.module('ws.app').controller('taxManageCtrl', ['$rootScope', '$scope', '$
             typeId: typeId
         }).success(function (data) {
             if (data.success) {
-                $.extend(target ,data.data);
+                $.extend(target, data.data);
             } else if (data.message) {
                 $scope.alert(data.message, 'error');
             }
@@ -36,7 +48,7 @@ angular.module('ws.app').controller('taxManageCtrl', ['$rootScope', '$scope', '$
     function getIssue(target) {
         $http.post('app/tax/business/issue/list', {}).success(function (data) {
             if (data.success) {
-                $.extend(target ,data.data);
+                $.extend(target, data.data);
             } else if (data.message) {
                 $scope.alert(data.message, 'error');
             }
@@ -115,10 +127,14 @@ angular.module('ws.app').controller('taxManageCtrl', ['$rootScope', '$scope', '$
     $scope.showAdd = function () {
 
         $scope.addObj = {
-            issues: [],
             issueId: null
         };
-        getIssue($scope.addObj.issues);
+        $scope.addObj2 = {
+            issues: [],
+            categories: []
+        };
+
+        getIssue($scope.addObj2.issues);
         $scope.addForm.$setPristine();
         $("#addModal").modal('show');
     };
@@ -131,14 +147,16 @@ angular.module('ws.app').controller('taxManageCtrl', ['$rootScope', '$scope', '$
         $.extend($scope.addObj, {
             categoryId: null
         });
-        $scope.addObj.categories = [];
-        getCategory(typeId, $scope.addObj.categories);
+        $scope.addObj2.categories = [];
+        getCategory(typeId, $scope.addObj2.categories);
     };
 
     $scope.add = function () {
         if (!validateAddForm()) {
             return;
         }
+
+
         $scope.mask(true, 1);
         $http.post('app/tax/business/add', $scope.addObj).success(function (data) {
             if (data.success) {
@@ -180,22 +198,24 @@ angular.module('ws.app').controller('taxManageCtrl', ['$rootScope', '$scope', '$
             return;
         }
 
+        $scope.editObj2 = {categories: [], issues: []};
+
         $scope.editObj = {
             id: checkeds[0].id,
-            taxpayerCode:checkeds[0].taxpayerCode,
-            taxpayerName:checkeds[0].taxpayerName,
-            categoryTypeId:checkeds[0].categoryTypeId,
-            categoryId:checkeds[0].categoryId,
+            taxpayerCode: checkeds[0].taxpayerCode,
+            taxpayerName: checkeds[0].taxpayerName,
+            categoryTypeId: checkeds[0].categoryTypeId,
+            categoryId: checkeds[0].categoryId,
             hasIssue: checkeds[0].hasIssue,
             issueId: checkeds[0].issueId,
-            description:checkeds[0].description,
-            issues: []
+            description: checkeds[0].description,
+            busTime: checkeds[0].busTime
         };
 
-        getIssue($scope.editObj.issues);
+        getIssue($scope.editObj2.issues);
 
-        $scope.editObj.categories = [];
-        getCategory($scope.editObj.categoryTypeId, $scope.editObj.categories);
+        $scope.editObj2.categories = [];
+        getCategory($scope.editObj.categoryTypeId, $scope.editObj2.categories);
         $("#editModal").modal('show');
     };
 
@@ -207,8 +227,8 @@ angular.module('ws.app').controller('taxManageCtrl', ['$rootScope', '$scope', '$
         $.extend($scope.editObj, {
             categoryId: null
         });
-        $scope.editObj.categories = [];
-        getCategory(typeId, $scope.editObj.categories);
+        $scope.editObj2.categories = [];
+        getCategory(typeId, $scope.editObj2.categories);
     };
 
     $scope.edit = function () {

@@ -9,16 +9,33 @@ angular.module('ws.app').controller('taxStatementCtrl', ['$rootScope', '$scope',
     $scope.initDtp = function (e) {
         console.info(e);
         $scope.datetimepicker('#createTimeStart').onChange(function (d) {
-            $scope.searchParams.createTimeStart = d;
+            $scope.searchParams.startCreate = d;
         });
         $scope.datetimepicker('#createTimeEnd').onChange(function (d) {
-            $scope.searchParams.createTimeEnd = d;
+            $scope.searchParams.endCreate = d;
         });
     };
 
-    $scope.statement = function (agencyIds) {
+    $http.post('app/tax/agency/list', {}).success(function (data) {
+        if (data.success) {
+            $scope.searchParams.agencies = data.data;
+        } else if (data.message) {
+            $scope.alert(data.message, 'error');
+        }
+    }).error(function (data) {
+        $scope.alert(data, 'error');
+    });
 
-        agencyIds = ['BE3F79B002C2428994E63926C384A791'];
+    $scope.statement = function () {
+
+        agencyIds = [];
+        var ags = $('#agencies').find('input');
+        $.each(ags, function (i) {
+            var ag = $(ags[i]);
+            if (ag.is(':checked')) {
+                agencyIds.push(ag.attr('id'));
+            }
+        });
 
         var agencyIdStr = '';
 
@@ -28,8 +45,10 @@ angular.module('ws.app').controller('taxStatementCtrl', ['$rootScope', '$scope',
 
         agencyIdStr = agencyIdStr.substring(0, agencyIdStr.length - 1);
 
-        $http.post('http://localhost/app/tax/statistics/statement', {
-            agencyIdsStr: agencyIdStr
+        $http.post('app/tax/statistics/statement', {
+            agencyIdsStr: agencyIdStr,
+            startCreate: $scope.searchParams.startCreate,
+            endCreate: $scope.searchParams.endCreate
         }).success(function (data) {
             if (data.success) {
                 var rrrs = data.data;
@@ -47,7 +66,7 @@ angular.module('ws.app').controller('taxStatementCtrl', ['$rootScope', '$scope',
                                 aSpan: aSpan,
                                 ctSpan: ctSpan
                             }, r);
-                            aSpan.i = aSpan.i +1;
+                            aSpan.i = aSpan.i + 1;
                             ctSpan.i = ctSpan.i + 1;
                             recs.push(rec);
                             agencyName = false;

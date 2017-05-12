@@ -28,5 +28,6 @@
 }
 
 .ws-statement tr {
-    border-top: 1px dotted black;
+    border-top: 1px solid #7DBFA8;
+    font-family: "Microsoft Yahei", Tahoma, Geneva, sans-serif;
 }

@@ -72,7 +72,7 @@
                                 <th><label for="add_category_type">业务类型：</label></th>
                                 <td>
                                     <select id="add_category_type" class="form-control input-sm" name="categoryTypeId"
-                                            ng-model="addObj.categoryTypeId"  ng-change="addGetCategory(addObj.categoryTypeId)">
+                                            ng-model="addObj.categoryTypeId" ng-change="addGetCategory(addObj.categoryTypeId)">
                                         <option value="">请选择</option>
                                         <option ng-selected="categoryType.id == addObj.categoryTypeId" ng-repeat="categoryType in categoryTypes"
                                                 value="{{categoryType.id}}" ng-bind="categoryType.name"></option>
@@ -89,7 +89,7 @@
                                     <select id="add_category" class="form-control input-sm" name="categoryId"
                                             ng-model="addObj.categoryId">
                                         <option value="">请选择</option>
-                                        <option ng-selected="category.id == addObj.categoryId" ng-repeat="category in addObj.categories"
+                                        <option ng-selected="category.id == addObj.categoryId" ng-repeat="category in addObj2.categories"
                                                 value="{{category.id}}" ng-bind="category.name"></option>
                                     </select>
                                     <div class="ws-form-msg-err"
@@ -112,16 +112,32 @@
                                     <select id="add_issue" class="form-control input-sm" name="issueId" ng-disabled="!addObj.hasIssue"
                                             ng-model="addObj.issueId">
                                         <option value="">请选择</option>
-                                        <option ng-selected="issue.id == addObj.issueId" ng-repeat="issue in addObj.issues"
+                                        <option ng-selected="issue.id == addObj.issueId" ng-repeat="issue in addObj2.issues"
                                                 value="{{issue.id}}" ng-bind="issue.name"></option>
                                     </select>
                                 </td>
                             </tr>
                             <tr>
+                                <th><label for="add_time">业务时间：</label></th>
+                                <td>
+                                    <div class="input-group input-group-sm ws-datetimepicker">
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                            <input size="16" type="text" id="add_time" name="busTime" ng-init="initDtp()"
+                                                   class="form-control input-sm" style="width: 215px;"
+                                                   placeholder="年-月-日 时:分" ng-model="addObj.busTime">
+                                    </div>
+                                    <div ng-messages="addForm.busTime.$error"
+                                         ng-show="addForm.busTime.$dirty && addForm.busTime.$invalid"
+                                         ng-messages-multiple class="ws-form-msg-err">
+                                        <span ng-message="required" class="label label-danger">业务时间为必填项</span>
+                                    </div>
+                                </td>
                                 <th><label for="add_desc">业务描述：</label></th>
-                                <td colspan="3">
+                                <td>
                                     <textarea id="add_desc" class="form-control" type="text" name="description"
-                                              style="resize: none; height: 100px; width: 500px; margin-top: 10px;"
+                                              style="resize: none; height: 100px; width: 250px; margin-top: 10px;"
                                               placeholder="业务描述" ng-model="addObj.description" maxlength="500" required></textarea>
                                     <div ng-messages="addForm.description.$error"
                                          ng-show="addForm.description.$dirty && addForm.description.$invalid"
@@ -184,7 +200,7 @@
                                 <th><label for="edit_category_type">业务类型：</label></th>
                                 <td>
                                     <select id="edit_category_type" class="form-control input-sm" name="categoryTypeId" required
-                                            ng-model="editObj.categoryTypeId"  ng-change="editGetCategory(editObj.categoryTypeId)">
+                                            ng-model="editObj.categoryTypeId" ng-change="editGetCategory(editObj.categoryTypeId)">
                                         <option value="">请选择</option>
                                         <option ng-selected="categoryType.id == editObj.categoryTypeId" ng-repeat="categoryType in categoryTypes"
                                                 value="{{categoryType.id}}" ng-bind="categoryType.name"></option>
@@ -201,7 +217,7 @@
                                     <select id="edit_category" class="form-control input-sm" name="categoryId" required
                                             ng-model="editObj.categoryId">
                                         <option value="">请选择</option>
-                                        <option ng-selected="category.id == editObj.categoryId" ng-repeat="category in editObj.categories"
+                                        <option ng-selected="category.id == editObj.categoryId" ng-repeat="category in editObj2.categories"
                                                 value="{{category.id}}" ng-bind="category.name"></option>
                                     </select>
                                     <div class="ws-form-msg-err"
@@ -224,16 +240,32 @@
                                     <select id="edit_issue" class="form-control input-sm" name="issueId" ng-disabled="!editObj.hasIssue"
                                             ng-model="editObj.issueId">
                                         <option value="">请选择</option>
-                                        <option ng-selected="issue.id == editObj.issueId" ng-repeat="issue in editObj.issues"
+                                        <option ng-selected="issue.id == editObj.issueId" ng-repeat="issue in editObj2.issues"
                                                 value="{{issue.id}}" ng-bind="issue.name"></option>
                                     </select>
                                 </td>
                             </tr>
                             <tr>
+                                <th><label for="edit_time">业务时间：</label></th>
+                                <td>
+                                    <div class="input-group input-group-sm ws-datetimepicker">
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                        <input size="16" type="text" id="edit_time" name="busTime" ng-init="initDtp()"
+                                               class="form-control input-sm" style="width: 215px;"
+                                               placeholder="年-月-日 时:分" ng-model="editObj.busTime">
+                                    </div>
+                                    <div ng-messages="addForm.busTime.$error"
+                                         ng-show="editForm.busTime.$dirty && editForm.busTime.$invalid"
+                                         ng-messages-multiple class="ws-form-msg-err">
+                                        <span ng-message="required" class="label label-danger">业务时间为必填项</span>
+                                    </div>
+                                </td>
                                 <th><label for="edit_desc">业务描述：</label></th>
-                                <td colspan="3">
+                                <td>
                                     <textarea id="edit_desc" class="form-control" type="text" name="description"
-                                              style="resize: none; height: 100px; width: 500px; margin-top: 10px;"
+                                              style="resize: none; height: 100px; width: 250px; margin-top: 10px;"
                                               placeholder="业务描述" ng-model="editObj.description" maxlength="500" required></textarea>
                                     <div ng-messages="editForm.description.$error"
                                          ng-show="editForm.description.$dirty && editForm.description.$invalid"
@@ -286,19 +318,19 @@
                                 <th><label for="detail_category_type">业务类型：</label></th>
                                 <td>
                                     <input id="detail_category_type" class="form-control input-sm" name="categoryTypeId"
-                                            ng-model="detailObj.categoryTypeName" readonly>
+                                           ng-model="detailObj.categoryTypeName" readonly>
                                 </td>
                                 <th><label for="detail_category">业务项目：</label></th>
                                 <td>
                                     <input id="detail_category" class="form-control input-sm" name="categoryId"
-                                            ng-model="detailObj.categoryName" readonly>
+                                           ng-model="detailObj.categoryName" readonly>
                                 </td>
                             </tr>
                             <!--临时加上问题类型-->
                             <tr>
                                 <th><label for="detail_category_type">是否存在问题：</label></th>
                                 <td>
-                                    <input ng-model="detailObj.hasIssue" type="checkbox" ng-change="addHasIssue()" readonly>
+                                    <input ng-model="detailObj.hasIssue" type="checkbox" disabled="disabled">
                                     <span ng-show="detailObj.hasIssue">存在问题</span>
                                 </td>
                                 <th><label for="detail_issue">问题种类：</label></th>
@@ -308,10 +340,21 @@
                                 </td>
                             </tr>
                             <tr>
+                                <th><label for="detail_time">业务时间：</label></th>
+                                <td>
+                                    <div class="input-group input-group-sm ws-datetimepicker">
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                        <input size="16" type="text" id="detail_time" name="busTime" readonly
+                                               class="form-control input-sm" style="width: 215px;"
+                                               placeholder="年-月-日 时:分" ng-model="detailObj.busTime">
+                                    </div>
+                                </td>
                                 <th><label for="detail_desc">业务描述：</label></th>
-                                <td colspan="3">
+                                <td>
                                     <textarea id="detail_desc" class="form-control" type="text" name="description" readonly
-                                              style="resize: none; height: 100px; width: 500px; margin-top: 10px;"
+                                              style="resize: none; height: 100px; width: 250px; margin-top: 10px;"
                                               placeholder="业务描述" ng-model="detailObj.description" maxlength="500" required></textarea>
                                 </td>
                             </tr>
