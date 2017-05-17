@@ -19,8 +19,13 @@ public class BusinessEntity extends BaseEntity {
     private String description;
     private Date busTime;   //业务发生时间
 
-    private Boolean hasIssue;
-    private BusIssueEntity issue;
+    private ExamineEntity firstExamine;
+
+    private ExamineEntity secondExamine;
+
+    private ExamineEntity thirdExamine;
+
+    private Boolean amendment; //是否已经整改
 
     private BusCategoryEntity category;
 
@@ -88,25 +93,6 @@ public class BusinessEntity extends BaseEntity {
         this.category = category;
     }
 
-    @Column(name = "has_issue")
-    public Boolean getHasIssue() {
-        return hasIssue;
-    }
-
-    public void setHasIssue(Boolean hasIssue) {
-        this.hasIssue = hasIssue;
-    }
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "issue_id")
-    public BusIssueEntity getIssue() {
-        return issue;
-    }
-
-    public void setIssue(BusIssueEntity issue) {
-        this.issue = issue;
-    }
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "agency_id")
     public AgencyEntity getAgency() {
@@ -163,5 +149,44 @@ public class BusinessEntity extends BaseEntity {
 
     public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
+    }
+
+    @OneToOne
+    @JoinColumn(name = "examine_first_id")
+    public ExamineEntity getFirstExamine() {
+        return firstExamine;
+    }
+
+    public void setFirstExamine(ExamineEntity firstExamine) {
+        this.firstExamine = firstExamine;
+    }
+
+    @OneToOne
+    @JoinColumn(name = "examine_second_id")
+    public ExamineEntity getSecondExamine() {
+        return secondExamine;
+    }
+
+    public void setSecondExamine(ExamineEntity secondExamine) {
+        this.secondExamine = secondExamine;
+    }
+
+    @OneToOne
+    @JoinColumn(name = "examine_third_id")
+    public ExamineEntity getThirdExamine() {
+        return thirdExamine;
+    }
+
+    public void setThirdExamine(ExamineEntity thirdExamine) {
+        this.thirdExamine = thirdExamine;
+    }
+
+    @Column(name = "amendment")
+    public Boolean getAmendment() {
+        return amendment;
+    }
+
+    public void setAmendment(Boolean amendment) {
+        this.amendment = amendment;
     }
 }

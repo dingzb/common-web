@@ -34,6 +34,7 @@ public class UserEntity extends BaseEntity implements java.io.Serializable {
     private Set<RoleEntity> roles = new HashSet<RoleEntity>(0);
 
     private AgencyEntity agency;
+    private Boolean agencyBoss;
 
     public UserEntity() {
     }
@@ -180,6 +181,15 @@ public class UserEntity extends BaseEntity implements java.io.Serializable {
 
     public void setAgency(AgencyEntity agency) {
         this.agency = agency;
+    }
+
+    @Column(name = "agency_boss")
+    public Boolean getAgencyBoss() {
+        return agencyBoss;
+    }
+
+    public void setAgencyBoss(Boolean agencyBoss) {
+        this.agencyBoss = agencyBoss;
     }
 
     @Override

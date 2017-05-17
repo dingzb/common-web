@@ -13,7 +13,7 @@ import java.util.Set;
 public class BusIssueEntity extends BaseEntity {
 
     private String name;
-    private Set<BusinessEntity> business;
+    private Set<ExamineEntity> examines;
 
     @Column(name = "name", length = 50, nullable = false)
     public String getName() {
@@ -24,12 +24,13 @@ public class BusIssueEntity extends BaseEntity {
         this.name = name;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "issue")
-    public Set<BusinessEntity> getBusiness() {
-        return business;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "bus_tax_examine_issue", joinColumns = {@JoinColumn(name = "examine_id")}, inverseJoinColumns = {@JoinColumn(name = "issue_id")})
+    public Set<ExamineEntity> getExamines() {
+        return examines;
     }
 
-    public void setBusiness(Set<BusinessEntity> business) {
-        this.business = business;
+    public void setExamines(Set<ExamineEntity> examines) {
+        this.examines = examines;
     }
 }

@@ -80,11 +80,11 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
                     businessModel.setCategoryTypeName(categoryTypeEntity.getName());
                 }
 
-                BusIssueEntity issueEntity = businessEntity.getIssue();
-                if (issueEntity != null) {
-                    businessModel.setIssueId(issueEntity.getId());
-                    businessModel.setIssueName(issueEntity.getName());
-                }
+//                BusIssueEntity issueEntity = businessEntity.getIssue();
+//                if (issueEntity != null) {
+//                    businessModel.setIssueId(issueEntity.getId());
+//                    businessModel.setIssueName(issueEntity.getName());
+//                }
 
                 UserEntity create = businessEntity.getCreate();
                 if (create != null) {
@@ -134,10 +134,10 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
                 BusCategoryEntity categoryEntity = businessCategoryDao.getById(businessModel.getCategoryId());
                 businessEntity.setCategory(categoryEntity);
             }
-            if (businessModel.getHasIssue() && !StringTools.isEmpty(businessModel.getIssueId())) {
-                BusIssueEntity busIssueEntity = businessIssueDao.getById(businessModel.getIssueId());
-                businessEntity.setIssue(busIssueEntity);
-            }
+//            if (businessModel.getHasIssue() && !StringTools.isEmpty(businessModel.getIssueId())) {
+//                BusIssueEntity busIssueEntity = businessIssueDao.getById(businessModel.getIssueId());
+//                businessEntity.setIssue(busIssueEntity);
+//            }
             if (!StringTools.isEmpty(businessModel.getUserId())) {
                 UserEntity create = userDao.getById(businessModel.getUserId());
                 businessEntity.setCreate(create);
@@ -169,15 +169,15 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
             if (categoryEntity != null) {
                 businessEntity.setCategory(categoryEntity);
             }
-            if (business.getHasIssue() && !StringTools.isEmpty(business.getIssueId())) {
-                BusIssueEntity issueEntity = businessIssueDao.getById(business.getIssueId());
-                if (issueEntity != null) {
-                    businessEntity.setIssue(issueEntity);
-                }
-            } else {
-                businessEntity.setHasIssue(false);
-                businessEntity.setIssue(null);
-            }
+//            if (business.getHasIssue() && !StringTools.isEmpty(business.getIssueId())) {
+//                BusIssueEntity issueEntity = businessIssueDao.getById(business.getIssueId());
+//                if (issueEntity != null) {
+//                    businessEntity.setIssue(issueEntity);
+//                }
+//            } else {
+//                businessEntity.setHasIssue(false);
+//                businessEntity.setIssue(null);
+//            }
             businessEntity.setBusTime(business.getBusTime());
             businessEntity.setDescription(business.getDescription());
 
@@ -267,10 +267,10 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
                     }
                     scmTmp.setCount(scmTmp.getCount() + 1);
                     sm.setDetailCount(sm.getDetailCount() + 1);
-                    BusIssueEntity busIssueEntity = be.getIssue();
-                    if (busIssueEntity != null) {
-                        scmTmp.getIssueNames().add(busIssueEntity.getName());
-                    }
+//                    BusIssueEntity busIssueEntity = be.getIssue();
+//                    if (busIssueEntity != null) {
+//                        scmTmp.getIssueNames().add(busIssueEntity.getName());
+//                    }
                 }
                 sm.setRecs(sctms);
                 sms.add(sm);
