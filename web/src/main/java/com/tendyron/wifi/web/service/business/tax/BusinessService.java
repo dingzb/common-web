@@ -16,7 +16,32 @@ import java.util.List;
  */
 public interface BusinessService extends BaseService<BusinessEntity> {
 
+    /**
+     * 获取所有业务分页数据
+     *
+     * @param query
+     * @return
+     * @throws ServiceException
+     */
     PagingModel paging(BusinessQuery query) throws ServiceException;
+
+    /**
+     * 获取 新建业务
+     *
+     * @param query
+     * @return
+     * @throws ServiceException
+     */
+    PagingModel pagingCreated(BusinessQuery query) throws ServiceException;
+
+    /**
+     * 获取完成自查的业务
+     *
+     * @param query
+     * @return
+     * @throws ServiceException
+     */
+    PagingModel pagingCommitted(BusinessQuery query) throws ServiceException;
 
     void add(BusinessModel businessModel) throws ServiceException;
 
@@ -25,4 +50,13 @@ public interface BusinessService extends BaseService<BusinessEntity> {
     Integer del(String[] ids) throws ServiceException;
 
     List<StatementModel> statement(StatementQuery query) throws ServiceException;
+
+    /**
+     * 提交业务
+     *
+     * @param ids
+     * @throws ServiceException
+     */
+    void commit(String[] ids) throws ServiceException;
+
 }

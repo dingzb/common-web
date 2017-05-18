@@ -54,6 +54,10 @@ public class BusinessDaoImpl extends BaseDaoImpl<BusinessEntity> implements Busi
             hqlsb.append(" and {0}.createTime <= :createTimeEnd");
             params.put("createTimeEnd", bQuery.getCreateTimeEnd());
         }
+        if (bQuery.getStatus() != null){
+            hqlsb.append(" and {0}.status = :status");
+            params.put("status", bQuery.getStatus());
+        }
 
         return hqlsb;
     }
@@ -61,7 +65,7 @@ public class BusinessDaoImpl extends BaseDaoImpl<BusinessEntity> implements Busi
     @Override
     public List<BusinessEntity> paging(BusinessQuery query) {
         Map<String, Object> params = new HashMap<>();
-        String hql = getHql(query, "business", params) + "order by business.createTime desc";
+        String hql = getHql(query, "business", params) + " order by business.createTime desc";
         return getByHqlPaging(hql, params, query.getPage(), query.getSize());
     }
 }

@@ -43,3 +43,10 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.ws-split {
+    display: inline-block;
+    border-left: 1px solid gray;
+    height: 28px;
+    margin-bottom: -10px;
+}

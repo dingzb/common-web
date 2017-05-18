@@ -1,6 +1,6 @@
-<div ng-controller="taxManageCtrl">
+<div ng-controller="taxFirstCtrl">
     <ws-datagrid configuration="datagrid" inner-ctrl="innerCtrl">
-        <div class="collapse" id="showOrHide">
+        <div class="collapse in" id="showOrHide">
             <form class="form-inline">
                 <div class="ws-search-input-group">
                     <div class="form-group">
@@ -15,23 +15,23 @@
                 </div>
             </form>
         </div>
-        <div>
-            <button class="btn btn-info btn-sm" type="button" ng-click="showAdd()"
-                    ws-permcode="tax.business.add">添加
-            </button>
-            <button class="btn btn-info btn-sm" type="button" ng-click="showEdit()"
-                    ws-permcode="tax.business.edit">编辑
-            </button>
-            <button class="btn btn-info btn-sm" type="button" ng-click="del()"
-                    ws-permcode="tax.business.del">删除
-            </button>
-            <span class="ws-split"></span>
-            <button class="btn btn-danger btn-sm" type="button" ng-click="commit()"
-                    ws-permcode="tax.business.del">提交业务
-            </button>
-            <button class="btn btn-primary btn-sm pull-right" data-toggle="collapse" data-target="#showOrHide">显示/隐藏搜索
-            </button>
-        </div>
+        <!--<div>-->
+            <!--<button class="btn btn-info btn-sm" type="button" ng-click="showAdd()"-->
+                    <!--ws-permcode="tax.business.add">添加-->
+            <!--</button>-->
+            <!--<button class="btn btn-info btn-sm" type="button" ng-click="showEdit()"-->
+                    <!--ws-permcode="tax.business.edit">编辑-->
+            <!--</button>-->
+            <!--<button class="btn btn-info btn-sm" type="button" ng-click="del()"-->
+                    <!--ws-permcode="tax.business.del">删除-->
+            <!--</button>-->
+            <!--<span class="ws-split"></span>-->
+            <!--<button class="btn btn-danger btn-sm" type="button" ng-click="commit()"-->
+                    <!--ws-permcode="tax.business.del">提交业务-->
+            <!--</button>-->
+            <!--<button class="btn btn-primary btn-sm pull-right" data-toggle="collapse" data-target="#showOrHide">显示/隐藏搜索-->
+            <!--</button>-->
+        <!--</div>-->
     </ws-datagrid>
     <!-- 添加 -->
     <div class="modal fade" id="addModal" tabindex="-1" role="dialog"
@@ -106,20 +106,20 @@
                             </tr>
                             <!--&lt;!&ndash;临时加上问题类型&ndash;&gt;-->
                             <!--<tr>-->
-                                <!--<th><label for="add_category_type">是否存在问题：</label></th>-->
-                                <!--<td>-->
-                                    <!--<input ng-model="addObj.hasIssue" type="checkbox" ng-change="addHasIssue()">-->
-                                    <!--<span ng-show="addObj.hasIssue">存在问题</span>-->
-                                <!--</td>-->
-                                <!--<th><label for="add_issue">问题种类：</label></th>-->
-                                <!--<td>-->
-                                    <!--<select id="add_issue" class="form-control input-sm" name="issueId" ng-disabled="!addObj.hasIssue"-->
-                                            <!--ng-model="addObj.issueId">-->
-                                        <!--<option value="">请选择</option>-->
-                                        <!--<option ng-selected="issue.id == addObj.issueId" ng-repeat="issue in addObj2.issues"-->
-                                                <!--value="{{issue.id}}" ng-bind="issue.name"></option>-->
-                                    <!--</select>-->
-                                <!--</td>-->
+                            <!--<th><label for="add_category_type">是否存在问题：</label></th>-->
+                            <!--<td>-->
+                            <!--<input ng-model="addObj.hasIssue" type="checkbox" ng-change="addHasIssue()">-->
+                            <!--<span ng-show="addObj.hasIssue">存在问题</span>-->
+                            <!--</td>-->
+                            <!--<th><label for="add_issue">问题种类：</label></th>-->
+                            <!--<td>-->
+                            <!--<select id="add_issue" class="form-control input-sm" name="issueId" ng-disabled="!addObj.hasIssue"-->
+                            <!--ng-model="addObj.issueId">-->
+                            <!--<option value="">请选择</option>-->
+                            <!--<option ng-selected="issue.id == addObj.issueId" ng-repeat="issue in addObj2.issues"-->
+                            <!--value="{{issue.id}}" ng-bind="issue.name"></option>-->
+                            <!--</select>-->
+                            <!--</td>-->
                             <!--</tr>-->
                             <tr>
                                 <th><label for="add_time">业务时间：</label></th>
@@ -128,9 +128,9 @@
                                         <span class="input-group-addon">
                                             <span class="glyphicon glyphicon-calendar"></span>
                                         </span>
-                                            <input size="16" type="text" id="add_time" name="busTime" ng-init="initDtp()"
-                                                   class="form-control input-sm" style="width: 215px;"
-                                                   placeholder="年-月-日 时:分" ng-model="addObj.busTime">
+                                        <input size="16" type="text" id="add_time" name="busTime" ng-init="initDtp()"
+                                               class="form-control input-sm" style="width: 215px;"
+                                               placeholder="年-月-日 时:分" ng-model="addObj.busTime">
                                     </div>
                                     <div ng-messages="addForm.busTime.$error"
                                          ng-show="addForm.busTime.$dirty && addForm.busTime.$invalid"
@@ -234,20 +234,20 @@
                             </tr>
                             <!--临时加上问题类型-->
                             <!--<tr>-->
-                                <!--<th><label for="edit_category_type">是否存在问题：</label></th>-->
-                                <!--<td>-->
-                                    <!--<input ng-model="editObj.hasIssue" type="checkbox" ng-change="editHasIssue()">-->
-                                    <!--<span ng-show="editObj.hasIssue">存在问题</span>-->
-                                <!--</td>-->
-                                <!--<th><label for="edit_issue">问题种类：</label></th>-->
-                                <!--<td>-->
-                                    <!--<select id="edit_issue" class="form-control input-sm" name="issueId" ng-disabled="!editObj.hasIssue"-->
-                                            <!--ng-model="editObj.issueId">-->
-                                        <!--<option value="">请选择</option>-->
-                                        <!--<option ng-selected="issue.id == editObj.issueId" ng-repeat="issue in editObj2.issues"-->
-                                                <!--value="{{issue.id}}" ng-bind="issue.name"></option>-->
-                                    <!--</select>-->
-                                <!--</td>-->
+                            <!--<th><label for="edit_category_type">是否存在问题：</label></th>-->
+                            <!--<td>-->
+                            <!--<input ng-model="editObj.hasIssue" type="checkbox" ng-change="editHasIssue()">-->
+                            <!--<span ng-show="editObj.hasIssue">存在问题</span>-->
+                            <!--</td>-->
+                            <!--<th><label for="edit_issue">问题种类：</label></th>-->
+                            <!--<td>-->
+                            <!--<select id="edit_issue" class="form-control input-sm" name="issueId" ng-disabled="!editObj.hasIssue"-->
+                            <!--ng-model="editObj.issueId">-->
+                            <!--<option value="">请选择</option>-->
+                            <!--<option ng-selected="issue.id == editObj.issueId" ng-repeat="issue in editObj2.issues"-->
+                            <!--value="{{issue.id}}" ng-bind="issue.name"></option>-->
+                            <!--</select>-->
+                            <!--</td>-->
                             <!--</tr>-->
                             <tr>
                                 <th><label for="edit_time">业务时间：</label></th>
@@ -332,16 +332,16 @@
                             </tr>
                             <!--临时加上问题类型-->
                             <!--<tr>-->
-                                <!--<th><label for="detail_category_type">是否存在问题：</label></th>-->
-                                <!--<td>-->
-                                    <!--<input ng-model="detailObj.hasIssue" type="checkbox" disabled="disabled">-->
-                                    <!--<span ng-show="detailObj.hasIssue">存在问题</span>-->
-                                <!--</td>-->
-                                <!--<th><label for="detail_issue">问题种类：</label></th>-->
-                                <!--<td>-->
-                                    <!--<input id="detail_issue" class="form-control input-sm" name="issueId"-->
-                                           <!--ng-model="detailObj.issueName" readonly>-->
-                                <!--</td>-->
+                            <!--<th><label for="detail_category_type">是否存在问题：</label></th>-->
+                            <!--<td>-->
+                            <!--<input ng-model="detailObj.hasIssue" type="checkbox" disabled="disabled">-->
+                            <!--<span ng-show="detailObj.hasIssue">存在问题</span>-->
+                            <!--</td>-->
+                            <!--<th><label for="detail_issue">问题种类：</label></th>-->
+                            <!--<td>-->
+                            <!--<input id="detail_issue" class="form-control input-sm" name="issueId"-->
+                            <!--ng-model="detailObj.issueName" readonly>-->
+                            <!--</td>-->
                             <!--</tr>-->
                             <tr>
                                 <th><label for="detail_time">业务时间：</label></th>
@@ -366,6 +366,8 @@
                     </form>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn-info btn btn-sm" data-dismiss="modal">没问题</button>
+                    <button type="button" class="btn-info btn btn-sm" data-dismiss="modal">有问题</button>
                     <button type="button" class="btn-info btn btn-sm" data-dismiss="modal">关闭</button>
                 </div>
             </div>

@@ -23,11 +23,31 @@ public class BusinessController extends BaseController {
     @Autowired
     private BusinessService businessService;
 
-    @RequestMapping("paging")
+    @RequestMapping("paging/created")
     @ResponseBody
-    public Json paging(BusinessQuery query) {
+    public Json pagingCreated(BusinessQuery query) {
+        try {
+            return success(businessService.pagingCreated(query));
+        } catch (ServiceException e) {
+            return fail(e);
+        }
+    }
+
+    @RequestMapping("paging/all")
+    @ResponseBody
+    public Json pagingAll(BusinessQuery query) {
         try {
             return success(businessService.paging(query));
+        } catch (ServiceException e) {
+            return fail(e);
+        }
+    }
+
+    @RequestMapping("paging/committed")
+    @ResponseBody
+    public Json pagingCommitted (BusinessQuery query) {
+        try {
+            return success(businessService.pagingCommitted(query));
         } catch (ServiceException e) {
             return fail(e);
         }
@@ -65,5 +85,16 @@ public class BusinessController extends BaseController {
             return fail(e.getMessage());
         }
         return success("成功删除" + result + "条数据");
+    }
+
+    @RequestMapping("commit")
+    @ResponseBody
+    public Json commit(@RequestParam("ids[]") String[] ids){
+        try {
+            businessService.commit(ids);
+            return success("提交成功");
+        } catch (ServiceException e) {
+            return fail(e);
+        }
     }
 }

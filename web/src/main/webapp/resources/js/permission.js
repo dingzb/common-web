@@ -38,15 +38,21 @@ angular.module('ws.permission', ['ws.basic', 'ui.router']).constant('wsPermissio
         console.info('get state change from ', fromState, ' to ', toState);
         var state = toState.name;
         //登录检测
-        if (!$rootScope.user && state != 'login') {
+        if (!$rootScope.user && state !== 'login') {
             evt.preventDefault();
             $state.go('login');
             return;
         }
-        if ($rootScope.user && state == 'login') {
+        if ($rootScope.user && state === 'login') {
             evt.preventDefault();
-            $state.go('main.tax');
+            $state.go('main.tax'); //跳转到业务模块
             // $state.go('main.welcome');
+            return;
+        }
+        //主视图或欢迎视图直接跳转到业务模块
+        if ($rootScope.user && (state === 'main' || state === 'main.welcome')){
+            evt.preventDefault();
+            $state.go('main.tax'); //跳转到业务模块
             return;
         }
         console.info('get normal state');

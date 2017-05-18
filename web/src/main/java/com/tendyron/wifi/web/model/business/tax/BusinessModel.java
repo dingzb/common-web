@@ -1,18 +1,11 @@
 package com.tendyron.wifi.web.model.business.tax;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tendyron.wifi.web.entity.business.tax.AgencyEntity;
-import com.tendyron.wifi.web.entity.business.tax.BusCategoryEntity;
-import com.tendyron.wifi.web.entity.business.tax.BusIssueEntity;
-import com.tendyron.wifi.web.entity.system.UserEntity;
 import com.tendyron.wifi.web.model.BaseModel;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * Created by Neo on 2017/5/9.
@@ -27,16 +20,26 @@ public class BusinessModel extends BaseModel {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", locale = "zh", timezone = "GMT+8")
     private Date busTime;
-    private Boolean hasIssue;
 
     private String agencyId;
     private String categoryId;
     private String categoryTypeId;
-    private String issueId;
-    private String issueName;
+
     private String agencyName;
     private String categoryName;
     private String categoryTypeName;
+
+    private Boolean firstHasIssue; // to
+    private String firstIssueIds; // xxxx,xxxx,xxx , to
+    private ExamineModel firstExamine; //vo
+
+    private Boolean secondHasIssue;
+    private String secondIssueIds; // xxxx,xxxx,xxx
+    private ExamineModel secondExamine;
+
+    private Boolean thirdHasIssue;
+    private String thirdIssueIds; // xxxx,xxxx,xxx
+    private ExamineModel thirdExamine;
 
     private String createId;
     private String checkId;
@@ -83,14 +86,6 @@ public class BusinessModel extends BaseModel {
         this.description = description;
     }
 
-    public Boolean getHasIssue() {
-        return hasIssue;
-    }
-
-    public void setHasIssue(Boolean hasIssue) {
-        this.hasIssue = hasIssue;
-    }
-
     public String getAgencyId() {
         return agencyId;
     }
@@ -115,14 +110,6 @@ public class BusinessModel extends BaseModel {
         this.categoryTypeId = categoryTypeId;
     }
 
-    public String getIssueId() {
-        return issueId;
-    }
-
-    public void setIssueId(String issueId) {
-        this.issueId = issueId;
-    }
-
     public String getAgencyName() {
         return agencyName;
     }
@@ -145,14 +132,6 @@ public class BusinessModel extends BaseModel {
 
     public void setCategoryTypeName(String categoryTypeName) {
         this.categoryTypeName = categoryTypeName;
-    }
-
-    public String getIssueName() {
-        return issueName;
-    }
-
-    public void setIssueName(String issueName) {
-        this.issueName = issueName;
     }
 
     public String getCreateId() {
@@ -225,5 +204,77 @@ public class BusinessModel extends BaseModel {
 
     public void setBusTime(Date busTime) {
         this.busTime = busTime;
+    }
+
+    public Boolean getFirstHasIssue() {
+        return firstHasIssue;
+    }
+
+    public void setFirstHasIssue(Boolean firstHasIssue) {
+        this.firstHasIssue = firstHasIssue;
+    }
+
+    public String getFirstIssueIds() {
+        return firstIssueIds;
+    }
+
+    public void setFirstIssueIds(String firstIssueIds) {
+        this.firstIssueIds = firstIssueIds;
+    }
+
+    public ExamineModel getFirstExamine() {
+        return firstExamine;
+    }
+
+    public void setFirstExamine(ExamineModel firstExamine) {
+        this.firstExamine = firstExamine;
+    }
+
+    public Boolean getSecondHasIssue() {
+        return secondHasIssue;
+    }
+
+    public void setSecondHasIssue(Boolean secondHasIssue) {
+        this.secondHasIssue = secondHasIssue;
+    }
+
+    public String getSecondIssueIds() {
+        return secondIssueIds;
+    }
+
+    public void setSecondIssueIds(String secondIssueIds) {
+        this.secondIssueIds = secondIssueIds;
+    }
+
+    public ExamineModel getSecondExamine() {
+        return secondExamine;
+    }
+
+    public void setSecondExamine(ExamineModel secondExamine) {
+        this.secondExamine = secondExamine;
+    }
+
+    public Boolean getThirdHasIssue() {
+        return thirdHasIssue;
+    }
+
+    public void setThirdHasIssue(Boolean thirdHasIssue) {
+        this.thirdHasIssue = thirdHasIssue;
+    }
+
+    public String getThirdIssueIds() {
+        return thirdIssueIds;
+    }
+
+    public void setThirdIssueIds(String thirdIssueIds) {
+        this.thirdIssueIds = thirdIssueIds;
+    }
+
+    public ExamineModel getThirdExamine() {
+        return thirdExamine;
+    }
+
+    public void setThirdExamine(ExamineModel thirdExamine) {
+        this.thirdExamine = thirdExamine;
     }
 }

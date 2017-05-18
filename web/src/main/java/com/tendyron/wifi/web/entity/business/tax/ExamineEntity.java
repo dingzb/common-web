@@ -30,7 +30,7 @@ public class ExamineEntity extends BaseEntity {
     }
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "bus_tax_examine_issue", joinColumns = {@JoinColumn(name = "issue_id")}, inverseJoinColumns = {@JoinColumn(name = "examine_id")})
+    @JoinTable(name = "bus_tax_examine_issue", joinColumns = {@JoinColumn(name = "examine_id")}, inverseJoinColumns = {@JoinColumn(name = "issue_id")})
 
     public Set<BusIssueEntity> getIssues() {
         return issues;

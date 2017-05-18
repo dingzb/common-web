@@ -15,14 +15,12 @@ public class BusinessEntity extends BaseEntity {
 
     private String taxpayerCode;
     private String taxpayerName;
-    private String content;
+//    private String content;
     private String description;
     private Date busTime;   //业务发生时间
 
     private ExamineEntity firstExamine;
-
     private ExamineEntity secondExamine;
-
     private ExamineEntity thirdExamine;
 
     private Boolean amendment; //是否已经整改
@@ -37,6 +35,8 @@ public class BusinessEntity extends BaseEntity {
 
     private Date createTime;
     private Date modifyTime;
+
+    private Integer status; // 0: 创建, 1: 提交, 2: 自查, 3: 审查, 4: 核查, 5: 整改
 
     @Column(name = "taxpayer_code", length = 50)
     public String getTaxpayerCode() {
@@ -56,14 +56,14 @@ public class BusinessEntity extends BaseEntity {
         this.taxpayerName = taxpayerName;
     }
 
-    @Column(name = "content", length = 4096)
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
+//    @Column(name = "content", length = 4096)
+//    public String getContent() {
+//        return content;
+//    }
+//
+//    public void setContent(String content) {
+//        this.content = content;
+//    }
 
     @Column(name = "description", length = 4096)
     public String getDescription() {
@@ -188,5 +188,14 @@ public class BusinessEntity extends BaseEntity {
 
     public void setAmendment(Boolean amendment) {
         this.amendment = amendment;
+    }
+
+    @Column(name = "status")
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

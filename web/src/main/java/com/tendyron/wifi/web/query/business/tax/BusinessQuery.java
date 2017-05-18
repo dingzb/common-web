@@ -24,7 +24,8 @@ public class BusinessQuery extends PagingQuery {
     private Date createTimeStart;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date createTimeEnd;
-//    private String[] agencyIds;
+
+    private Integer status;
 
     public String getContent() {
         return content;
@@ -104,5 +105,13 @@ public class BusinessQuery extends PagingQuery {
 
     public void setBusTime(Date busTime) {
         this.busTime = busTime;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

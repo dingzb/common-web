@@ -24,6 +24,22 @@ angular.module('ws.stateConfig').config(['$stateProvider', function ($stateProvi
                 templateUrl: 'tpls/tax/business/manage.html'
             }
         }
+    }).state('main.tax.business.view', {
+        url: '/view',
+        views: {
+            'right@main.tax': {
+                templateUrl: 'tpls/tax/business/view.html'
+            }
+        }
+    }).state('main.tax.examine', {
+        url: '/examine'
+    }).state('main.tax.examine.first', {
+        url: '/first',
+        views: {
+            'right@main.tax': {
+                templateUrl: 'tpls/tax/examine/first.html'
+            }
+        }
     }).state('main.tax.statistics', {
         url: '/statistics'
     }).state('main.tax.statistics.statement', {

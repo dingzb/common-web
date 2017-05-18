@@ -4,7 +4,7 @@
  */
 
 
-angular.module('ws.app').controller('taxManageCtrl', ['$rootScope', '$scope', '$http', function ($rootScope, $scope, $http) {
+angular.module('ws.app').controller('taxFirstCtrl', ['$rootScope', '$scope', '$http', function ($rootScope, $scope, $http) {
     $scope.searchParams = {};
     $scope.categories = [];
     $scope.addObj = {};
@@ -60,7 +60,7 @@ angular.module('ws.app').controller('taxManageCtrl', ['$rootScope', '$scope', '$
 
     //初始化组列表
     $scope.datagrid = {
-        url: 'app/tax/business/paging/created',
+        url: 'app/tax/examine/paging/committed',
         method: 'post',
         params: {},
         columns: [{
@@ -75,35 +75,24 @@ angular.module('ws.app').controller('taxManageCtrl', ['$rootScope', '$scope', '$
         }, {
             field: 'categoryName',
             title: '业务项目'
-        }
-            // , {
-            //     field: 'hasIssue',
-            //     title: '是否存在问题',
-            //     formatter: function (val) {
-            //         return val ? '是' : '否';
-            //     }
-            // }, {
-            //     field: 'issueName',
-            //     title: '问题种类'
-            // }
-            , {
-                field: 'agencyName',
-                title: '主管税务机关'
-            }, {
-                field: 'createName',
-                title: '税收管理员'
-            }, {
-                field: 'createTime',
-                title: '创建时间'
-            }, {
-                field: 'id',
-                title: '操作',
-                formatter: function (row) {
-                    var str = JSON.stringify(row);
-                    str = str.replace(/"/g, "'");
-                    return "<button type=\"button\" class=\"btn btn-link btn-sm\" title='详情' onClick=\"angular.custom.taxBusinessDetail(" + str + ")\"><span class=\"glyphicon glyphicon-link\" > </span></button>";
-                }
-            }],
+        }, {
+            field: 'agencyName',
+            title: '主管税务机关'
+        }, {
+            field: 'createName',
+            title: '税收管理员'
+        }, {
+            field: 'createTime',
+            title: '创建时间'
+        }, {
+            field: 'id',
+            title: '操作',
+            formatter: function (row) {
+                var str = JSON.stringify(row);
+                str = str.replace(/"/g, "'");
+                return '<button type="button" class="btn btn-link btn-sm" title="详情" onClick="angular.custom.taxBusinessDetail(' + str + ')"><span class="glyphicon glyphicon-link"></span></button>';
+            }
+        }],
         checkbox: true,
         sizes: [10, 20, 50, 80],
         pageSize: 10

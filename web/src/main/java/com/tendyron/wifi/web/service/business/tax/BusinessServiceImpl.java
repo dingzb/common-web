@@ -21,9 +21,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * Created by Neo on 2017/5/9.
@@ -46,6 +46,20 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
 
     @Autowired
     private AgencyDao agencyDao;
+
+    @Transactional
+    @Override
+    public PagingModel pagingCreated(BusinessQuery query) throws ServiceException {
+        query.setStatus(0);
+        return paging(query);
+    }
+
+    @Transactional
+    @Override
+    public PagingModel pagingCommitted(BusinessQuery query) throws ServiceException {
+        query.setStatus(1);
+        return paging(query);
+    }
 
     @Transactional
     @Override
@@ -72,19 +86,22 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
                 if (categoryEntity != null) {
                     businessModel.setCategoryId(categoryEntity.getId());
                     businessModel.setCategoryName(categoryEntity.getName());
+
+                    BusCategoryTypeEntity categoryTypeEntity = categoryEntity.getType();
+                    if (categoryTypeEntity != null) {
+                        businessModel.setCategoryTypeId(categoryTypeEntity.getId());
+                        businessModel.setCategoryTypeName(categoryTypeEntity.getName());
+                    }
                 }
 
-                BusCategoryTypeEntity categoryTypeEntity = categoryEntity.getType();
-                if (categoryTypeEntity != null) {
-                    businessModel.setCategoryTypeId(categoryTypeEntity.getId());
-                    businessModel.setCategoryTypeName(categoryTypeEntity.getName());
-                }
+                ExamineEntity first = businessEntity.getFirstExamine();
+                convertIssue(first, businessModel, businessModel::setFirstHasIssue, businessModel::setFirstExamine);
 
-//                BusIssueEntity issueEntity = businessEntity.getIssue();
-//                if (issueEntity != null) {
-//                    businessModel.setIssueId(issueEntity.getId());
-//                    businessModel.setIssueName(issueEntity.getName());
-//                }
+                ExamineEntity second = businessEntity.getSecondExamine();
+                convertIssue(second, businessModel, businessModel::setSecondHasIssue, businessModel::setSecondExamine);
+
+                ExamineEntity third = businessEntity.getThirdExamine();
+                convertIssue(third, businessModel, businessModel::setThirdHasIssue, businessModel::setThirdExamine);
 
                 UserEntity create = businessEntity.getCreate();
                 if (create != null) {
@@ -115,6 +132,33 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
         paging.setRows(businessModels);
         paging.setTotal(total);
         return paging;
+    }
+
+    /**
+     * 转换问题名称
+     *
+     * @param examine
+     * @param bus
+     */
+    private void convertIssue(ExamineEntity examine, BusinessModel bus, Consumer<Boolean> hasIssue, Consumer<ExamineModel> setExa) {
+        if (examine == null) {
+            return;
+        }
+        hasIssue.accept(examine.getHasIssue());
+        ExamineModel examineModel = new ExamineModel();
+        BeanUtils.copyProperties(examine, examineModel);
+        Set<BusIssueEntity> issues = examine.getIssues();
+        if (issues != null) {
+            Set<BusIssueModel> busIssueModels = new HashSet<>();
+            for (BusIssueEntity issue : issues) {
+                BusIssueModel busIssueModel = new BusIssueModel();
+                BeanUtils.copyProperties(issue, busIssueModel);
+                busIssueModels.add(busIssueModel);
+            }
+            examineModel.setIssues(busIssueModels);
+        }
+        setExa.accept(examineModel);
+
     }
 
     @Override
@@ -280,5 +324,27 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
             throw new ServiceException();
         }
         return sms;
+    }
+
+    @Transactional
+    @Override
+    public void commit(String[] ids) throws ServiceException {
+        changeStatus(ids, 1);
+    }
+
+    private void changeStatus(String[] ids, int status) throws ServiceException {
+        try {
+            for (String id : ids) {
+                BusinessEntity business = businessDao.getById(id);
+                if (business == null) {
+                    throw new ServiceException("业务不存在");
+                }
+                business.setStatus(status);
+                businessDao.update(business);
+            }
+        } catch (Exception e) {
+            logger.error("", e);
+            throw new ServiceException();
+        }
     }
 }
