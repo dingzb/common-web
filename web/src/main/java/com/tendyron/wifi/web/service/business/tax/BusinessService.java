@@ -3,6 +3,7 @@ package com.tendyron.wifi.web.service.business.tax;
 import com.tendyron.wifi.web.entity.business.tax.BusinessEntity;
 import com.tendyron.wifi.web.model.PagingModel;
 import com.tendyron.wifi.web.model.business.tax.BusinessModel;
+import com.tendyron.wifi.web.model.business.tax.ExamineModel;
 import com.tendyron.wifi.web.model.business.tax.StatementModel;
 import com.tendyron.wifi.web.query.business.tax.BusinessQuery;
 import com.tendyron.wifi.web.query.business.tax.StatementQuery;
@@ -58,5 +59,13 @@ public interface BusinessService extends BaseService<BusinessEntity> {
      * @throws ServiceException
      */
     void commit(String[] ids) throws ServiceException;
+
+    /**
+     * 提交检查结果
+     *
+     * @param examine
+     * @throws ServiceException
+     */
+    void commitExamine(ExamineModel examine) throws ServiceException;
 
 }

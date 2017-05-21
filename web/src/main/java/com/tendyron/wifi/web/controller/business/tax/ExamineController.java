@@ -2,6 +2,8 @@ package com.tendyron.wifi.web.controller.business.tax;
 
 import com.tendyron.wifi.web.controller.BaseController;
 import com.tendyron.wifi.web.model.Json;
+import com.tendyron.wifi.web.model.business.tax.BusinessModel;
+import com.tendyron.wifi.web.model.business.tax.ExamineModel;
 import com.tendyron.wifi.web.query.business.tax.BusinessQuery;
 import com.tendyron.wifi.web.service.ServiceException;
 import com.tendyron.wifi.web.service.business.tax.BusinessService;
@@ -28,6 +30,18 @@ public class ExamineController extends BaseController {
             return success(businessService.pagingCommitted(query));
         } catch (ServiceException e) {
             return fail(e);
+        }
+    }
+
+    @RequestMapping("first/commit")
+    @ResponseBody
+    public Json commitFirst(ExamineModel examine){
+        examine.setStep(1);
+        try {
+            businessService.commitExamine(examine);
+            return success("提交成功");
+        } catch (ServiceException e) {
+            return fail();
         }
     }
 }

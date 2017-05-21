@@ -36,7 +36,7 @@ public class BusinessEntity extends BaseEntity {
     private Date createTime;
     private Date modifyTime;
 
-    private Integer status; // 0: 创建, 1: 提交, 2: 自查, 3: 审查, 4: 核查, 5: 整改
+    private Integer status; // 0: 创建, 1: 待自查, 2: 待审查, 3: 待核查, 4: 有问题，待整改, 5: 整改完成
 
     @Column(name = "taxpayer_code", length = 50)
     public String getTaxpayerCode() {
@@ -151,7 +151,7 @@ public class BusinessEntity extends BaseEntity {
         this.modifyTime = modifyTime;
     }
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "examine_first_id")
     public ExamineEntity getFirstExamine() {
         return firstExamine;

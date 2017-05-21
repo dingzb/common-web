@@ -26,6 +26,7 @@ public class BusinessQuery extends PagingQuery {
     private Date createTimeEnd;
 
     private Integer status;
+    private Integer[] includeStatus;
 
     public String getContent() {
         return content;
@@ -113,5 +114,13 @@ public class BusinessQuery extends PagingQuery {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Integer[] getIncludeStatus() {
+        return includeStatus;
+    }
+
+    public void setIncludeStatus(Integer[] includeStatus) {
+        this.includeStatus = includeStatus;
     }
 }

@@ -77,10 +77,12 @@ angular.module('ws.app').controller('taxViewCtrl', ['$rootScope', '$scope', '$ht
             title: '自查意见',
             formatter: function (row) {
                 var issue = '';
-                if (row.firstHasIssue){
+                if (row.firstHasIssue === null){
+                    issue = '<span></span>';
+                } else if (row.firstHasIssue){
                     issue = '<a href="javascript:void(0);">否</a>';
                 } else {
-                    issue = '<span>否</span>';
+                    issue = '<span>是</span>';
                 }
                 return issue;
             }
@@ -89,7 +91,9 @@ angular.module('ws.app').controller('taxViewCtrl', ['$rootScope', '$scope', '$ht
             title: '复核意见',
             formatter: function (row) {
                 var issue = '';
-                if (row.secondHasIssue){
+                if (row.secondHasIssue === null){
+                    issue = '<span></span>';
+                } else if (row.secondHasIssue){
                     issue = '<a href="javascript:void(0);" onclick="alert('+ row.secondExamine +')">否</a>';
                 } else {
                     issue = '<span>是</span>';
@@ -101,7 +105,9 @@ angular.module('ws.app').controller('taxViewCtrl', ['$rootScope', '$scope', '$ht
             title: '核查意见',
             formatter: function (row) {
                 var issue = '';
-                if (row.thirdHasIssue){
+                if (row.thirdHasIssue === null){
+                    issue = '<span></span>';
+                } else if (row.thirdHasIssue){
                     issue = '<a href="javascript:void(0);" onclick="alert('+ row.thirdExamine +')">否</a>';
                 } else {
                     issue = '<span>是</span>';

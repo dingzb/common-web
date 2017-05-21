@@ -57,7 +57,7 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
     @Transactional
     @Override
     public PagingModel pagingCommitted(BusinessQuery query) throws ServiceException {
-        query.setStatus(1);
+        query.setIncludeStatus(new Integer[]{1, 2, 3, 4, 5});
         return paging(query);
     }
 
@@ -342,6 +342,49 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
                 business.setStatus(status);
                 businessDao.update(business);
             }
+        } catch (Exception e) {
+            logger.error("", e);
+            throw new ServiceException();
+        }
+    }
+
+    @Transactional
+    @Override
+    public void commitExamine(ExamineModel examine) throws ServiceException {
+        if (examine.getStep() == 0) {
+            throw new ServiceException("审查阶段未指定");
+        }
+        String busId = examine.getBusId();
+        try {
+            BusinessEntity business = businessDao.getById(busId);
+            if (business == null) {
+                throw new ServiceException("业务不存在");
+            }
+            ExamineEntity examineEntity = new ExamineEntity();
+            examineEntity.setId(StringTools.randomUUID());
+            examineEntity.setHasIssue(examine.getHasIssue());
+
+            String issueIdStr = examine.getIssueIdStrs();
+            if (!StringTools.isEmpty(issueIdStr)) {
+                String[] issueIds = issueIdStr.split(",");
+                Set<BusIssueEntity> issues = businessIssueDao.getByIds(Arrays.asList(issueIds));
+                examineEntity.setIssues(issues);
+                examineEntity.setDescription(examine.getDescription());
+            }
+
+            switch (examine.getStep()) {
+                case 1:
+                    business.setFirstExamine(examineEntity);
+                    break;
+                case 2:
+                    business.setSecondExamine(examineEntity);
+                    break;
+                case 3:
+                    business.setThirdExamine(examineEntity);
+            }
+
+            businessDao.update(business);
+
         } catch (Exception e) {
             logger.error("", e);
             throw new ServiceException();

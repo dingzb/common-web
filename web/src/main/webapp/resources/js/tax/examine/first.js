@@ -10,6 +10,11 @@ angular.module('ws.app').controller('taxFirstCtrl', ['$rootScope', '$scope', '$h
     $scope.addObj = {};
     $scope.editObj = {};
 
+    $scope.hasIssue = false;
+    $scope.issues = [];
+
+    getIssue();
+
     $scope.initDtp = function (e) {
         $scope.datetimepicker('#add_time').onChange(function (d) {
             $scope.addObj.busTime = d;
@@ -45,14 +50,13 @@ angular.module('ws.app').controller('taxFirstCtrl', ['$rootScope', '$scope', '$h
         });
     }
 
-    function getIssue(target) {
+    function getIssue() {
         $http.post('app/tax/business/issue/list', {}).success(function (data) {
             if (data.success) {
-                $.extend(target, data.data);
+                $.extend($scope.issues, data.data);
             } else if (data.message) {
                 $scope.alert(data.message, 'error');
             }
-            console.info(target);
         }).error(function (data) {
             $scope.alert(data, 'error');
         });
@@ -82,6 +86,20 @@ angular.module('ws.app').controller('taxFirstCtrl', ['$rootScope', '$scope', '$h
             field: 'createName',
             title: '税收管理员'
         }, {
+            field: 'firstExamine',
+            title: '自查意见',
+            formatter: function (row) {
+                var str = JSON.stringify(row);
+                str = str.replace(/"/g, "'");
+                if(row.firstExamine){
+                    return row.firstExamine.hasIssue ?
+                        '<button type="button" class="btn btn-link btn-sm" title="否" onClick="angular.custom.taxBusinessFirstDetail(' + str + ')">否</button>' :
+                        '<span>是</span>';
+                } else {
+                    return '';
+                }
+            }
+        }, {
             field: 'createTime',
             title: '创建时间'
         }, {
@@ -90,7 +108,7 @@ angular.module('ws.app').controller('taxFirstCtrl', ['$rootScope', '$scope', '$h
             formatter: function (row) {
                 var str = JSON.stringify(row);
                 str = str.replace(/"/g, "'");
-                return '<button type="button" class="btn btn-link btn-sm" title="详情" onClick="angular.custom.taxBusinessDetail(' + str + ')"><span class="glyphicon glyphicon-link"></span></button>';
+                return '<button type="button" class="btn btn-link btn-sm" title="自查" onClick="angular.custom.taxBusinessFirst(' + str + ')">自查</button>';
             }
         }],
         checkbox: true,
@@ -112,213 +130,49 @@ angular.module('ws.app').controller('taxFirstCtrl', ['$rootScope', '$scope', '$h
         $.extend($scope.searchParams, clearSearch);
     };
 
-    //=======================添加================================
-    $scope.showAdd = function () {
-
-        $scope.addObj = {
-            issueId: null
-        };
-        $scope.addObj2 = {
-            issues: [],
-            categories: []
-        };
-
-        getIssue($scope.addObj2.issues);
-        $scope.addForm.$setPristine();
-        $("#addModal").modal('show');
-    };
-
-    $scope.addHasIssue = function () {
-        $scope.addObj.issueId = null;
-    };
-
-    $scope.addGetCategory = function (typeId) {
-        $.extend($scope.addObj, {
-            categoryId: null
-        });
-        $scope.addObj2.categories = [];
-        getCategory(typeId, $scope.addObj2.categories);
-    };
-
-    $scope.add = function () {
-        if (!validateAddForm()) {
-            return;
-        }
-
-
-        $scope.mask(true, 1);
-        $http.post('app/tax/business/add', $scope.addObj).success(function (data) {
-            if (data.success) {
-                $scope.innerCtrl.load($scope.datagrid.params);
-                $scope.alert(data.message);
-                $("#addModal").modal('hide');
-            } else {
-                $scope.alert(data.message, 'error');
-            }
-            $scope.mask(false);
-        }).error(function () {
-            $scope.mask(false);
-        });
-    };
-
-    //添加清空
-    $scope.addReset = function () {
-        $scope.addObj = {};
-    };
-    //添加校验
-    function validateAddForm() {
-        if ($scope.addForm.$invalid) {
-            console.info($scope.addForm);
-            $scope.addForm.taxpayerCode.$setDirty();
-            $scope.addForm.taxpayerName.$setDirty();
-            $scope.addForm.categoryTypeId.$setDirty();
-            $scope.addForm.categoryId.$setDirty();
-            $scope.addForm.description.$setDirty();
-            return false;
-        }
-        return true;
-    }
-
-    //==================编辑=========================
-    $scope.showEdit = function () {
-        var checkeds = $scope.innerCtrl.getChecked();
-        if (checkeds.length !== 1) {
-            $scope.alert("只能选择一个进行编辑", 'error');
-            return;
-        }
-
-        $scope.editObj2 = {categories: [], issues: []};
-
-        $scope.editObj = {
-            id: checkeds[0].id,
-            taxpayerCode: checkeds[0].taxpayerCode,
-            taxpayerName: checkeds[0].taxpayerName,
-            categoryTypeId: checkeds[0].categoryTypeId,
-            categoryId: checkeds[0].categoryId,
-            hasIssue: checkeds[0].hasIssue,
-            issueId: checkeds[0].issueId,
-            description: checkeds[0].description,
-            busTime: checkeds[0].busTime
-        };
-
-        getIssue($scope.editObj2.issues);
-
-        $scope.editObj2.categories = [];
-        getCategory($scope.editObj.categoryTypeId, $scope.editObj2.categories);
-        $("#editModal").modal('show');
-    };
-
-    $scope.editHasIssue = function () {
-        $scope.editObj.issueId = null;
-    };
-
-    $scope.editGetCategory = function (typeId) {
-        $.extend($scope.editObj, {
-            categoryId: null
-        });
-        $scope.editObj2.categories = [];
-        getCategory(typeId, $scope.editObj2.categories);
-    };
-
-    $scope.edit = function () {
-        if (!validateEditForm()) {
-            return;
-        }
-        $scope.mask(true, 1);
-        $http.post('app/tax/business/edit', $scope.editObj).success(function (data) {
-            if (data.success) {
-                $scope.innerCtrl.load($scope.datagrid.params);
-                $scope.alert(data.message);
-                $("#editModal").modal('hide');
-            } else {
-                $scope.alert(data.message, 'error');
-            }
-            $scope.mask(false);
-        }).error(function () {
-            $scope.mask(false);
-        });
-    };
-
-    //编辑清空
-    $scope.editReset = function () {
-        $scope.editObj = {};
-    };
-
-    //编辑校验
-    function validateEditForm() {
-        if ($scope.editForm.$invalid) {
-            console.info($scope.editForm);
-            $scope.editForm.taxpayerCode.$setDirty();
-            $scope.editForm.taxpayerName.$setDirty();
-            $scope.editForm.categoryTypeId.$setDirty();
-            $scope.editForm.categoryId.$setDirty();
-            $scope.editForm.description.$setDirty();
-            return false;
-        }
-        return true;
-    }
-
-    //=================================删除====================================
-    $scope.del = function () {
-        var checkeds = $scope.innerCtrl.getChecked();
-        if (checkeds.length <= 0) {
-            $scope.alert("至少选择一条记录！", 'error');
-            return;
-        }
-        var ids = [];
-        for (var i = 0; i < checkeds.length; i++) {
-            ids.push(checkeds[i].id);
-        }
-        $scope.confirm("将要删除" + ids.length + "条记录", function (y) {
-            if (!y) {
-                return;
-            }
-            $http.post('app/tax/business/del', {
-                'ids': ids
-            }).success(function (data) {
-                if (data.success) {
-                    $scope.innerCtrl.load($scope.datagrid.params);
-                    $scope.alert(data.message);
-                } else
-                    $scope.alert(data.message, 'error');
-            });
-        });
-    };
-
-    //=========详情===================
-    angular.custom.taxBusinessDetail = function (row) {
+    //========= 自查 =================
+    angular.custom.taxBusinessFirst = function (row) {
         $scope.$apply(function () {
             $scope.detailObj = row;
+            $scope.isFirsted = row.firstExamine !== null;
         });
-        $("#detailModal").modal('show');
-    }
+        $("#firstModal").modal('show');
+    };
 
+    angular.custom.taxBusinessFirstDetail = function (row) {
+        alert(row.firstExamine.issues[0].name);
+    };
 
-    //=============== 提交业务 =====================
+    //=============== 提交自查 =====================
 
-    $scope.commit = function () {
-        var checkeds = $scope.innerCtrl.getChecked();
-        if (checkeds.length <= 0) {
-            $scope.alert("至少选择一条记录！", 'error');
-            return;
-        }
-        var ids = [];
-        for (var i = 0; i < checkeds.length; i++) {
-            ids.push(checkeds[i].id);
-        }
-        $scope.confirm("将要提交" + ids.length + "条记录", function (y) {
-            if (!y) {
-                return;
-            }
-            $http.post('app/tax/business/commit', {
-                'ids': ids
-            }).success(function (data) {
-                if (data.success) {
-                    $scope.innerCtrl.load($scope.datagrid.params);
-                    $scope.alert(data.message);
-                } else
-                    $scope.alert(data.message, 'error');
+    $scope.commitFirst = function (row) {
+        console.info($scope.detailObj);
+        var firstData = {
+            busId: $scope.detailObj.id,
+            hasIssue: $scope.hasIssue
+        };
+
+        if ($scope.hasIssue) {
+            var issues = $('#issues').find('input');
+            var issuesStr = '';
+            $.each(issues, function (i) {
+                issuesStr = $(issues[i]).val() + ',';
             });
+            issuesStr = issuesStr.substr(0, issuesStr.length - 1);
+
+            firstData = $.extend(firstData, {
+                issueIdStrs: issuesStr,
+                description: $scope.issueDesc
+            });
+        }
+
+        $http.post('app/tax/examine/first/commit', firstData).success(function (data) {
+            if (data.success) {
+                $scope.innerCtrl.load($scope.datagrid.params);
+                $scope.alert(data.message);
+            } else
+                $scope.alert(data.message, 'error');
         });
     };
+
 }]);

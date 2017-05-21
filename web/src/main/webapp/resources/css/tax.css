@@ -1,0 +1,10 @@
+.ws-tax-line {
+    border-top: dotted 1px #008c25;
+    margin: 20px 0;
+}
+
+.ws-tax-form-line {
+    font-weight: bold;
+    display: inline-block;
+    margin: 5px 0;
+}

@@ -58,6 +58,10 @@ public class BusinessDaoImpl extends BaseDaoImpl<BusinessEntity> implements Busi
             hqlsb.append(" and {0}.status = :status");
             params.put("status", bQuery.getStatus());
         }
+        if(bQuery.getIncludeStatus() != null){
+            hqlsb.append(" and {0}.status in (:statuses)");
+            params.put("statuses", bQuery.getIncludeStatus());
+        }
 
         return hqlsb;
     }
