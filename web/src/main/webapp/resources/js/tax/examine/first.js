@@ -64,7 +64,7 @@ angular.module('ws.app').controller('taxFirstCtrl', ['$rootScope', '$scope', '$h
 
     //初始化组列表
     $scope.datagrid = {
-        url: 'app/tax/examine/paging/committed',
+        url: 'app/tax/examine/paging/first',
         method: 'post',
         params: {},
         columns: [{
@@ -94,7 +94,7 @@ angular.module('ws.app').controller('taxFirstCtrl', ['$rootScope', '$scope', '$h
                 if(row.firstExamine){
                     return row.firstExamine.hasIssue ?
                         '<button type="button" class="btn btn-link btn-sm" title="否" onClick="angular.custom.taxBusinessFirstDetail(' + str + ')">否</button>' :
-                        '<span>是</span>';
+                        '<button type="button" class="btn btn-link btn-sm" title="是" disabled>是</button>';
                 } else {
                     return '';
                 }

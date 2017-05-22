@@ -53,6 +53,8 @@ public class BusinessModel extends BaseModel {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", locale = "zh", timezone = "GMT+8")
     private Date modifyTime;
 
+    private Integer status;
+
 
     public String getTaxpayerCode() {
         return taxpayerCode;
@@ -276,5 +278,13 @@ public class BusinessModel extends BaseModel {
 
     public void setThirdExamine(ExamineModel thirdExamine) {
         this.thirdExamine = thirdExamine;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

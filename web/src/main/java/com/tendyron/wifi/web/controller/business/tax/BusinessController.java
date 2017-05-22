@@ -43,11 +43,11 @@ public class BusinessController extends BaseController {
         }
     }
 
-    @RequestMapping("paging/committed")
+    @RequestMapping("paging/amendment")
     @ResponseBody
-    public Json pagingCommitted (BusinessQuery query) {
+    public Json pagingAmendment (BusinessQuery query) {
         try {
-            return success(businessService.pagingCommitted(query));
+            return success(businessService.pagingAmendment(query));
         } catch (ServiceException e) {
             return fail(e);
         }
@@ -97,4 +97,16 @@ public class BusinessController extends BaseController {
             return fail(e);
         }
     }
+
+    @RequestMapping("commit/amendment")
+    @ResponseBody
+    public Json commitAmendment(@RequestParam("ids[]") String[] ids){
+        try {
+            businessService.commitAmendment(ids);
+            return success("提交成功");
+        } catch (ServiceException e) {
+            return fail(e);
+        }
+    }
+
 }

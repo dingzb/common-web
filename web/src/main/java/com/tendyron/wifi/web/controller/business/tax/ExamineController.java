@@ -2,7 +2,6 @@ package com.tendyron.wifi.web.controller.business.tax;
 
 import com.tendyron.wifi.web.controller.BaseController;
 import com.tendyron.wifi.web.model.Json;
-import com.tendyron.wifi.web.model.business.tax.BusinessModel;
 import com.tendyron.wifi.web.model.business.tax.ExamineModel;
 import com.tendyron.wifi.web.query.business.tax.BusinessQuery;
 import com.tendyron.wifi.web.service.ServiceException;
@@ -23,11 +22,11 @@ public class ExamineController extends BaseController {
     @Autowired
     private BusinessService businessService;
 
-    @RequestMapping("paging/committed")
+    @RequestMapping("paging/first")
     @ResponseBody
     public Json pagingCommitted(BusinessQuery query){
         try {
-            return success(businessService.pagingCommitted(query));
+            return success(businessService.pagingFirst(query));
         } catch (ServiceException e) {
             return fail(e);
         }

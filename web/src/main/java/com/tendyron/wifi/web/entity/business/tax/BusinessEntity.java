@@ -15,7 +15,7 @@ public class BusinessEntity extends BaseEntity {
 
     private String taxpayerCode;
     private String taxpayerName;
-//    private String content;
+    //    private String content;
     private String description;
     private Date busTime;   //业务发生时间
 
@@ -197,5 +197,16 @@ public class BusinessEntity extends BaseEntity {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public static class BUS_STATUS {
+        public static final int CREATE = 0;
+        public static final int FIRST = 1;
+        public static final int SECOND = 2;
+        public static final int THIRD = 3;
+        public static final int HAS_ISSUE = 4;
+        public static final int FINISH = 5;
+
+        // 0: 创建, 1: 待自查, 2: 待审查, 3: 待核查, 4: 有问题，待整改, 5: 整改完成
     }
 }

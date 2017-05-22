@@ -6,6 +6,7 @@ import com.tendyron.wifi.web.dao.business.tax.BusinessDao;
 import com.tendyron.wifi.web.dao.business.tax.BusinessIssueDao;
 import com.tendyron.wifi.web.dao.system.UserDao;
 import com.tendyron.wifi.web.entity.business.tax.*;
+import com.tendyron.wifi.web.entity.business.tax.BusinessEntity.BUS_STATUS;
 import com.tendyron.wifi.web.entity.system.UserEntity;
 import com.tendyron.wifi.web.model.PagingModel;
 import com.tendyron.wifi.web.model.business.tax.*;
@@ -56,8 +57,15 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
 
     @Transactional
     @Override
-    public PagingModel pagingCommitted(BusinessQuery query) throws ServiceException {
+    public PagingModel pagingFirst(BusinessQuery query) throws ServiceException {
         query.setIncludeStatus(new Integer[]{1, 2, 3, 4, 5});
+        return paging(query);
+    }
+
+    @Transactional
+    @Override
+    public PagingModel pagingAmendment(BusinessQuery query) throws ServiceException {
+        query.setStatus(4);
         return paging(query);
     }
 
@@ -311,10 +319,7 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
                     }
                     scmTmp.setCount(scmTmp.getCount() + 1);
                     sm.setDetailCount(sm.getDetailCount() + 1);
-//                    BusIssueEntity busIssueEntity = be.getIssue();
-//                    if (busIssueEntity != null) {
-//                        scmTmp.getIssueNames().add(busIssueEntity.getName());
-//                    }
+
                 }
                 sm.setRecs(sctms);
                 sms.add(sm);
@@ -329,7 +334,7 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
     @Transactional
     @Override
     public void commit(String[] ids) throws ServiceException {
-        changeStatus(ids, 1);
+        changeStatus(ids, BUS_STATUS.FIRST);
     }
 
     private void changeStatus(String[] ids, int status) throws ServiceException {
@@ -383,11 +388,22 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
                     business.setThirdExamine(examineEntity);
             }
 
+            if (examine.getHasIssue()){
+                business.setStatus(BUS_STATUS.HAS_ISSUE);
+            } else {
+                business.setStatus(BUS_STATUS.SECOND);
+            }
             businessDao.update(business);
 
         } catch (Exception e) {
             logger.error("", e);
             throw new ServiceException();
         }
+    }
+
+    @Transactional
+    @Override
+    public void commitAmendment(String[] ids) throws ServiceException {
+        changeStatus(ids, BUS_STATUS.FINISH);
     }
 }

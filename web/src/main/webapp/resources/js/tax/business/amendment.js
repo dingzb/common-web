@@ -60,7 +60,7 @@ angular.module('ws.app').controller('taxAmendmentCtrl', ['$rootScope', '$scope',
 
     //初始化组列表
     $scope.datagrid = {
-        url: 'app/tax/business/paging/created',
+        url: 'app/tax/business/paging/amendment',
         method: 'post',
         params: {},
         columns: [{
@@ -75,35 +75,66 @@ angular.module('ws.app').controller('taxAmendmentCtrl', ['$rootScope', '$scope',
         }, {
             field: 'categoryName',
             title: '业务项目'
-        }
-            // , {
-            //     field: 'hasIssue',
-            //     title: '是否存在问题',
-            //     formatter: function (val) {
-            //         return val ? '是' : '否';
-            //     }
-            // }, {
-            //     field: 'issueName',
-            //     title: '问题种类'
-            // }
-            , {
-                field: 'agencyName',
-                title: '主管税务机关'
-            }, {
-                field: 'createName',
-                title: '税收管理员'
-            }, {
-                field: 'createTime',
-                title: '创建时间'
-            }, {
-                field: 'id',
-                title: '操作',
-                formatter: function (row) {
-                    var str = JSON.stringify(row);
-                    str = str.replace(/"/g, "'");
-                    return "<button type=\"button\" class=\"btn btn-link btn-sm\" title='详情' onClick=\"angular.custom.taxBusinessDetail(" + str + ")\"><span class=\"glyphicon glyphicon-link\" > </span></button>";
+        }, {
+            field: 'firstHasIssue',
+            title: '自查意见',
+            formatter: function (row) {
+                var issue = '';
+                if (row.firstHasIssue === null){
+                    issue = '<span></span>';
+                } else if (row.firstHasIssue){
+                    issue = '<a href="javascript:void(0);">否</a>';
+                } else {
+                    issue = '<span>是</span>';
                 }
-            }],
+                return issue;
+            }
+        }, {
+            field: 'secondHasIssue',
+            title: '复核意见',
+            formatter: function (row) {
+                var issue = '';
+                if (row.secondHasIssue === null){
+                    issue = '<span></span>';
+                } else if (row.secondHasIssue){
+                    issue = '<a href="javascript:void(0);" onclick="alert('+ row.secondExamine +')">否</a>';
+                } else {
+                    issue = '<span>是</span>';
+                }
+                return issue;
+            }
+        }, {
+            field: 'thirdHasIssue',
+            title: '核查意见',
+            formatter: function (row) {
+                var issue = '';
+                if (row.thirdHasIssue === null){
+                    issue = '<span></span>';
+                } else if (row.thirdHasIssue){
+                    issue = '<a href="javascript:void(0);" onclick="alert('+ row.thirdExamine +')">否</a>';
+                } else {
+                    issue = '<span>是</span>';
+                }
+                return issue;
+            }
+        }, {
+            field: 'agencyName',
+            title: '主管税务机关'
+        }, {
+            field: 'createName',
+            title: '税收管理员'
+        }, {
+            field: 'createTime',
+            title: '创建时间'
+        }, {
+            field: 'id',
+            title: '操作',
+            formatter: function (row) {
+                var str = JSON.stringify(row);
+                str = str.replace(/"/g, "'");
+                return '<button type="button" class="btn btn-link btn-sm" title="详情" onClick="angular.custom.taxBusinessDetail(' + str + ')"><span class="glyphicon glyphicon-link"></span></button>';
+            }
+        }],
         checkbox: true,
         sizes: [10, 20, 50, 80],
         pageSize: 10
@@ -302,7 +333,7 @@ angular.module('ws.app').controller('taxAmendmentCtrl', ['$rootScope', '$scope',
             $scope.detailObj = row;
         });
         $("#detailModal").modal('show');
-    }
+    };
 
 
     //=============== 提交业务 =====================
@@ -321,7 +352,7 @@ angular.module('ws.app').controller('taxAmendmentCtrl', ['$rootScope', '$scope',
             if (!y) {
                 return;
             }
-            $http.post('app/tax/business/commit', {
+            $http.post('app/tax/business/commit/amendment', {
                 'ids': ids
             }).success(function (data) {
                 if (data.success) {
