@@ -1,6 +1,7 @@
 *.iml
 target
 .idea
+*/**/log/*
 
 web/src/main/webapp/2.html
 web/src/main/webapp/WEB-INF/logs/2017-04/wireless_2017-04-29_1.log
