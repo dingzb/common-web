@@ -31,6 +31,13 @@ angular.module('ws.stateConfig').config(['$stateProvider', function ($stateProvi
                 templateUrl: 'tpls/tax/business/view.html'
             }
         }
+    }).state('main.tax.business.amendment', {
+        url: '/amendment',
+        views: {
+            'right@main.tax': {
+                templateUrl: 'tpls/tax/business/amendment.html'
+            }
+        }
     }).state('main.tax.examine', {
         url: '/examine'
     }).state('main.tax.examine.first', {
