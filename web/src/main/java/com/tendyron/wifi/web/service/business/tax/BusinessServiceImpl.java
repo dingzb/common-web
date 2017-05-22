@@ -51,21 +51,35 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
     @Transactional
     @Override
     public PagingModel pagingCreated(BusinessQuery query) throws ServiceException {
-        query.setStatus(0);
+        query.setStatus(BUS_STATUS.CREATE);
         return paging(query);
     }
 
     @Transactional
     @Override
     public PagingModel pagingFirst(BusinessQuery query) throws ServiceException {
-        query.setIncludeStatus(new Integer[]{1, 2, 3, 4, 5});
+        query.setIncludeStatus(new Integer[]{BUS_STATUS.FIRST, BUS_STATUS.SECOND, BUS_STATUS.THIRD, BUS_STATUS.HAS_ISSUE, BUS_STATUS.FINISH});
+        return paging(query);
+    }
+
+    @Transactional
+    @Override
+    public PagingModel pagingSecond(BusinessQuery query) throws ServiceException {
+        query.setIncludeStatus(new Integer[]{BUS_STATUS.SECOND, BUS_STATUS.THIRD, BUS_STATUS.HAS_ISSUE, BUS_STATUS.FINISH});
+        return paging(query);
+    }
+
+    @Transactional
+    @Override
+    public PagingModel pagingThird(BusinessQuery query) throws ServiceException {
+        query.setIncludeStatus(new Integer[]{BUS_STATUS.THIRD, BUS_STATUS.HAS_ISSUE, BUS_STATUS.FINISH});
         return paging(query);
     }
 
     @Transactional
     @Override
     public PagingModel pagingAmendment(BusinessQuery query) throws ServiceException {
-        query.setStatus(4);
+        query.setStatus(BUS_STATUS.HAS_ISSUE);
         return paging(query);
     }
 
@@ -388,10 +402,10 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
                     business.setThirdExamine(examineEntity);
             }
 
-            if (examine.getHasIssue()){
+            if (examine.getHasIssue()) {
                 business.setStatus(BUS_STATUS.HAS_ISSUE);
             } else {
-                business.setStatus(BUS_STATUS.SECOND);
+                business.setStatus((business.getStatus() + 1) > BUS_STATUS.THIRD ? BUS_STATUS.FINISH : business.getStatus() + 1);
             }
             businessDao.update(business);
 

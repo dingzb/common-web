@@ -1,6 +1,7 @@
 package com.tendyron.wifi.web.controller.business.tax;
 
 import com.tendyron.wifi.web.controller.BaseController;
+import com.tendyron.wifi.web.entity.business.tax.BusinessEntity.BUS_STATUS;
 import com.tendyron.wifi.web.model.Json;
 import com.tendyron.wifi.web.model.business.tax.ExamineModel;
 import com.tendyron.wifi.web.query.business.tax.BusinessQuery;
@@ -24,9 +25,29 @@ public class ExamineController extends BaseController {
 
     @RequestMapping("paging/first")
     @ResponseBody
-    public Json pagingCommitted(BusinessQuery query){
+    public Json pagingFirst(BusinessQuery query){
         try {
             return success(businessService.pagingFirst(query));
+        } catch (ServiceException e) {
+            return fail(e);
+        }
+    }
+
+    @RequestMapping("paging/second")
+    @ResponseBody
+    public Json pagingSecond(BusinessQuery query){
+        try {
+            return success(businessService.pagingSecond(query));
+        } catch (ServiceException e) {
+            return fail(e);
+        }
+    }
+
+    @RequestMapping("paging/third")
+    @ResponseBody
+    public Json pagingThird(BusinessQuery query){
+        try {
+            return success(businessService.pagingThird(query));
         } catch (ServiceException e) {
             return fail(e);
         }
@@ -35,7 +56,31 @@ public class ExamineController extends BaseController {
     @RequestMapping("first/commit")
     @ResponseBody
     public Json commitFirst(ExamineModel examine){
-        examine.setStep(1);
+        examine.setStep(BUS_STATUS.FIRST);
+        try {
+            businessService.commitExamine(examine);
+            return success("提交成功");
+        } catch (ServiceException e) {
+            return fail();
+        }
+    }
+
+    @RequestMapping("second/commit")
+    @ResponseBody
+    public Json commitSecond(ExamineModel examine){
+        examine.setStep(BUS_STATUS.SECOND);
+        try {
+            businessService.commitExamine(examine);
+            return success("提交成功");
+        } catch (ServiceException e) {
+            return fail();
+        }
+    }
+
+    @RequestMapping("third/commit")
+    @ResponseBody
+    public Json commitThird(ExamineModel examine){
+        examine.setStep(BUS_STATUS.THIRD);
         try {
             businessService.commitExamine(examine);
             return success("提交成功");

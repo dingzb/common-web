@@ -4,7 +4,7 @@
  */
 
 
-angular.module('ws.app').controller('taxFirstCtrl', ['$rootScope', '$scope', '$http', function ($rootScope, $scope, $http) {
+angular.module('ws.app').controller('taxThirdCtrl', ['$rootScope', '$scope', '$http', function ($rootScope, $scope, $http) {
     $scope.searchParams = {};
     $scope.categories = [];
     $scope.addObj = {};
@@ -64,7 +64,7 @@ angular.module('ws.app').controller('taxFirstCtrl', ['$rootScope', '$scope', '$h
 
     //初始化组列表
     $scope.datagrid = {
-        url: 'app/tax/examine/paging/first',
+        url: 'app/tax/examine/paging/third',
         method: 'post',
         params: {},
         columns: [{
@@ -100,6 +100,34 @@ angular.module('ws.app').controller('taxFirstCtrl', ['$rootScope', '$scope', '$h
                 }
             }
         }, {
+            field: 'secondExamine',
+            title: '审查意见',
+            formatter: function (row) {
+                var str = JSON.stringify(row);
+                str = str.replace(/"/g, "'");
+                if(row.secondExamine){
+                    return row.secondExamine.hasIssue ?
+                        '<button type="button" class="btn btn-link btn-sm" title="否" onClick="angular.custom.taxBusinessSecondDetail(' + str + ')">否</button>' :
+                        '<button type="button" class="btn btn-link btn-sm" title="是" disabled>是</button>';
+                } else {
+                    return '';
+                }
+            }
+        }, {
+            field: 'thirdExamine',
+            title: '核查意见',
+            formatter: function (row) {
+                var str = JSON.stringify(row);
+                str = str.replace(/"/g, "'");
+                if(row.thirdExamine){
+                    return row.thirdExamine.hasIssue ?
+                        '<button type="button" class="btn btn-link btn-sm" title="否" onClick="angular.custom.taxBusinessThirdDetail(' + str + ')">否</button>' :
+                        '<button type="button" class="btn btn-link btn-sm" title="是" disabled>是</button>';
+                } else {
+                    return '';
+                }
+            }
+        }, {
             field: 'createTime',
             title: '创建时间'
         }, {
@@ -108,7 +136,7 @@ angular.module('ws.app').controller('taxFirstCtrl', ['$rootScope', '$scope', '$h
             formatter: function (row) {
                 var str = JSON.stringify(row);
                 str = str.replace(/"/g, "'");
-                return '<button type="button" class="btn btn-link btn-sm" title="自查" onClick="angular.custom.taxBusinessFirst(' + str + ')">自查</button>';
+                return '<button type="button" class="btn btn-link btn-sm" title="核查" onClick="angular.custom.taxBusinessThird(' + str + ')">核查</button>';
             }
         }],
         checkbox: true,
@@ -130,25 +158,26 @@ angular.module('ws.app').controller('taxFirstCtrl', ['$rootScope', '$scope', '$h
         $.extend($scope.searchParams, clearSearch);
     };
 
-    //========= 自查 =================
-    angular.custom.taxBusinessFirst = function (row) {
+    //========= 核查 =================
+    angular.custom.taxBusinessThird = function (row) {
         $scope.$apply(function () {
             $scope.detailObj = row;
-            $scope.isFirsted = row.firstExamine !== null;
-            $scope.hasIssue = false;
+            $scope.isThird = row.thirdExamine !== null;
+            $scope.hasIssue = '0';
+            console.info($scope.hasIssue)
         });
-        $("#firstModal").modal('show');
+        $("#thirdModal").modal('show');
     };
 
     angular.custom.taxBusinessFirstDetail = function (row) {
         alert(row.firstExamine.issues[0].name);
     };
 
-    //=============== 提交自查 =====================
+    //=============== 提交核查 =====================
 
-    $scope.commitFirst = function (row) {
+    $scope.commitThird = function (row) {
         console.info($scope.detailObj);
-        var firstData = {
+        var thirdData = {
             busId: $scope.detailObj.id,
             hasIssue: $scope.hasIssue
         };
@@ -161,13 +190,13 @@ angular.module('ws.app').controller('taxFirstCtrl', ['$rootScope', '$scope', '$h
             });
             issuesStr = issuesStr.substr(0, issuesStr.length - 1);
 
-            firstData = $.extend(firstData, {
+            thirdData = $.extend(thirdData, {
                 issueIdStrs: issuesStr,
                 description: $scope.issueDesc
             });
         }
 
-        $http.post('app/tax/examine/first/commit', firstData).success(function (data) {
+        $http.post('app/tax/examine/third/commit', thirdData).success(function (data) {
             if (data.success) {
                 $scope.innerCtrl.load($scope.datagrid.params);
                 $scope.alert(data.message);

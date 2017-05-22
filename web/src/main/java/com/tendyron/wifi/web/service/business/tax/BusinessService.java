@@ -45,6 +45,22 @@ public interface BusinessService extends BaseService<BusinessEntity> {
     PagingModel pagingFirst(BusinessQuery query) throws ServiceException;
 
     /**
+     *
+     * @param query
+     * @return
+     * @throws ServiceException
+     */
+    PagingModel pagingSecond(BusinessQuery query) throws ServiceException;
+
+    /**
+     *
+     * @param query
+     * @return
+     * @throws ServiceException
+     */
+    PagingModel pagingThird(BusinessQuery query) throws ServiceException;
+
+    /**
      * 查询需要整改的业务
      *
      * @param query
@@ -84,4 +100,5 @@ public interface BusinessService extends BaseService<BusinessEntity> {
      * @throws ServiceException
      */
     void commitAmendment(String[] ids) throws ServiceException;
+
 }

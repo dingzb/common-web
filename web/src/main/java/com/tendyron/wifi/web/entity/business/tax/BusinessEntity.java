@@ -161,7 +161,7 @@ public class BusinessEntity extends BaseEntity {
         this.firstExamine = firstExamine;
     }
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "examine_second_id")
     public ExamineEntity getSecondExamine() {
         return secondExamine;
@@ -171,7 +171,7 @@ public class BusinessEntity extends BaseEntity {
         this.secondExamine = secondExamine;
     }
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "examine_third_id")
     public ExamineEntity getThirdExamine() {
         return thirdExamine;

@@ -47,6 +47,20 @@ angular.module('ws.stateConfig').config(['$stateProvider', function ($stateProvi
                 templateUrl: 'tpls/tax/examine/first.html'
             }
         }
+    }).state('main.tax.examine.second', {
+        url: '/second',
+        views: {
+            'right@main.tax': {
+                templateUrl: 'tpls/tax/examine/second.html'
+            }
+        }
+    }).state('main.tax.examine.third', {
+        url: '/third',
+        views: {
+            'right@main.tax': {
+                templateUrl: 'tpls/tax/examine/third.html'
+            }
+        }
     }).state('main.tax.statistics', {
         url: '/statistics'
     }).state('main.tax.statistics.statement', {
