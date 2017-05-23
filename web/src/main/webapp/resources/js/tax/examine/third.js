@@ -217,7 +217,7 @@ angular.module('ws.app').controller('taxThirdCtrl', ['$rootScope', '$scope', '$h
             var issues = $('#issues').find('input');
             var issuesStr = '';
             $.each(issues, function (i) {
-                issuesStr = $(issues[i]).val() + ',';
+                issuesStr = issuesStr + $(issues[i]).val() + ',';
             });
             issuesStr = issuesStr.substr(0, issuesStr.length - 1);
 

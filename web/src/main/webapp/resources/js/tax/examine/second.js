@@ -189,7 +189,7 @@ angular.module('ws.app').controller('taxSecondCtrl', ['$rootScope', '$scope', '$
         $('#issueDetailModal').modal('show');
     };
 
-    //=============== 提交自查 =====================
+    //=============== 提交审查 =====================
 
     $scope.commitSecond = function (row) {
         console.info($scope.detailObj);
