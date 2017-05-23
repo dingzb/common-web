@@ -26,20 +26,22 @@
                             aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h4 class="modal-title">业务核查{{hasIssue}}</h4>{{hasIssue}}
+                    <h4 class="modal-title">业务核查</h4>
                 </div>
                 <div class="modal-body">
                     <table class="ws-form-table input-long">
                         <tr>
                             <th><label for="detail_taxpayer_code">纳税人识别号：</label></th>
                             <td>
-                                <input id="detail_taxpayer_code" class="form-control input-sm" type="text" name="taxpayerCode"
+                                <input id="detail_taxpayer_code" class="form-control input-sm" type="text"
+                                       name="taxpayerCode"
                                        placeholder="纳税人识别号" readonly
                                        ng-model="detailObj.taxpayerCode">
                             </td>
                             <th><label for="detail_taxpayer_name">纳税人名称：</label></th>
                             <td>
-                                <input id="detail_taxpayer_name" class="form-control input-sm" type="text" name="taxpayerName"
+                                <input id="detail_taxpayer_name" class="form-control input-sm" type="text"
+                                       name="taxpayerName"
                                        placeholder="纳税人名称" readonly
                                        ng-model="detailObj.taxpayerName">
                             </td>
@@ -70,29 +72,31 @@
                             </td>
                             <th><label for="detail_desc">业务描述：</label></th>
                             <td>
-                                    <textarea id="detail_desc" class="form-control" type="text" name="description" readonly
+                                    <textarea id="detail_desc" class="form-control" type="text" name="description"
+                                              readonly
                                               style="resize: none; height: 100px; width: 250px; margin-top: 10px;"
-                                              placeholder="业务描述" ng-model="detailObj.description" maxlength="500" required></textarea>
+                                              placeholder="业务描述" ng-model="detailObj.description" maxlength="500"
+                                              required></textarea>
                             </td>
                         </tr>
                     </table>
 
 
                     <div class="ws-tax-line"></div>
-                    <div ng-if="!isThird && detailObj.status !== 5">
-                        <form name="firstForm" novalidate>
+                    <div ng-show="!isThird && detailObj.status !== 4">
+                        <form name="thirdForm" novalidate>
                             <div class="ws-tax-form-line">
                                 <span>通过自查是否发现问题：</span>
                                 <span>
-                                <label class="radio-inline">{{hasIssue}}
-                                    <input ng-model="hasIssue" type="radio" name="hasIssue" value="1">是
+                                <label class="radio-inline">
+                                    <input ng-model="hasIssue" type="radio" name="hasIssue" ng-value="true">是
                                 </label>
                                 <label class="radio-inline">
-                                    <input ng-model="hasIssue" type="radio" name="hasIssue" value="0">否
+                                    <input ng-model="hasIssue" type="radio" name="hasIssue" ng-value="false">否
                                 </label>
                             </span>
                             </div>
-                            <div class="collapse" ng-class="{in: hasIssue === '1'}">
+                            <div class="collapse" ng-class="{'in': hasIssue}">
                                 <div class="ws-tax-form-line">
                                     <span>问题类型：</span>
                                     <span id="issues">
@@ -111,15 +115,125 @@
 
                         </form>
                     </div>
-                    <div ng-if="isThird">
+                    <div ng-show="isThird">
                         <span style="color: #f42c2a;">业务已经核查</span>
                     </div>
-                    <div ng-if="detailObj.status === 5">
+                    <div ng-show="!isThird && detailObj.status === 4">
                         <span style="color: #f42c2a;">业务已经被标记为有问题</span>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button ng-disabled="isThird || detailObj.status === 5" type="button" data-dismiss="modal" class="btn-danger btn btn-sm" ng-click="commitThird()">保存核查并提交</button>
+                    <button ng-disabled="isThird || detailObj.status === 4" type="button" data-dismiss="modal"
+                            class="btn-danger btn btn-sm" ng-click="commitThird()">保存核查并提交
+                    </button>
+                    <button type="button" class="btn-info btn btn-sm" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 问题详情 -->
+    <div class="modal fade" id="issueDetailModal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" data-backdrop="static">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">业务{{issueDetail.title}}详情</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="ws-form-table input-long">
+                        <tr>
+                            <th><label for="issue_detail_taxpayer_code">纳税人识别号：</label></th>
+                            <td>
+                                <input id="issue_detail_taxpayer_code" class="form-control input-sm" type="text"
+                                       name="taxpayerCode"
+                                       placeholder="纳税人识别号" readonly
+                                       ng-model="detailObj.taxpayerCode">
+                            </td>
+                            <th><label for="issue_detail_taxpayer_name">纳税人名称：</label></th>
+                            <td>
+                                <input id="issue_detail_taxpayer_name" class="form-control input-sm" type="text"
+                                       name="taxpayerName"
+                                       placeholder="纳税人名称" readonly
+                                       ng-model="detailObj.taxpayerName">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><label for="issue_detail_category_type">业务类型：</label></th>
+                            <td>
+                                <input id="issue_detail_category_type" class="form-control input-sm"
+                                       name="categoryTypeId"
+                                       ng-model="detailObj.categoryTypeName" readonly>
+                            </td>
+                            <th><label for="issue_detail_category">业务项目：</label></th>
+                            <td>
+                                <input id="issue_detail_category" class="form-control input-sm" name="categoryId"
+                                       ng-model="detailObj.categoryName" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><label for="issue_detail_time">业务时间：</label></th>
+                            <td>
+                                <div class="input-group input-group-sm ws-datetimepicker">
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    <input size="16" type="text" id="issue_detail_time" name="busTime" readonly
+                                           class="form-control input-sm" style="width: 215px;"
+                                           placeholder="年-月-日 时:分" ng-model="detailObj.busTime">
+                                </div>
+                            </td>
+                            <th><label for="issue_detail_desc">业务描述：</label></th>
+                            <td>
+                                    <textarea id="issue_detail_desc" class="form-control" type="text" name="description"
+                                              readonly
+                                              style="resize: none; height: 100px; width: 250px; margin-top: 10px;"
+                                              placeholder="业务描述" ng-model="detailObj.description" maxlength="500"
+                                              required></textarea>
+                            </td>
+                        </tr>
+                    </table>
+
+
+                    <div class="ws-tax-line"></div>
+                    <div>
+                        <div class="ws-tax-form-line">
+                            <span>通过{{issueDetail.title}}是否发现问题：</span>
+                            <span>
+                                <label class="radio-inline">
+                                    <input ng-model="issueDetail.hasIssue" type="radio" name="hasIssue" ng-value="true"
+                                           disabled>是
+                                </label>
+                                <label class="radio-inline">
+                                    <input ng-model="issueDetail.hasIssue" type="radio" name="hasIssue" ng-value="false"
+                                           disabled>否
+                                </label>
+                            </span>
+                        </div>
+                        <div class="collapse" ng-class="{'in': issueDetail.hasIssue}">
+                            <div class="ws-tax-form-line">
+                                <span>问题类型：</span>
+                                <div id="issue_issues" style="display: inline;">
+                                    <label class="checkbox-inline" ng-repeat="issue in issues">
+                                        <input type="checkbox" value="{{issue.id}}" disabled/>{{issue.name}}
+                                    </label>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="ws-tax-form-line">问题描述：</div>
+                                <textarea class="form-control" type="text" name="description"
+                                          ng-model="issueDetail.description"
+                                          style="resize: none; height: 100px; width: 100%; margin-top: 10px;"
+                                          placeholder="问题描述" maxlength="500" readonly></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
                     <button type="button" class="btn-info btn btn-sm" data-dismiss="modal">关闭</button>
                 </div>
             </div>

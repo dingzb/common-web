@@ -76,46 +76,46 @@ angular.module('ws.app').controller('taxAmendmentCtrl', ['$rootScope', '$scope',
             field: 'categoryName',
             title: '业务项目'
         }, {
-            field: 'firstHasIssue',
+            field: 'firstExamine',
             title: '自查意见',
             formatter: function (row) {
-                var issue = '';
-                if (row.firstHasIssue === null){
-                    issue = '<span></span>';
-                } else if (row.firstHasIssue){
-                    issue = '<a href="javascript:void(0);">否</a>';
+                var str = JSON.stringify(row);
+                str = str.replace(/"/g, "'");
+                if(row.firstExamine){
+                    return row.firstExamine.hasIssue ?
+                        '<button type="button" class="btn btn-link btn-sm" title="否" onClick="angular.custom.taxBusinessFirstDetail(' + str + ')">否</button>' :
+                        '<button type="button" class="btn btn-link btn-sm" title="是" disabled>是</button>';
                 } else {
-                    issue = '<span>是</span>';
+                    return '';
                 }
-                return issue;
             }
         }, {
-            field: 'secondHasIssue',
-            title: '复核意见',
+            field: 'secondExamine',
+            title: '审查意见',
             formatter: function (row) {
-                var issue = '';
-                if (row.secondHasIssue === null){
-                    issue = '<span></span>';
-                } else if (row.secondHasIssue){
-                    issue = '<a href="javascript:void(0);" onclick="alert('+ row.secondExamine +')">否</a>';
+                var str = JSON.stringify(row);
+                str = str.replace(/"/g, "'");
+                if(row.secondExamine){
+                    return row.secondExamine.hasIssue ?
+                        '<button type="button" class="btn btn-link btn-sm" title="否" onClick="angular.custom.taxBusinessSecondDetail(' + str + ')">否</button>' :
+                        '<button type="button" class="btn btn-link btn-sm" title="是" disabled>是</button>';
                 } else {
-                    issue = '<span>是</span>';
+                    return '';
                 }
-                return issue;
             }
         }, {
-            field: 'thirdHasIssue',
+            field: 'thirdExamine',
             title: '核查意见',
             formatter: function (row) {
-                var issue = '';
-                if (row.thirdHasIssue === null){
-                    issue = '<span></span>';
-                } else if (row.thirdHasIssue){
-                    issue = '<a href="javascript:void(0);" onclick="alert('+ row.thirdExamine +')">否</a>';
+                var str = JSON.stringify(row);
+                str = str.replace(/"/g, "'");
+                if(row.thirdExamine){
+                    return row.thirdExamine.hasIssue ?
+                        '<button type="button" class="btn btn-link btn-sm" title="否" onClick="angular.custom.taxBusinessThirdDetail(' + str + ')">否</button>' :
+                        '<button type="button" class="btn btn-link btn-sm" title="是" disabled>是</button>';
                 } else {
-                    issue = '<span>是</span>';
+                    return '';
                 }
-                return issue;
             }
         }, {
             field: 'agencyName',

@@ -200,10 +200,6 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
                 BusCategoryEntity categoryEntity = businessCategoryDao.getById(businessModel.getCategoryId());
                 businessEntity.setCategory(categoryEntity);
             }
-//            if (businessModel.getHasIssue() && !StringTools.isEmpty(businessModel.getIssueId())) {
-//                BusIssueEntity busIssueEntity = businessIssueDao.getById(businessModel.getIssueId());
-//                businessEntity.setIssue(busIssueEntity);
-//            }
             if (!StringTools.isEmpty(businessModel.getUserId())) {
                 UserEntity create = userDao.getById(businessModel.getUserId());
                 businessEntity.setCreate(create);
@@ -215,6 +211,7 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
 
         businessEntity.setCreateTime(new Date());
         businessEntity.setId(StringTools.randomUUID());
+        businessEntity.setStatus(BUS_STATUS.CREATE);
         businessDao.save(businessEntity);
     }
 
@@ -371,48 +368,67 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
     @Override
     public void commitExamine(ExamineModel examine) throws ServiceException {
         if (examine.getStep() == 0) {
-            throw new ServiceException("审查阶段未指定");
+            throw new ServiceException("审查阶段错误");
         }
+
         String busId = examine.getBusId();
+        BusinessEntity business;
         try {
-            BusinessEntity business = businessDao.getById(busId);
-            if (business == null) {
-                throw new ServiceException("业务不存在");
-            }
-            ExamineEntity examineEntity = new ExamineEntity();
-            examineEntity.setId(StringTools.randomUUID());
-            examineEntity.setHasIssue(examine.getHasIssue());
-
-            String issueIdStr = examine.getIssueIdStrs();
-            if (!StringTools.isEmpty(issueIdStr)) {
-                String[] issueIds = issueIdStr.split(",");
-                Set<BusIssueEntity> issues = businessIssueDao.getByIds(Arrays.asList(issueIds));
-                examineEntity.setIssues(issues);
-                examineEntity.setDescription(examine.getDescription());
-            }
-
-            switch (examine.getStep()) {
-                case 1:
-                    business.setFirstExamine(examineEntity);
-                    break;
-                case 2:
-                    business.setSecondExamine(examineEntity);
-                    break;
-                case 3:
-                    business.setThirdExamine(examineEntity);
-            }
-
-            if (examine.getHasIssue()) {
-                business.setStatus(BUS_STATUS.HAS_ISSUE);
-            } else {
-                business.setStatus((business.getStatus() + 1) > BUS_STATUS.THIRD ? BUS_STATUS.FINISH : business.getStatus() + 1);
-            }
-            businessDao.update(business);
-
+            business = businessDao.getById(busId);
         } catch (Exception e) {
             logger.error("", e);
             throw new ServiceException();
         }
+        if (business == null) {
+            throw new ServiceException("业务不存在");
+        }
+
+        if (BUS_STATUS.HAS_ISSUE == business.getStatus()) {
+            throw new ServiceException("业务已经被标记为有问题");
+        }
+
+        if (examine.getStep() + 1 == business.getStatus()) {
+            throw new ServiceException("业务已经检查过");
+        }
+
+        ExamineEntity examineEntity = new ExamineEntity();
+        examineEntity.setId(StringTools.randomUUID());
+        examineEntity.setHasIssue(examine.getHasIssue());
+
+        String issueIdStr = examine.getIssueIdStrs();
+        if (!StringTools.isEmpty(issueIdStr)) {
+            String[] issueIds = issueIdStr.split(",");
+            Set<BusIssueEntity> issues = businessIssueDao.getByIds(Arrays.asList(issueIds));
+            examineEntity.setIssues(issues);
+            examineEntity.setDescription(examine.getDescription());
+        }
+
+        switch (examine.getStep()) {
+            case 1:
+                business.setFirstExamine(examineEntity);
+                break;
+            case 2:
+                business.setSecondExamine(examineEntity);
+                break;
+            case 3:
+                business.setThirdExamine(examineEntity);
+        }
+
+        if (examine.getHasIssue()) {
+            business.setStatus(BUS_STATUS.HAS_ISSUE);
+        } else {
+            business.setStatus((business.getStatus() + 1) > BUS_STATUS.THIRD ? BUS_STATUS.FINISH : business.getStatus() + 1);
+        }
+
+        try {
+
+            businessDao.update(business);
+        } catch (Exception e) {
+            logger.error("", e);
+            throw new ServiceException();
+        }
+
+
     }
 
     @Transactional

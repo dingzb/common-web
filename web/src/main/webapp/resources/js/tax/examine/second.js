@@ -86,6 +86,9 @@ angular.module('ws.app').controller('taxSecondCtrl', ['$rootScope', '$scope', '$
             field: 'createName',
             title: '税收管理员'
         }, {
+            field: 'busTime',
+            title: '业务时间'
+        }, {
             field: 'firstExamine',
             title: '自查意见',
             formatter: function (row) {
@@ -93,7 +96,7 @@ angular.module('ws.app').controller('taxSecondCtrl', ['$rootScope', '$scope', '$
                 str = str.replace(/"/g, "'");
                 if(row.firstExamine){
                     return row.firstExamine.hasIssue ?
-                        '<button type="button" class="btn btn-link btn-sm" title="否" onClick="angular.custom.taxBusinessFirstDetail(' + str + ')">否</button>' :
+                        '<button type="button" class="btn btn-link btn-sm" title="否" onClick="angular.custom.taxBusinessIssueDetail(' + str + ', 1)">否</button>' :
                         '<button type="button" class="btn btn-link btn-sm" title="是" disabled>是</button>';
                 } else {
                     return '';
@@ -107,15 +110,12 @@ angular.module('ws.app').controller('taxSecondCtrl', ['$rootScope', '$scope', '$
                 str = str.replace(/"/g, "'");
                 if(row.secondExamine){
                     return row.secondExamine.hasIssue ?
-                        '<button type="button" class="btn btn-link btn-sm" title="否" onClick="angular.custom.taxBusinessSecondDetail(' + str + ')">否</button>' :
+                        '<button type="button" class="btn btn-link btn-sm" title="否" onClick="angular.custom.taxBusinessIssueDetail(' + str + ', 2)">否</button>' :
                         '<button type="button" class="btn btn-link btn-sm" title="是" disabled>是</button>';
                 } else {
                     return '';
                 }
             }
-        }, {
-            field: 'createTime',
-            title: '创建时间'
         }, {
             field: 'id',
             title: '操作',
@@ -154,8 +154,39 @@ angular.module('ws.app').controller('taxSecondCtrl', ['$rootScope', '$scope', '$
         $("#secondModal").modal('show');
     };
 
-    angular.custom.taxBusinessFirstDetail = function (row) {
-        alert(row.firstExamine.issues[0].name);
+    angular.custom.taxBusinessIssueDetail = function (row, step) {
+        var issues = null;
+
+        $scope.$apply(function () {
+            $scope.detailObj = row;
+            switch (step) {
+                case 1:
+                    issues = row.firstExamine.issues;
+                    $scope.issueDetail = row.firstExamine;
+                    $scope.issueDetail.title = '自查';
+                    break;
+                case 2:
+                    issues = row.secondExamine.issues;
+                    $scope.issueDetail = row.secondExamine;
+                    $scope.issueDetail.title = '审查';
+                    break;
+                case 3:
+                    issues = row.thirdExamine.issues;
+                    $scope.issueDetail = row.thirdExamine;
+                    $scope.issueDetail.title = '核查';
+            }
+        });
+
+        $('#issue_issues').find('input').prop('checked', false);
+
+        if (issues){
+            issues.forEach(function (issue) {
+                $('#issue_issues').find('input[value=' + issue.id + ']').prop('checked', true);
+            });
+        }
+
+
+        $('#issueDetailModal').modal('show');
     };
 
     //=============== 提交自查 =====================
@@ -168,10 +199,10 @@ angular.module('ws.app').controller('taxSecondCtrl', ['$rootScope', '$scope', '$
         };
 
         if ($scope.hasIssue) {
-            var issues = $('#issues').find('input');
+            var issues = $('#issues').find('input:checked');
             var issuesStr = '';
             $.each(issues, function (i) {
-                issuesStr = $(issues[i]).val() + ',';
+                issuesStr = issuesStr + $(issues[i]).val() + ',';
             });
             issuesStr = issuesStr.substr(0, issuesStr.length - 1);
 

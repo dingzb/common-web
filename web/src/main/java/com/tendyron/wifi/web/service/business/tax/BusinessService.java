@@ -45,7 +45,6 @@ public interface BusinessService extends BaseService<BusinessEntity> {
     PagingModel pagingFirst(BusinessQuery query) throws ServiceException;
 
     /**
-     *
      * @param query
      * @return
      * @throws ServiceException
@@ -53,7 +52,6 @@ public interface BusinessService extends BaseService<BusinessEntity> {
     PagingModel pagingSecond(BusinessQuery query) throws ServiceException;
 
     /**
-     *
      * @param query
      * @return
      * @throws ServiceException
@@ -75,6 +73,13 @@ public interface BusinessService extends BaseService<BusinessEntity> {
 
     Integer del(String[] ids) throws ServiceException;
 
+    /**
+     * 报表统计
+     *
+     * @param query
+     * @return
+     * @throws ServiceException
+     */
     List<StatementModel> statement(StatementQuery query) throws ServiceException;
 
     /**

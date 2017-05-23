@@ -61,7 +61,7 @@ public class ExamineController extends BaseController {
             businessService.commitExamine(examine);
             return success("提交成功");
         } catch (ServiceException e) {
-            return fail();
+            return fail(e);
         }
     }
 
@@ -73,7 +73,7 @@ public class ExamineController extends BaseController {
             businessService.commitExamine(examine);
             return success("提交成功");
         } catch (ServiceException e) {
-            return fail();
+            return fail(e);
         }
     }
 
@@ -85,7 +85,7 @@ public class ExamineController extends BaseController {
             businessService.commitExamine(examine);
             return success("提交成功");
         } catch (ServiceException e) {
-            return fail();
+            return fail(e);
         }
     }
 }
