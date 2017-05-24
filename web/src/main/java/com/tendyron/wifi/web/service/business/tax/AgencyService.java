@@ -11,5 +11,5 @@ import java.util.List;
  * Created by Neo on 2017/5/12.
  */
 public interface AgencyService extends BaseService<AgencyEntity> {
-    List<AgencyModel> list() throws SerialException;
+    List<AgencyModel> list(String level) throws SerialException;
 }

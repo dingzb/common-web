@@ -11,6 +11,30 @@ angular.module('ws.app').controller('systemUserCtrl', ['$rootScope', '$scope', '
         });
     };
 
+    //获取二级机构（分局）
+    $http.post('app/tax/agency/list', {}).success(function (data) {
+        if (data.success) {
+            $scope.agencies = data.data;
+        } else if (data.message) {
+            $scope.alert(data.message, 'error');
+        }
+    }).error(function (data) {
+        $scope.alert(data, 'error');
+    });
+
+    //获取一级机构（县局）
+    $http.post('app/tax/agency/list', {level: 0}).success(function (data) {
+        if (data.success) {
+            $scope.topAgencies = data.data;
+            $scope.userTopAgencyId = data.data[0].id;
+        } else if (data.message) {
+            $scope.alert(data.message, 'error');
+        }
+    }).error(function (data) {
+        $scope.alert(data, 'error');
+    });
+
+
     //初始化列表
     $scope.datagrid = {
         url: 'app/system/user/paging',
@@ -23,27 +47,14 @@ angular.module('ws.app').controller('systemUserCtrl', ['$rootScope', '$scope', '
             field: 'name',
             title: '姓名'
         }, {
-            field: 'type',
-            title: '类型',
-            formatter: function (val) {
-                switch (val.type) {
-                    case 'ADMIN':
-                        return '管理员';
-                    case 'NORMAL':
-                        return '普通';
-                    default :
-                        return '未知';
-                }
+            field: 'agency',
+            title: '机关',
+            translator: function (row) {
+                return row.agency === null ? '' : row.agency.name;
             }
-        }, {
-            field: 'idCard',
-            title: '证件号码'
         }, {
             field: 'createTime',
             title: '创建时间'
-        }, {
-            field: 'modifyTime',
-            title: '修改时间'
         }],
         checkbox: {
             field: 'yes'
@@ -57,9 +68,9 @@ angular.module('ws.app').controller('systemUserCtrl', ['$rootScope', '$scope', '
 
         var clearSearch = {
             username: "",
-            name : "",
-            createTimeStart : "",
-            createTimeEnd : ""
+            name: "",
+            createTimeStart: "",
+            createTimeEnd: ""
         };
         $.extend($scope.searchParams, clearSearch);
         $.extend($scope.datagrid.params, clearSearch);
@@ -146,14 +157,12 @@ angular.module('ws.app').controller('systemUserCtrl', ['$rootScope', '$scope', '
         if (!validateForm()) {
             return;
         }
+
         $scope.mask(true, 0);
         $http.post("app/system/user/add", {
-            'id': $scope.info.id,
             'username': $scope.info.username,
             'name': $scope.info.name,
-            'email': $scope.info.email,
-            'idCard': $scope.info.idCard,
-            'phone': $scope.info.phone,
+            'agencyId': $scope.userAgencyId ? $scope.userAgencyId : $scope.userTopAgencyId,
             'type': 'NORMAL'
         }).success(function (data, status, headers, config) {
             $scope.mask(false);
@@ -175,17 +184,18 @@ angular.module('ws.app').controller('systemUserCtrl', ['$rootScope', '$scope', '
     $scope.onEdit = function () {
         $scope.modalTitle = "修改用户";
         var checkeds = $scope.innerCtrl.getChecked();
-        if (checkeds.length == 1) {
+        var level = checkeds[0].agency.level;
+        $scope.editUserAgencyId = level === 0 ? '' : checkeds[0].agency.id;
+        $scope.editUserTopAgencyId = level !== 0 ? '' : checkeds[0].agency.id;
+
+        if (checkeds.length === 1) {
             $scope.edit = checkeds[0];
             $scope.edit = {
                 'username': checkeds[0].username,
                 'name': checkeds[0].name,
-                'idCard': checkeds[0].idCard,
-                'email': checkeds[0].email,
-                'phone': checkeds[0].phone,
-                'type': checkeds[0].type,
                 'id': checkeds[0].id
-            };
+            }
+            ;
             $("#editModal").modal('show');
         } else {
             $scope.alert("必须选择一条记录进行编辑", 'error');
@@ -202,10 +212,7 @@ angular.module('ws.app').controller('systemUserCtrl', ['$rootScope', '$scope', '
             'id': $scope.edit.id,
             'username': $scope.edit.username,
             'name': $scope.edit.name,
-            'email': $scope.edit.email,
-            'idCard': $scope.edit.idCard,
-            'phone': $scope.edit.phone,
-            'type': $scope.edit.type
+            'agencyId': $scope.editUserAgencyId ? $scope.editUserAgencyId : $scope.editUserTopAgencyId
         }).success(function (data) {
             $scope.mask(false);
             if (data.success) {
@@ -237,7 +244,7 @@ angular.module('ws.app').controller('systemUserCtrl', ['$rootScope', '$scope', '
     //设置组
     $scope.showGroups = function () {
         var checkeds = $scope.innerCtrl.getChecked();
-        if (checkeds.length != 1) {
+        if (checkeds.length !== 1) {
             $scope.alert("只能设置一条记录！", 'error');
             return;
         }

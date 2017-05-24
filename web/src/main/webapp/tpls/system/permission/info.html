@@ -16,18 +16,18 @@
                         <td><span>名称</span></td>
                         <td><span ng-bind="display.name"></span></td>
                     </tr>
-                    <tr>
-                        <td><span>邮箱</span></td>
-                        <td><span ng-bind="display.email"></span></td>
-                    </tr>
-                    <tr>
-                        <td><span>证件号码</span></td>
-                        <td><span ng-bind="display.idCard"></span></td>
-                    </tr>
-                    <tr>
-                        <td><span>手机号</span></td>
-                        <td><span ng-bind="display.phone"></span></td>
-                    </tr>
+                    <!--<tr>-->
+                        <!--<td><span>邮箱</span></td>-->
+                        <!--<td><span ng-bind="display.email"></span></td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                        <!--<td><span>证件号码</span></td>-->
+                        <!--<td><span ng-bind="display.idCard"></span></td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                        <!--<td><span>手机号</span></td>-->
+                        <!--<td><span ng-bind="display.phone"></span></td>-->
+                    <!--</tr>-->
                     </tbody>
                 </table>
             </div>
@@ -74,91 +74,91 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-8">
-                            <div class="form-group"
-                                 ng-class="{'has-error has-feedback':infoForm.email.$dirty&&infoForm.email.$invalid}">
-                                <label for="email">邮箱</label>
-                                <input name="email" type="email" class="form-control input-sm" id="email" placeholder="邮箱"
-                                       required
-                                       ng-model="info.email" ng-maxlength=50 
-                                       ng-pattern="/^[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?$/">
-                                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"
-                                      ng-show="infoForm.email.$dirty&&infoForm.email.$invalid"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="oldPasswd">&nbsp;</label>
-                                <p ng-show="infoForm.email.$dirty&&infoForm.email.$error.required"
-                                   class="form-control-static" style="font-size: small; color: #A94442">
-                                    <span class="glyphicon glyphicon-info-sign"></span>&nbsp;请输入邮箱
-                                </p>
-                                <p ng-show="infoForm.email.$dirty&&infoForm.email.$error.email"
-                                   class="form-control-static"
-                                   style="width:200px;font-size: small; color: #A94442">
-                                    <span class="glyphicon glyphicon-info-sign"></span>&nbsp;邮箱格式为xxxx@xx.xx
-                                </p>
-                                <p ng-show="infoForm.email.$dirty&&infoForm.email.$error.maxlength"
-                                   class="form-control-static" style="font-size: small; color: #A94442">
-                                    <span class="glyphicon glyphicon-info-sign"></span>&nbsp;邮箱最大长度为50
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-8">
-                            <div class="form-group"
-                                 ng-class="{'has-error has-feedback':infoForm.idCard.$dirty&&infoForm.idCard.$invalid}">
-                                <label for="idCard">身份证号</label>
-                                <input name="idCard" type="text" ws-idCard class="form-control input-sm" id="idCard"
-                                       
-                                       placeholder="身份证号" required ng-model="info.idCard">
-                                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"
-                                      ng-show="infoForm.idCard.$dirty&&infoForm.idCard.$invalid"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="idCard">&nbsp;</label>
-                                <p ng-show="infoForm.idCard.$dirty&&infoForm.idCard.$error.required"
-                                   class="form-control-static" style="font-size: small; color: #A94442">
-                                    <span class="glyphicon glyphicon-info-sign"></span>&nbsp;请输入身份证号
-                                </p>
-                                <p ng-show="infoForm.idCard.$dirty&&infoForm.idCard.$error.idCard"
-                                   class="form-control-static" style="font-size: small; color: #A94442">
-                                    <span class="glyphicon glyphicon-info-sign"></span>&nbsp;身份证号格式不正确
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-8">
-                            <div class="form-group"
-                                 ng-class="{'has-error has-feedback':infoForm.phone.$dirty&&infoForm.phone.$invalid}">
-                                <label for="phone">手机号</label>
-                                <input name="phone" type="text" class="form-control input-sm" id="phone" placeholder="手机号"
-                                       required
-                                       ng-model="info.phone" 
-                                       ng-pattern="/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/">
-                                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"
-                                      ng-show="infoForm.phone.$dirty&&infoForm.phone.$invalid"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="phone">&nbsp;</label>
-                                <p ng-show="infoForm.phone.$dirty&&infoForm.phone.$error.required"
-                                   class="form-control-static" style="font-size: small; color: #A94442">
-                                    <span class="glyphicon glyphicon-info-sign"></span>&nbsp;请输入手机号
-                                </p>
-                                <p ng-show="infoForm.phone.$dirty&&infoForm.phone.$error.pattern"
-                                   class="form-control-static" style="font-size: small; color: #A94442">
-                                    <span class="glyphicon glyphicon-info-sign"></span>&nbsp;手机号格式不正确
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                    <!--<div class="row">-->
+                        <!--<div class="col-md-8">-->
+                            <!--<div class="form-group"-->
+                                 <!--ng-class="{'has-error has-feedback':infoForm.email.$dirty&&infoForm.email.$invalid}">-->
+                                <!--<label for="email">邮箱</label>-->
+                                <!--<input name="email" type="email" class="form-control input-sm" id="email" placeholder="邮箱"-->
+                                       <!--required-->
+                                       <!--ng-model="info.email" ng-maxlength=50 -->
+                                       <!--ng-pattern="/^[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?$/">-->
+                                <!--<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"-->
+                                      <!--ng-show="infoForm.email.$dirty&&infoForm.email.$invalid"></span>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="col-md-4">-->
+                            <!--<div class="form-group">-->
+                                <!--<label for="oldPasswd">&nbsp;</label>-->
+                                <!--<p ng-show="infoForm.email.$dirty&&infoForm.email.$error.required"-->
+                                   <!--class="form-control-static" style="font-size: small; color: #A94442">-->
+                                    <!--<span class="glyphicon glyphicon-info-sign"></span>&nbsp;请输入邮箱-->
+                                <!--</p>-->
+                                <!--<p ng-show="infoForm.email.$dirty&&infoForm.email.$error.email"-->
+                                   <!--class="form-control-static"-->
+                                   <!--style="width:200px;font-size: small; color: #A94442">-->
+                                    <!--<span class="glyphicon glyphicon-info-sign"></span>&nbsp;邮箱格式为xxxx@xx.xx-->
+                                <!--</p>-->
+                                <!--<p ng-show="infoForm.email.$dirty&&infoForm.email.$error.maxlength"-->
+                                   <!--class="form-control-static" style="font-size: small; color: #A94442">-->
+                                    <!--<span class="glyphicon glyphicon-info-sign"></span>&nbsp;邮箱最大长度为50-->
+                                <!--</p>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="row">-->
+                        <!--<div class="col-md-8">-->
+                            <!--<div class="form-group"-->
+                                 <!--ng-class="{'has-error has-feedback':infoForm.idCard.$dirty&&infoForm.idCard.$invalid}">-->
+                                <!--<label for="idCard">身份证号</label>-->
+                                <!--<input name="idCard" type="text" ws-idCard class="form-control input-sm" id="idCard"-->
+                                       <!---->
+                                       <!--placeholder="身份证号" required ng-model="info.idCard">-->
+                                <!--<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"-->
+                                      <!--ng-show="infoForm.idCard.$dirty&&infoForm.idCard.$invalid"></span>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="col-md-4">-->
+                            <!--<div class="form-group">-->
+                                <!--<label for="idCard">&nbsp;</label>-->
+                                <!--<p ng-show="infoForm.idCard.$dirty&&infoForm.idCard.$error.required"-->
+                                   <!--class="form-control-static" style="font-size: small; color: #A94442">-->
+                                    <!--<span class="glyphicon glyphicon-info-sign"></span>&nbsp;请输入身份证号-->
+                                <!--</p>-->
+                                <!--<p ng-show="infoForm.idCard.$dirty&&infoForm.idCard.$error.idCard"-->
+                                   <!--class="form-control-static" style="font-size: small; color: #A94442">-->
+                                    <!--<span class="glyphicon glyphicon-info-sign"></span>&nbsp;身份证号格式不正确-->
+                                <!--</p>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="row">-->
+                        <!--<div class="col-md-8">-->
+                            <!--<div class="form-group"-->
+                                 <!--ng-class="{'has-error has-feedback':infoForm.phone.$dirty&&infoForm.phone.$invalid}">-->
+                                <!--<label for="phone">手机号</label>-->
+                                <!--<input name="phone" type="text" class="form-control input-sm" id="phone" placeholder="手机号"-->
+                                       <!--required-->
+                                       <!--ng-model="info.phone" -->
+                                       <!--ng-pattern="/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/">-->
+                                <!--<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"-->
+                                      <!--ng-show="infoForm.phone.$dirty&&infoForm.phone.$invalid"></span>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="col-md-4">-->
+                            <!--<div class="form-group">-->
+                                <!--<label for="phone">&nbsp;</label>-->
+                                <!--<p ng-show="infoForm.phone.$dirty&&infoForm.phone.$error.required"-->
+                                   <!--class="form-control-static" style="font-size: small; color: #A94442">-->
+                                    <!--<span class="glyphicon glyphicon-info-sign"></span>&nbsp;请输入手机号-->
+                                <!--</p>-->
+                                <!--<p ng-show="infoForm.phone.$dirty&&infoForm.phone.$error.pattern"-->
+                                   <!--class="form-control-static" style="font-size: small; color: #A94442">-->
+                                    <!--<span class="glyphicon glyphicon-info-sign"></span>&nbsp;手机号格式不正确-->
+                                <!--</p>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
                     <div class="row">
                         <div class="col-md-8">
                             <div>

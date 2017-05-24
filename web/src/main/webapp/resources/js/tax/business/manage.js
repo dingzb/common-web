@@ -30,7 +30,7 @@ angular.module('ws.app').controller('taxManageCtrl', ['$rootScope', '$scope', '$
     });
 
     function getCategory(typeId, target) {
-        console.info(typeId, target)
+
         $http.post('app/tax/business/category/list', {
             typeId: typeId
         }).success(function (data) {
@@ -75,18 +75,7 @@ angular.module('ws.app').controller('taxManageCtrl', ['$rootScope', '$scope', '$
         }, {
             field: 'categoryName',
             title: '业务项目'
-        }
-            // , {
-            //     field: 'hasIssue',
-            //     title: '是否存在问题',
-            //     formatter: function (val) {
-            //         return val ? '是' : '否';
-            //     }
-            // }, {
-            //     field: 'issueName',
-            //     title: '问题种类'
-            // }
-            , {
+        }, {
                 field: 'agencyName',
                 title: '主管税务机关'
             }, {
@@ -302,7 +291,7 @@ angular.module('ws.app').controller('taxManageCtrl', ['$rootScope', '$scope', '$
             $scope.detailObj = row;
         });
         $("#detailModal").modal('show');
-    }
+    };
 
 
     //=============== 提交业务 =====================

@@ -7,6 +7,7 @@ import com.tendyron.wifi.web.query.business.tax.AgencyQuery;
 import com.tendyron.wifi.web.utils.StringTools;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,5 +34,16 @@ public class AgencyDaoImpl extends BaseDaoImpl<AgencyEntity> implements AgencyDa
             params.put("parentId", aQuery.getParentId());
         }
         return hqlsb;
+    }
+
+    @Override
+    public List<AgencyEntity> getList(String level) {
+        String hql = "from AgencyEntity where parent";
+        if ("0".equals(level)){
+            hql += " is null";
+        } else {
+            hql += " is not null";
+        }
+        return getByHql(hql, null);
     }
 }

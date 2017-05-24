@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tendyron.wifi.web.model.BaseModel;
+import com.tendyron.wifi.web.model.business.tax.AgencyModel;
 
 
 public class UserModel extends BaseModel {
@@ -23,7 +24,11 @@ public class UserModel extends BaseModel {
 	private Set<String> groupIds;
 	private Integer placeCount;
 	private Boolean selected;//datagrid选中
-	
+
+//	for agency
+	private AgencyModel agency;
+	private String agencyId;
+
 	public Integer getPlaceCount() {
 		return placeCount;
 	}
@@ -128,7 +133,23 @@ public class UserModel extends BaseModel {
 		this.selected = selected;
 	}
 
-	@Override
+	public AgencyModel getAgency() {
+		return agency;
+	}
+
+	public void setAgency(AgencyModel agency) {
+		this.agency = agency;
+	}
+
+    public String getAgencyId() {
+        return agencyId;
+    }
+
+    public void setAgencyId(String agencyId) {
+        this.agencyId = agencyId;
+    }
+
+    @Override
 	public String toString() {
 		return "UserModel [name=" + name + ", username=" + username + ", password=" + password + ", idCard=" + idCard + ", email=" + email + ", phone=" + phone + ", type=" + type
 				+ ", createTime=" + createTime + ", roleIds=" + roleIds + ", groupIds=" + groupIds + ", placeCount="

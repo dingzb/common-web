@@ -29,16 +29,20 @@ public class AgencyServiceImpl extends BaseServiceImpl<AgencyEntity> implements 
 
     @Override
     @Transactional
-    public List<AgencyModel> list() throws SerialException {
+    public List<AgencyModel> list(String level) throws SerialException {
 
         List<AgencyModel> ams = new ArrayList<>();
 
         try {
-            List<AgencyEntity> aes = agencyDao.getList();
+            List<AgencyEntity> aes = agencyDao.getList(level);
 
             for (AgencyEntity ae : aes){
                 AgencyModel am = new AgencyModel();
                 BeanUtils.copyProperties(ae, am);
+                //TODO 多级机构时如何在编辑时展示？，目前暂时如下解决
+                if (ae.getParent() == null) {
+                    am.setLevel(0);
+                }
                 ams.add(am);
             }
         } catch (Exception e) {

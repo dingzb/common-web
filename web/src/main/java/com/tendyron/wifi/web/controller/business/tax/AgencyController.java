@@ -6,6 +6,7 @@ import com.tendyron.wifi.web.service.business.tax.AgencyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.sql.rowset.serial.SerialException;
@@ -22,9 +23,9 @@ public class AgencyController extends BaseController {
 
     @RequestMapping("list")
     @ResponseBody
-    public Json list(){
+    public Json list(@RequestParam(value = "level", required = false) String level){
         try {
-            return success(agencyService.list());
+            return success(agencyService.list(level));
         } catch (SerialException e) {
             return fail(e);
         }

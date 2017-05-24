@@ -1,6 +1,9 @@
 package com.tendyron.wifi.web.service.system;
 
+import com.tendyron.wifi.web.dao.business.tax.AgencyDao;
+import com.tendyron.wifi.web.entity.business.tax.AgencyEntity;
 import com.tendyron.wifi.web.model.PagingModel;
+import com.tendyron.wifi.web.model.business.tax.AgencyModel;
 import com.tendyron.wifi.web.service.BaseServiceImpl;
 import com.tendyron.wifi.web.service.ServiceException;
 import com.tendyron.wifi.web.utils.LocaleUtil;
@@ -41,6 +44,8 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity> implements User
     private RoleDao roleDao;
     @Autowired
     private GroupDao groupDao;
+    @Autowired
+    private AgencyDao agencyDao;
 
     @BusinessLog(content = "用户登录", operation = LogOperationType.LOGIN)
     @Override
@@ -147,6 +152,15 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity> implements User
             for (UserEntity tmp : tmpList) {
                 UserModel row = new UserModel();
                 BeanUtils.copyProperties(tmp, row);
+                AgencyEntity agencyEntity = tmp.getAgency();
+                if (agencyEntity != null) {
+                    AgencyModel agencyModel = new AgencyModel();
+                    if (agencyEntity.getParent() == null) {
+                        agencyModel.setLevel(0);
+                    }
+                    BeanUtils.copyProperties(agencyEntity, agencyModel);
+                    row.setAgency(agencyModel);
+                }
                 row.setType(tmp.getType().toString());
                 rows.add(row);
             }
@@ -172,7 +186,12 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity> implements User
             throw new ServiceException("名称不能为空");
         }
         if (StringTools.isEmpty(userModel.getType())) {
-            throw new ServiceException("用户类型不能为空");
+//            throw new ServiceException("用户类型不能为空");
+            userModel.setType(UserType.NORMAL.toString());
+        }
+
+        if (StringTools.isEmpty(userModel.getAgencyId())) {
+            throw new ServiceException("机构不能为空");
         }
 
         // 判断用户名是否存在
@@ -248,6 +267,15 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity> implements User
             }
         }
 
+        try {
+            //设置机构
+            AgencyEntity agencyEntity = agencyDao.getById(userModel.getAgencyId());
+            userEntity.setAgency(agencyEntity);
+        } catch (Exception e) {
+            logger.catching(e);
+            throw new ServiceException();
+        }
+
         Serializable result = null;
         try {
             groupDao.save(group);
@@ -266,8 +294,16 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity> implements User
     @BusinessLog(content = "编辑用户", operation = LogOperationType.MODIFY)
     @Override
     @Transactional
-    public void editUserModel(UserModel userModel)
-            throws ServiceException {
+    public void editUserModel(UserModel userModel) throws ServiceException {
+        if (StringTools.isEmpty(userModel.getUsername())) {
+            throw new ServiceException("用户名不能为空");
+        }
+        if (StringTools.isEmpty(userModel.getName())) {
+            throw new ServiceException("名称不能为空");
+        }
+        if (StringTools.isEmpty(userModel.getAgencyId())) {
+            throw new ServiceException("机构不能为空");
+        }
         UserEntity userEntity = null;
         try {
             userEntity = userDao.getById(userModel.getId());
@@ -286,6 +322,10 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity> implements User
             if (!StringTools.isEmpty(userModel.getPhone())) {
                 userEntity.setPhone(userModel.getPhone());
             }
+
+            AgencyEntity agencyEntity = agencyDao.getById(userModel.getAgencyId());
+            userEntity.setAgency(agencyEntity);
+
             userEntity.setModifyTime(new Date());
             userDao.update(userEntity);
         } catch (Exception e) {
