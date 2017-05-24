@@ -16,6 +16,10 @@ angular.module('ws.app').controller('systemRoleCtrl', ['$rootScope', '$scope', '
             title: '角色名称',
             width: 10
         }, {
+            field: 'description',
+            title: '描述',
+            width: 70
+        }, {
             field: 'createTime',
             title: '创建时间',
             width: 15
@@ -23,10 +27,6 @@ angular.module('ws.app').controller('systemRoleCtrl', ['$rootScope', '$scope', '
             field: 'modifyTime',
             title: '修改时间',
             width: 15
-        }, {
-            field: 'description',
-            title: '描述',
-            width: 70
         }],
         checkbox: true,
         sizes: [10, 20, 50, 80],

@@ -42,19 +42,30 @@ angular.module('ws.app').controller('systemUserCtrl', ['$rootScope', '$scope', '
         params: {},
         columns: [{
             field: 'username',
-            title: '用户名'
+            title: '用户名',
+            width: 20
         }, {
             field: 'name',
-            title: '姓名'
+            title: '姓名',
+            width: 20
+        }, {
+            field: 'agencyBoss',
+            title: '负责人',
+            translator: function (row) {
+                return row.agencyBoss ? '是': '否';
+            },
+            width: 10
         }, {
             field: 'agency',
             title: '机关',
             translator: function (row) {
                 return row.agency === null ? '' : row.agency.name;
-            }
+            },
+            width: 30
         }, {
             field: 'createTime',
-            title: '创建时间'
+            title: '创建时间',
+            width: 30
         }],
         checkbox: {
             field: 'yes'
@@ -147,7 +158,9 @@ angular.module('ws.app').controller('systemUserCtrl', ['$rootScope', '$scope', '
     //添加onclick
     $scope.onAdd = function () {
         $scope.modalTitle = "添加用户";
-        $scope.info = {};
+        $scope.info = {
+            agencyBoss: false
+        };
         $scope.addUserForm.$setPristine();
         $("#addModal").modal('show');
     };
@@ -162,6 +175,7 @@ angular.module('ws.app').controller('systemUserCtrl', ['$rootScope', '$scope', '
         $http.post("app/system/user/add", {
             'username': $scope.info.username,
             'name': $scope.info.name,
+            'agencyBoss': $scope.info.agencyBoss,
             'agencyId': $scope.userAgencyId ? $scope.userAgencyId : $scope.userTopAgencyId,
             'type': 'NORMAL'
         }).success(function (data, status, headers, config) {
@@ -190,9 +204,13 @@ angular.module('ws.app').controller('systemUserCtrl', ['$rootScope', '$scope', '
 
         if (checkeds.length === 1) {
             $scope.edit = checkeds[0];
+            console.info(checkeds[0].agencyBoss);
+            console.info(typeof checkeds[0].agencyBoss);
+            console.info(checkeds[0].agencyBoss === null);
             $scope.edit = {
                 'username': checkeds[0].username,
                 'name': checkeds[0].name,
+                'agencyBoss': checkeds[0].agencyBoss,
                 'id': checkeds[0].id
             }
             ;
@@ -212,6 +230,7 @@ angular.module('ws.app').controller('systemUserCtrl', ['$rootScope', '$scope', '
             'id': $scope.edit.id,
             'username': $scope.edit.username,
             'name': $scope.edit.name,
+            'agencyBoss': $scope.edit.agencyBoss,
             'agencyId': $scope.editUserAgencyId ? $scope.editUserAgencyId : $scope.editUserTopAgencyId
         }).success(function (data) {
             $scope.mask(false);

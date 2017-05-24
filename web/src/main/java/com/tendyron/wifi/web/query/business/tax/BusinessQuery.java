@@ -4,6 +4,7 @@ import com.tendyron.wifi.web.query.PagingQuery;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+import java.util.Set;
 
 /**
  * Created by Neo on 2017/5/9.
@@ -25,8 +26,17 @@ public class BusinessQuery extends PagingQuery {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date createTimeEnd;
 
+    /*
+    * 为三层审查做权限区分
+     */
     private Integer status;
     private Integer[] includeStatus;
+
+    /*
+    * 为不同部门、职责，做权限区分
+     */
+    private String createUserId;
+    private Set<String> createUserIds;
 
     public String getContent() {
         return content;
@@ -122,5 +132,21 @@ public class BusinessQuery extends PagingQuery {
 
     public void setIncludeStatus(Integer[] includeStatus) {
         this.includeStatus = includeStatus;
+    }
+
+    public String getCreateUserId() {
+        return createUserId;
+    }
+
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId;
+    }
+
+    public Set<String> getCreateUserIds() {
+        return createUserIds;
+    }
+
+    public void setCreateUserIds(Set<String> createUserIds) {
+        this.createUserIds = createUserIds;
     }
 }

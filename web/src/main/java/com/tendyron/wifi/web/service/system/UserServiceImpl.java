@@ -322,6 +322,9 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity> implements User
             if (!StringTools.isEmpty(userModel.getPhone())) {
                 userEntity.setPhone(userModel.getPhone());
             }
+            if(userModel.getAgencyBoss() != null){
+                userEntity.setAgencyBoss(userModel.getAgencyBoss());
+            }
 
             AgencyEntity agencyEntity = agencyDao.getById(userModel.getAgencyId());
             userEntity.setAgency(agencyEntity);

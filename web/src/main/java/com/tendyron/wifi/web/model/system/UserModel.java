@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.tendyron.wifi.web.model.BaseModel;
 import com.tendyron.wifi.web.model.business.tax.AgencyModel;
 
@@ -28,6 +29,7 @@ public class UserModel extends BaseModel {
 //	for agency
 	private AgencyModel agency;
 	private String agencyId;
+	private Boolean agencyBoss; //是否是用户所处机构负责人
 
 	public Integer getPlaceCount() {
 		return placeCount;
@@ -147,6 +149,15 @@ public class UserModel extends BaseModel {
 
     public void setAgencyId(String agencyId) {
         this.agencyId = agencyId;
+    }
+
+
+    public Boolean getAgencyBoss() {
+        return agencyBoss;
+    }
+
+    public void setAgencyBoss(Boolean agencyBoss) {
+        this.agencyBoss = agencyBoss;
     }
 
     @Override

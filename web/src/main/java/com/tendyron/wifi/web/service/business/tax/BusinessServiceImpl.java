@@ -1,5 +1,6 @@
 package com.tendyron.wifi.web.service.business.tax;
 
+import com.tendyron.wifi.web.config.UserType;
 import com.tendyron.wifi.web.dao.business.tax.AgencyDao;
 import com.tendyron.wifi.web.dao.business.tax.BusinessCategoryDao;
 import com.tendyron.wifi.web.dao.business.tax.BusinessDao;
@@ -86,7 +87,32 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
     @Transactional
     @Override
     public PagingModel paging(BusinessQuery query) throws ServiceException {
+
         queryBasicAssert(query);
+
+        try {
+            UserEntity curUser = userDao.getById(query.getUserId());
+            if (UserType.NORMAL.equals(curUser.getType())){                     //非管理员
+                if (curUser.getAgencyBoss()){
+                    Set<UserEntity> agencyUsers = curUser.getAgency().getUsers();
+                    query.setCreateUserIds(getIds(agencyUsers));
+                } else if (curUser.getAgency().getChildren() != null){          //县局
+                    Set<String> childrenUserIds = new HashSet<>();
+                    for (AgencyEntity a : curUser.getAgency().getChildren()){
+                        childrenUserIds.addAll(getIds(a.getUsers()));
+                    }
+                    childrenUserIds.add(curUser.getId());                       // 县局用户自己，o(￣▽￣)ｄ 似乎没什么用
+                    query.setCreateUserIds(childrenUserIds);
+                } else {
+                    query.setCreateUserId(curUser.getId());
+                }
+            }
+        } catch (Exception e){
+            logger.error("", e);
+            throw new ServiceException();
+        }
+
+
         List<BusinessModel> businessModels = new ArrayList<>();
         PagingModel paging = new PagingModel();
         Long total = null;
