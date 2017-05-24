@@ -7,7 +7,7 @@ import com.tendyron.wifi.web.model.BaseModel;
  */
 public class AgencyModel extends BaseModel {
     private String name;
-    private int level; // 机构级别 0：顶级（目前县局）
+    private Integer level; // 机构级别 0：顶级（目前县局）
 
     public String getName() {
         return name;
@@ -17,11 +17,11 @@ public class AgencyModel extends BaseModel {
         this.name = name;
     }
 
-    public int getLevel() {
+    public Integer getLevel() {
         return level;
     }
 
-    public void setLevel(int level) {
+    public void setLevel(Integer level) {
         this.level = level;
     }
 }

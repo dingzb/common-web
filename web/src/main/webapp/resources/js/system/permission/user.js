@@ -186,7 +186,7 @@ angular.module('ws.app').controller('systemUserCtrl', ['$rootScope', '$scope', '
         var checkeds = $scope.innerCtrl.getChecked();
         var level = checkeds[0].agency.level;
         $scope.editUserAgencyId = level === 0 ? '' : checkeds[0].agency.id;
-        $scope.editUserTopAgencyId = level !== 0 ? '' : checkeds[0].agency.id;
+        $scope.editUserTopAgencyId = level !== 0 ? $scope.userTopAgencyId : checkeds[0].agency.id;
 
         if (checkeds.length === 1) {
             $scope.edit = checkeds[0];
