@@ -11,8 +11,14 @@ import com.tendyron.wifi.web.entity.business.tax.BusinessEntity.BUS_STATUS;
 import com.tendyron.wifi.web.entity.system.UserEntity;
 import com.tendyron.wifi.web.model.PagingModel;
 import com.tendyron.wifi.web.model.business.tax.*;
+import com.tendyron.wifi.web.model.business.tax.statistics.FenjuModel;
+import com.tendyron.wifi.web.model.business.tax.statistics.StatisticsCategoryModel;
+import com.tendyron.wifi.web.model.business.tax.statistics.StatisticsCategoryTypeModel;
+import com.tendyron.wifi.web.model.business.tax.statistics.XianjuModel;
 import com.tendyron.wifi.web.query.business.tax.BusinessQuery;
-import com.tendyron.wifi.web.query.business.tax.StatementQuery;
+import com.tendyron.wifi.web.query.business.tax.FenjuQuery;
+import com.tendyron.wifi.web.query.business.tax.StatisticsQuery;
+import com.tendyron.wifi.web.query.business.tax.XianjuQuery;
 import com.tendyron.wifi.web.service.BaseServiceImpl;
 import com.tendyron.wifi.web.service.ServiceException;
 import com.tendyron.wifi.web.utils.StringTools;
@@ -25,7 +31,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 /**
  * Created by Neo on 2017/5/9.
@@ -92,13 +97,13 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
 
         try {
             UserEntity curUser = userDao.getById(query.getUserId());
-            if (UserType.NORMAL.equals(curUser.getType())){                     //非管理员
-                if (curUser.getAgencyBoss()){
+            if (UserType.NORMAL.equals(curUser.getType())) {                     //非管理员
+                if (curUser.getAgencyBoss()) {
                     Set<UserEntity> agencyUsers = curUser.getAgency().getUsers();
                     query.setCreateUserIds(getIds(agencyUsers));
-                } else if (curUser.getAgency().getChildren() != null){          //县局
+                } else if (curUser.getAgency().getChildren() != null) {          //县局
                     Set<String> childrenUserIds = new HashSet<>();
-                    for (AgencyEntity a : curUser.getAgency().getChildren()){
+                    for (AgencyEntity a : curUser.getAgency().getChildren()) {
                         childrenUserIds.addAll(getIds(a.getUsers()));
                     }
                     childrenUserIds.add(curUser.getId());                       // 县局用户自己，o(￣▽￣)ｄ 似乎没什么用
@@ -107,7 +112,7 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
                     query.setCreateUserId(curUser.getId());
                 }
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             logger.error("", e);
             throw new ServiceException();
         }
@@ -294,12 +299,12 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
 
     @Override
     @Transactional
-    public List<StatementModel> statement(StatementQuery query) throws ServiceException {
+    public List<XianjuModel> xianju(XianjuQuery query) throws ServiceException {
         BusinessQuery bQuery = new BusinessQuery();
         bQuery.setCreateTimeStart(query.getStartCreate());
         bQuery.setCreateTimeEnd(query.getEndCreate());
 
-        List<StatementModel> sms = new ArrayList<>();
+        List<XianjuModel> sms = new ArrayList<>();
 
         try {
             for (String agencyId : query.getAgencyIds()) {
@@ -308,24 +313,24 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
                 bQuery.setCreateTimeEnd(query.getEndCreate());
 
                 AgencyEntity agency = agencyDao.getById(agencyId);
-                StatementModel sm = new StatementModel();
+                XianjuModel sm = new XianjuModel();
                 sm.setAgencyName(agency.getName());
                 sm.setAgencyId(agency.getId());
                 List<BusinessEntity> bes = businessDao.getList(bQuery);
-                List<StatementCategoryTypeModel> sctms = new ArrayList<>();
+                List<StatisticsCategoryTypeModel> sctms = new ArrayList<>();
 
                 for (BusinessEntity be : bes) {
-                    StatementCategoryTypeModel sctmTmp = null;
+                    StatisticsCategoryTypeModel sctmTmp = null;
                     BusCategoryTypeEntity bcte = be.getCategory().getType();
 
-                    for (StatementCategoryTypeModel sctm : sctms) {
+                    for (StatisticsCategoryTypeModel sctm : sctms) {
                         if (sctm.getId().equals(bcte.getId())) {
                             sctmTmp = sctm;
                             break;
                         }
                     }
                     if (sctmTmp == null) {
-                        sctmTmp = new StatementCategoryTypeModel();
+                        sctmTmp = new StatisticsCategoryTypeModel();
                         sctmTmp.setName(bcte.getName());
                         sctmTmp.setId(bcte.getId());
                         sctms.add(sctmTmp);
@@ -333,11 +338,11 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
 
                     BusCategoryEntity bce = be.getCategory();
 
-                    List<StatementCategoryModel> scms = sctmTmp.getRecs();
-                    StatementCategoryModel scmTmp = null;
+                    List<StatisticsCategoryModel> scms = sctmTmp.getRecs();
+                    StatisticsCategoryModel scmTmp = null;
 
                     if (scms != null) {
-                        for (StatementCategoryModel scm : scms) {
+                        for (StatisticsCategoryModel scm : scms) {
                             if (scm.getId().equals(bce.getId())) {
                                 scmTmp = scm;
                                 break;
@@ -349,12 +354,50 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
                     }
 
                     if (scmTmp == null) {
-                        scmTmp = new StatementCategoryModel();
+                        scmTmp = new StatisticsCategoryModel();
                         scmTmp.setName(bce.getName());
                         scmTmp.setId(bce.getId());
                         scms.add(scmTmp);
                     }
-                    scmTmp.setCount(scmTmp.getCount() + 1);
+
+                    scmTmp.setCount(scmTmp.getCount() + 1);     // 业务总数
+
+                    boolean hasIssue = false;
+                    if (be.getStatus() != BUS_STATUS.FINISH) { // 排除业务处在完成状态的业务，如三级审核后都没有问题或月经整改
+                        if (be.getFirstExamine() != null && be.getFirstExamine().getHasIssue()) {
+                            hasIssue = true;
+                            Set<String> issueNames = new HashSet<>();
+                            Set<BusIssueEntity> busIssueEntities = be.getFirstExamine().getIssues();
+                            busIssueEntities.forEach(busIssueEntity -> issueNames.add(busIssueEntity.getName()));
+                            Set<String> oldIssueNames = scmTmp.getIssueNames();
+                            if (oldIssueNames == null) {
+                                oldIssueNames = new HashSet<>();
+                            }
+                            oldIssueNames.addAll(issueNames);
+                        } else if (be.getSecondExamine() != null && be.getSecondExamine().getHasIssue()) {
+                            hasIssue = true;
+                            Set<String> issueNames = new HashSet<>();
+                            Set<BusIssueEntity> busIssueEntities = be.getSecondExamine().getIssues();
+                            busIssueEntities.forEach(busIssueEntity -> issueNames.add(busIssueEntity.getName()));
+                            Set<String> oldIssueNames = scmTmp.getIssueNames();
+                            if (oldIssueNames == null) {
+                                oldIssueNames = new HashSet<>();
+                            }
+                            oldIssueNames.addAll(issueNames);
+                        } else if (be.getThirdExamine() != null && be.getThirdExamine().getHasIssue()) {
+                            hasIssue = true;
+                            Set<String> issueNames = new HashSet<>();
+                            Set<BusIssueEntity> busIssueEntities = be.getThirdExamine().getIssues();
+                            busIssueEntities.forEach(busIssueEntity -> issueNames.add(busIssueEntity.getName()));
+                            Set<String> oldIssueNames = scmTmp.getIssueNames();
+                            if (oldIssueNames == null) {
+                                oldIssueNames = new HashSet<>();
+                            }
+                            oldIssueNames.addAll(issueNames);
+                        }
+                    }
+                    scmTmp.setIssueCount(scmTmp.getIssueCount() + (hasIssue ? 1 : 0));      //问题业务总数
+
                     sm.setDetailCount(sm.getDetailCount() + 1);
 
                 }
@@ -366,6 +409,216 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
             throw new ServiceException();
         }
         return sms;
+    }
+
+
+    @Transactional
+    @Override
+    public List<FenjuModel> fenju(FenjuQuery query) throws ServiceException {
+        BusinessQuery bQuery = new BusinessQuery();
+        bQuery.setCreateTimeStart(query.getStartCreate());
+        bQuery.setCreateTimeEnd(query.getEndCreate());
+
+        List<FenjuModel> fms = new ArrayList<>();
+
+        try {
+            for (String userId : query.getUserIds()) {
+                bQuery.setCreateUserId(userId);
+                UserEntity userEntity = userDao.getById(userId);
+                FenjuModel fm = new FenjuModel();
+                fm.setUserName(userEntity.getName());
+                fm.setUserId(userEntity.getId());
+                List<BusinessEntity> bes = businessDao.getList(bQuery);
+                List<StatisticsCategoryTypeModel> sctms = new ArrayList<>();
+
+                for (BusinessEntity be : bes) {
+                    StatisticsCategoryTypeModel sctmTmp = null;
+                    BusCategoryTypeEntity bcte = be.getCategory().getType();
+
+                    for (StatisticsCategoryTypeModel sctm : sctms) {
+                        if (sctm.getId().equals(bcte.getId())) {
+                            sctmTmp = sctm;
+                            break;
+                        }
+                    }
+                    if (sctmTmp == null) {
+                        sctmTmp = new StatisticsCategoryTypeModel();
+                        sctmTmp.setName(bcte.getName());
+                        sctmTmp.setId(bcte.getId());
+                        sctms.add(sctmTmp);
+                    }
+
+                    BusCategoryEntity bce = be.getCategory();
+
+                    List<StatisticsCategoryModel> scms = sctmTmp.getRecs();
+                    StatisticsCategoryModel scmTmp = null;
+
+                    if (scms != null) {
+                        for (StatisticsCategoryModel scm : scms) {
+                            if (scm.getId().equals(bce.getId())) {
+                                scmTmp = scm;
+                                break;
+                            }
+                        }
+                    } else {
+                        scms = new ArrayList<>();
+                        sctmTmp.setRecs(scms);
+                    }
+
+                    if (scmTmp == null) {
+                        scmTmp = new StatisticsCategoryModel();
+                        scmTmp.setName(bce.getName());
+                        scmTmp.setId(bce.getId());
+                        scms.add(scmTmp);
+                    }
+
+                    scmTmp.setCount(scmTmp.getCount() + 1);     // 业务总数
+
+                    boolean hasIssue = false;
+                    if (be.getStatus() != BUS_STATUS.FINISH) { // 排除业务处在完成状态的业务，如三级审核后都没有问题或月经整改
+                        if (be.getFirstExamine() != null && be.getFirstExamine().getHasIssue()) {
+                            hasIssue = true;
+                            Set<String> issueNames = new HashSet<>();
+                            Set<BusIssueEntity> busIssueEntities = be.getFirstExamine().getIssues();
+                            busIssueEntities.forEach(busIssueEntity -> issueNames.add(busIssueEntity.getName()));
+                            Set<String> oldIssueNames = scmTmp.getIssueNames();
+                            if (oldIssueNames == null) {
+                                oldIssueNames = new HashSet<>();
+                            }
+                            oldIssueNames.addAll(issueNames);
+                        } else if (be.getSecondExamine() != null && be.getSecondExamine().getHasIssue()) {
+                            hasIssue = true;
+                            Set<String> issueNames = new HashSet<>();
+                            Set<BusIssueEntity> busIssueEntities = be.getSecondExamine().getIssues();
+                            busIssueEntities.forEach(busIssueEntity -> issueNames.add(busIssueEntity.getName()));
+                            Set<String> oldIssueNames = scmTmp.getIssueNames();
+                            if (oldIssueNames == null) {
+                                oldIssueNames = new HashSet<>();
+                            }
+                            oldIssueNames.addAll(issueNames);
+                        } else if (be.getThirdExamine() != null && be.getThirdExamine().getHasIssue()) {
+                            hasIssue = true;
+                            Set<String> issueNames = new HashSet<>();
+                            Set<BusIssueEntity> busIssueEntities = be.getThirdExamine().getIssues();
+                            busIssueEntities.forEach(busIssueEntity -> issueNames.add(busIssueEntity.getName()));
+                            Set<String> oldIssueNames = scmTmp.getIssueNames();
+                            if (oldIssueNames == null) {
+                                oldIssueNames = new HashSet<>();
+                            }
+                            oldIssueNames.addAll(issueNames);
+                        }
+                    }
+                    scmTmp.setIssueCount(scmTmp.getIssueCount() + (hasIssue ? 1 : 0));      //问题业务总数
+
+                    fm.setDetailCount(fm.getDetailCount() + 1);
+
+                }
+                fm.setRecs(sctms);
+                fms.add(fm);
+            }
+        } catch (Exception e) {
+            logger.error("", e);
+            throw new ServiceException();
+        }
+        return fms;
+    }
+
+
+    @Transactional
+    @Override
+    public List<StatisticsCategoryTypeModel> person(StatisticsQuery query) throws ServiceException {
+        BusinessQuery bQuery = new BusinessQuery();
+        bQuery.setCreateTimeStart(query.getStartCreate());
+        bQuery.setCreateTimeEnd(query.getEndCreate());
+        bQuery.setCreateUserId(query.getUserId());
+        List<StatisticsCategoryTypeModel> sctms = new ArrayList<>();
+        try {
+            List<BusinessEntity> bes = businessDao.getList(bQuery);
+
+                for (BusinessEntity be : bes) {
+                    StatisticsCategoryTypeModel sctmTmp = null;
+                    BusCategoryTypeEntity bcte = be.getCategory().getType();
+
+                    for (StatisticsCategoryTypeModel sctm : sctms) {
+                        if (sctm.getId().equals(bcte.getId())) {
+                            sctmTmp = sctm;
+                            break;
+                        }
+                    }
+                    if (sctmTmp == null) {
+                        sctmTmp = new StatisticsCategoryTypeModel();
+                        sctmTmp.setName(bcte.getName());
+                        sctmTmp.setId(bcte.getId());
+                        sctms.add(sctmTmp);
+                    }
+
+                    BusCategoryEntity bce = be.getCategory();
+
+                    List<StatisticsCategoryModel> scms = sctmTmp.getRecs();
+                    StatisticsCategoryModel scmTmp = null;
+
+                    if (scms != null) {
+                        for (StatisticsCategoryModel scm : scms) {
+                            if (scm.getId().equals(bce.getId())) {
+                                scmTmp = scm;
+                                break;
+                            }
+                        }
+                    } else {
+                        scms = new ArrayList<>();
+                        sctmTmp.setRecs(scms);
+                    }
+
+                    if (scmTmp == null) {
+                        scmTmp = new StatisticsCategoryModel();
+                        scmTmp.setName(bce.getName());
+                        scmTmp.setId(bce.getId());
+                        scms.add(scmTmp);
+                    }
+
+                    scmTmp.setCount(scmTmp.getCount() + 1);     // 业务总数
+
+                    boolean hasIssue = false;
+                    if (be.getStatus() != BUS_STATUS.FINISH) { // 排除业务处在完成状态的业务，如三级审核后都没有问题或月经整改
+                        if (be.getFirstExamine() != null && be.getFirstExamine().getHasIssue()) {
+                            hasIssue = true;
+                            Set<String> issueNames = new HashSet<>();
+                            Set<BusIssueEntity> busIssueEntities = be.getFirstExamine().getIssues();
+                            busIssueEntities.forEach(busIssueEntity -> issueNames.add(busIssueEntity.getName()));
+                            Set<String> oldIssueNames = scmTmp.getIssueNames();
+                            if (oldIssueNames == null) {
+                                oldIssueNames = new HashSet<>();
+                            }
+                            oldIssueNames.addAll(issueNames);
+                        } else if (be.getSecondExamine() != null && be.getSecondExamine().getHasIssue()) {
+                            hasIssue = true;
+                            Set<String> issueNames = new HashSet<>();
+                            Set<BusIssueEntity> busIssueEntities = be.getSecondExamine().getIssues();
+                            busIssueEntities.forEach(busIssueEntity -> issueNames.add(busIssueEntity.getName()));
+                            Set<String> oldIssueNames = scmTmp.getIssueNames();
+                            if (oldIssueNames == null) {
+                                oldIssueNames = new HashSet<>();
+                            }
+                            oldIssueNames.addAll(issueNames);
+                        } else if (be.getThirdExamine() != null && be.getThirdExamine().getHasIssue()) {
+                            hasIssue = true;
+                            Set<String> issueNames = new HashSet<>();
+                            Set<BusIssueEntity> busIssueEntities = be.getThirdExamine().getIssues();
+                            busIssueEntities.forEach(busIssueEntity -> issueNames.add(busIssueEntity.getName()));
+                            Set<String> oldIssueNames = scmTmp.getIssueNames();
+                            if (oldIssueNames == null) {
+                                oldIssueNames = new HashSet<>();
+                            }
+                            oldIssueNames.addAll(issueNames);
+                        }
+                    }
+                    scmTmp.setIssueCount(scmTmp.getIssueCount() + (hasIssue ? 1 : 0));      //问题业务总数
+                }
+        } catch (Exception e) {
+            logger.error("", e);
+            throw new ServiceException();
+        }
+        return sctms;
     }
 
     @Transactional

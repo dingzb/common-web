@@ -1,11 +1,11 @@
-package com.tendyron.wifi.web.model.business.tax;
+package com.tendyron.wifi.web.model.business.tax.statistics;
 
 import java.util.List;
 
-public class StatementCategoryTypeModel {
+public class StatisticsCategoryTypeModel {
     private String name;
     private String id;
-    private List<StatementCategoryModel> recs;
+    private List<StatisticsCategoryModel> recs;
 
     public String getName() {
         return name;
@@ -23,11 +23,11 @@ public class StatementCategoryTypeModel {
         this.id = id;
     }
 
-    public List<StatementCategoryModel> getRecs() {
+    public List<StatisticsCategoryModel> getRecs() {
         return recs;
     }
 
-    public void setRecs(List<StatementCategoryModel> recs) {
+    public void setRecs(List<StatisticsCategoryModel> recs) {
         this.recs = recs;
     }
 }

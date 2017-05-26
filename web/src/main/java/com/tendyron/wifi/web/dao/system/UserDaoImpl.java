@@ -4,6 +4,7 @@ import com.tendyron.wifi.web.dao.BaseDaoImpl;
 import com.tendyron.wifi.web.entity.system.UserEntity;
 import com.tendyron.wifi.web.query.BaseQuery;
 import com.tendyron.wifi.web.query.system.UserQuery;
+import com.tendyron.wifi.web.service.ServiceException;
 import com.tendyron.wifi.web.utils.StringTools;
 import org.springframework.stereotype.Repository;
 

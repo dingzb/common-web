@@ -1,12 +1,11 @@
 package com.tendyron.wifi.web.model.system;
 
-import java.util.Date;
-import java.util.Set;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.tendyron.wifi.web.model.BaseModel;
 import com.tendyron.wifi.web.model.business.tax.AgencyModel;
+
+import java.util.Date;
+import java.util.Set;
 
 
 public class UserModel extends BaseModel {

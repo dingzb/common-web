@@ -2,10 +2,12 @@ package com.tendyron.wifi.web.dao.system;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 import com.tendyron.wifi.web.dao.BaseDao;
 import com.tendyron.wifi.web.entity.system.UserEntity;
 import com.tendyron.wifi.web.query.system.UserQuery;
+import com.tendyron.wifi.web.service.ServiceException;
 
 /**
  * 

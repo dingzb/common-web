@@ -1,11 +1,15 @@
-<div ng-controller="taxStatementCtrl">
+<div ng-controller="taxXianjuCtrl">
     <div>
-        <div class="collapse" id="agencies">
-            <span ng-repeat="agency in searchParams.agencies" style="margin: 10px 4px; display: inline-block;">
-                 <label for="{{agency.id}}">
-                    <input id="{{agency.id}}" type="checkbox"> {{agency.name}}
-                </label>
-            </span>
+        <div class="collapse in" id="agencies" style="margin-bottom: 15px;">
+            <label style="font-weight: bold;">机构选择：</label>
+            <label ng-repeat="agency in searchParams.agencies"  class="checkbox-inline">
+                <input type="checkbox" id="{{agency.id}}" type="checkbox"> {{agency.name}}
+            </label>
+            <!--<span ng-repeat="agency in searchParams.agencies" style="margin: 10px 4px; display: inline-block;">-->
+                 <!--<label for="{{agency.id}}">-->
+                    <!--<input id="{{agency.id}}" type="checkbox"> {{agency.name}}-->
+                <!--</label>-->
+            <!--</span>-->
         </div>
         <div>
             <form class="form-inline">
@@ -35,7 +39,7 @@
                     <div class="ws-search-btn-group ws-inline">
                         <button class="btn btn-info btn-sm" type="submit" ng-click="statement(searchParams.agencyId)">查询</button>
                         <button class="btn btn-info btn-sm" type="button" ng-click="resetSearch()">清空</button>
-                        <button class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#agencies">机关选择</button>
+                        <!--<button class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#agencies">机关选择</button>-->
                     </div>
                 </div>
             </form>
@@ -45,16 +49,17 @@
         <table class="ws-statement">
             <thead>
             <tr>
-                <th colspan="5" class="ws-heading"><span>税务统计报表</span></th>
+                <th colspan="6" class="ws-heading"><span>税务统计报表</span></th>
             </tr>
             <tr>
-                <th colspan="5" class="ws-subheading">统计单位：左云县国家税务局</th>
+                <th colspan="6" class="ws-subheading">统计单位：左云县国家税务局</th>
             </tr>
             <tr class="ws-header">
                 <th>主管税务机关</th>
                 <th>业务类型</th>
                 <th>业务项目</th>
-                <th>问题户数</th>
+                <th>问题数</th>
+                <th>总数</th>
                 <th>问题类型</th>
             </tr>
             </thead>
@@ -63,6 +68,7 @@
                 <td rowspan="{{rec.aSpan.i}}" ng-bind="rec.agencyName" ng-if="rec.agencyName"></td>
                 <td rowspan="{{rec.ctSpan.i}}" ng-bind="rec.categoryTypeName" ng-if="rec.categoryTypeName"></td>
                 <td ng-bind="rec.name"></td>
+                <td ng-bind="rec.issueCount"></td>
                 <td ng-bind="rec.count"></td>
                 <td>
                     <span ng-repeat="issue in rec.issueNames">{{issue}} </span>

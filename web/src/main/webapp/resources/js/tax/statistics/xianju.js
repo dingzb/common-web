@@ -1,9 +1,8 @@
 /**
- * Created by Neo on 2017/5/11.
- * 报表形式统计
+ * 统计县局内所有业务情况
  */
 
-angular.module('ws.app').controller('taxStatementCtrl', ['$rootScope', '$scope', '$http', function ($rootScope, $scope, $http) {
+angular.module('ws.app').controller('taxXianjuCtrl', ['$rootScope', '$scope', '$http', function ($rootScope, $scope, $http) {
     $scope.searchParams = {};
     //日期控件初始化
     $scope.initDtp = function (e) {
@@ -28,24 +27,24 @@ angular.module('ws.app').controller('taxStatementCtrl', ['$rootScope', '$scope',
 
     $scope.statement = function () {
 
-        agencyIds = [];
+        userIds = [];
         var ags = $('#agencies').find('input');
         $.each(ags, function (i) {
             var ag = $(ags[i]);
             if (ag.is(':checked')) {
-                agencyIds.push(ag.attr('id'));
+                userIds.push(ag.attr('id'));
             }
         });
 
         var agencyIdStr = '';
 
-        agencyIds.forEach(function (aId) {
+        userIds.forEach(function (aId) {
             agencyIdStr += (aId + ',');
         });
 
         agencyIdStr = agencyIdStr.substring(0, agencyIdStr.length - 1);
 
-        $http.post('app/tax/statistics/statement', {
+        $http.post('app/tax/statistics/xianju', {
             agencyIdsStr: agencyIdStr,
             startCreate: $scope.searchParams.startCreate,
             endCreate: $scope.searchParams.endCreate

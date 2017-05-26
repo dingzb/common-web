@@ -1,16 +1,15 @@
-package com.tendyron.wifi.web.model.business.tax;
+package com.tendyron.wifi.web.model.business.tax.statistics;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Neo on 2017/5/11.
  */
-public class StatementModel {
+public class XianjuModel {
 
     private String agencyName;
     private String agencyId;
-    private List<StatementCategoryTypeModel> recs;
+    private List<StatisticsCategoryTypeModel> recs;
 
     private int detailCount;
 
@@ -30,11 +29,11 @@ public class StatementModel {
         this.agencyName = agencyName;
     }
 
-    public List<StatementCategoryTypeModel> getRecs() {
+    public List<StatisticsCategoryTypeModel> getRecs() {
         return recs;
     }
 
-    public void setRecs(List<StatementCategoryTypeModel> recs) {
+    public void setRecs(List<StatisticsCategoryTypeModel> recs) {
         this.recs = recs;
     }
 

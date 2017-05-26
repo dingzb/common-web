@@ -1,13 +1,14 @@
-package com.tendyron.wifi.web.model.business.tax;
+package com.tendyron.wifi.web.model.business.tax.statistics;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class StatementCategoryModel {
+public class StatisticsCategoryModel {
     private String name;
     private String id;
     private int count = 0;
+    private int issueCount = 0;
     private Set<String> issueNames = new HashSet<>();
 
     public String getName() {
@@ -40,5 +41,13 @@ public class StatementCategoryModel {
 
     public void setIssueNames(Set<String> issueNames) {
         this.issueNames = issueNames;
+    }
+
+    public int getIssueCount() {
+        return issueCount;
+    }
+
+    public void setIssueCount(int issueCount) {
+        this.issueCount = issueCount;
     }
 }

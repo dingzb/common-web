@@ -4,9 +4,13 @@ import com.tendyron.wifi.web.entity.business.tax.BusinessEntity;
 import com.tendyron.wifi.web.model.PagingModel;
 import com.tendyron.wifi.web.model.business.tax.BusinessModel;
 import com.tendyron.wifi.web.model.business.tax.ExamineModel;
-import com.tendyron.wifi.web.model.business.tax.StatementModel;
+import com.tendyron.wifi.web.model.business.tax.statistics.FenjuModel;
+import com.tendyron.wifi.web.model.business.tax.statistics.StatisticsCategoryTypeModel;
+import com.tendyron.wifi.web.model.business.tax.statistics.XianjuModel;
 import com.tendyron.wifi.web.query.business.tax.BusinessQuery;
-import com.tendyron.wifi.web.query.business.tax.StatementQuery;
+import com.tendyron.wifi.web.query.business.tax.FenjuQuery;
+import com.tendyron.wifi.web.query.business.tax.StatisticsQuery;
+import com.tendyron.wifi.web.query.business.tax.XianjuQuery;
 import com.tendyron.wifi.web.service.BaseService;
 import com.tendyron.wifi.web.service.ServiceException;
 
@@ -74,13 +78,31 @@ public interface BusinessService extends BaseService<BusinessEntity> {
     Integer del(String[] ids) throws ServiceException;
 
     /**
-     * 报表统计
+     * 县局报表统计
      *
      * @param query
      * @return
      * @throws ServiceException
      */
-    List<StatementModel> statement(StatementQuery query) throws ServiceException;
+    List<XianjuModel> xianju(XianjuQuery query) throws ServiceException;
+
+    /**
+     * 分局报表统计
+     *
+     * @param query
+     * @return
+     * @throws ServiceException
+     */
+    List<FenjuModel> fenju(FenjuQuery query) throws ServiceException;
+
+    /**
+     * 个人报表统计
+     *
+     * @param query
+     * @return
+     * @throws ServiceException
+     */
+    List<StatisticsCategoryTypeModel> person(StatisticsQuery query) throws ServiceException;
 
     /**
      * 提交业务
@@ -105,5 +127,6 @@ public interface BusinessService extends BaseService<BusinessEntity> {
      * @throws ServiceException
      */
     void commitAmendment(String[] ids) throws ServiceException;
+
 
 }

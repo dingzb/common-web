@@ -63,11 +63,25 @@ angular.module('ws.stateConfig').config(['$stateProvider', function ($stateProvi
         }
     }).state('main.tax.statistics', {
         url: '/statistics'
-    }).state('main.tax.statistics.statement', {
-        url: '/statement',
+    }).state('main.tax.statistics.xianju', {
+        url: '/xianju',
         views: {
             'right@main.tax': {
-                templateUrl: 'tpls/tax/statistics/statement.html'
+                templateUrl: 'tpls/tax/statistics/xianju.html'
+            }
+        }
+    }).state('main.tax.statistics.fenju', {
+        url: '/fenju',
+        views: {
+            'right@main.tax': {
+                templateUrl: 'tpls/tax/statistics/fenju.html'
+            }
+        }
+    }).state('main.tax.statistics.person', {
+        url: '/person',
+        views: {
+            'right@main.tax': {
+                templateUrl: 'tpls/tax/statistics/person.html'
             }
         }
     });

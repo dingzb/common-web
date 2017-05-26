@@ -59,6 +59,25 @@ angular.module('ws.app').controller('taxViewCtrl', ['$rootScope', '$scope', '$ht
             field: 'createTime',
             title: '创建时间'
         }, {
+            field: 'status',
+            title: '状态',
+            translator: function (row) {
+                switch (row.status) {
+                    case 0:
+                        return '待提交';
+                    case 1:
+                        return '待自查';
+                    case 2:
+                        return '待审查';
+                    case 3:
+                        return '待核查';
+                    case 4:
+                        return '待整改';
+                    case 5:
+                        return '完成';
+                }
+            }
+        },{
             field: 'firstExamine',
             title: '自查意见',
             formatter: function (row) {

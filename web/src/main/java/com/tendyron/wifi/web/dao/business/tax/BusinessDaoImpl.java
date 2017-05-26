@@ -4,7 +4,6 @@ import com.tendyron.wifi.web.dao.BaseDaoImpl;
 import com.tendyron.wifi.web.entity.business.tax.BusinessEntity;
 import com.tendyron.wifi.web.query.BaseQuery;
 import com.tendyron.wifi.web.query.business.tax.BusinessQuery;
-import com.tendyron.wifi.web.query.business.tax.StatementQuery;
 import com.tendyron.wifi.web.utils.StringTools;
 import org.springframework.stereotype.Repository;
 

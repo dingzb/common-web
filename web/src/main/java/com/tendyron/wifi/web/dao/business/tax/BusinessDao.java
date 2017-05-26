@@ -3,10 +3,7 @@ package com.tendyron.wifi.web.dao.business.tax;
 import com.tendyron.wifi.web.dao.BaseDao;
 import com.tendyron.wifi.web.entity.business.tax.BusinessEntity;
 import com.tendyron.wifi.web.query.business.tax.BusinessQuery;
-import com.tendyron.wifi.web.query.business.tax.StatementQuery;
-import org.springframework.stereotype.Repository;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**

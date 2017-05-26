@@ -1,7 +1,7 @@
 .ws-statement {
     padding: 10px;
-    border-right: 1px dotted black;
-    border-bottom: 1px dotted black;
+    border-right: 1px solid #d2d7c8;
+    border-bottom: 1px solid #D2D7C8;
     width: 100%;
 }
 
@@ -23,11 +23,11 @@
 }
 
 .ws-statement th, .ws-statement td {
-    border-left: 1px dotted black;
+    border-left: 1px solid #D2D7C8;
     padding: 5px;
 }
 
 .ws-statement tr {
-    border-top: 1px solid #7DBFA8;
+    border-top: 1px solid #D2D7C8;
     font-family: "Microsoft Yahei", Tahoma, Geneva, sans-serif;
 }
