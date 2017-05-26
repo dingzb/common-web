@@ -7,8 +7,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
 
-@Entity
-@Table(name = "bus_vendor")
+//@Entity
+//@Table(name = "bus_vendor")
 public class VendorEntity extends BaseEntity implements Serializable {
 
 	private static final long serialVersionUID = 290040982039123174L;

@@ -13,8 +13,8 @@ import java.util.Set;
  * 
  * @author Dzb
  */
-@Entity
-@Table(name = "bus_ap")
+//@Entity
+//@Table(name = "bus_ap")
 public class ApEntity extends BaseEntity implements Serializable {
 
 	private static final long serialVersionUID = -5285900370984266684L;

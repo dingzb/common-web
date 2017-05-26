@@ -12,8 +12,8 @@ import java.util.Set;
  *
  * @author Dzb
  */
-@Entity
-@Table(name = "bus_firmware")
+//@Entity
+//@Table(name = "bus_firmware")
 public class FirmwareEntity extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 8714501726724328800L;

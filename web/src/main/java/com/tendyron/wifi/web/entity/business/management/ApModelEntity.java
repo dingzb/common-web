@@ -12,8 +12,8 @@ import java.util.Set;
  * 
  * @author Dzb
  */
-@Entity
-@Table(name = "bus_apmodel")
+//@Entity
+//@Table(name = "bus_apmodel")
 public class ApModelEntity extends BaseEntity implements Serializable {
 
 	private static final long serialVersionUID = 2748603396071090669L;

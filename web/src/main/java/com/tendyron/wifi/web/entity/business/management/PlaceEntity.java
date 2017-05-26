@@ -17,8 +17,8 @@ import java.util.Set;
  * 
  * @author Dzb
  */
-@Entity
-@Table(name = "bus_place")
+//@Entity
+//@Table(name = "bus_place")
 public class PlaceEntity extends BaseEntity implements Serializable {
 
 	private static final long serialVersionUID = -9067371073801568433L;
