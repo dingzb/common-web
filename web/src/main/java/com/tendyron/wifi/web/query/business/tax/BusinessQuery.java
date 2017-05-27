@@ -15,8 +15,11 @@ public class BusinessQuery extends PagingQuery {
     private Boolean hasIssue;
     private String issueId;
     private String agencyId;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
-    private Date busTime;
+    private Date busTimeStart;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    private Date busTimeEnd;
 
     private String taxpayerCode;
     private String taxpayerName;
@@ -110,12 +113,20 @@ public class BusinessQuery extends PagingQuery {
         this.createTimeEnd = createTimeEnd;
     }
 
-    public Date getBusTime() {
-        return busTime;
+    public Date getBusTimeStart() {
+        return busTimeStart;
     }
 
-    public void setBusTime(Date busTime) {
-        this.busTime = busTime;
+    public void setBusTimeStart(Date busTimeStart) {
+        this.busTimeStart = busTimeStart;
+    }
+
+    public Date getBusTimeEnd() {
+        return busTimeEnd;
+    }
+
+    public void setBusTimeEnd(Date busTimeEnd) {
+        this.busTimeEnd = busTimeEnd;
     }
 
     public Integer getStatus() {

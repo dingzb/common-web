@@ -14,6 +14,11 @@ public class StatisticsQuery extends BaseQuery {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date endCreate;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    private Date busTimeStart;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    private Date busTimeEnd;
+
     private String categoryTypeIdsStr;
     private String categoryIdsStr;
     private String issueIdStr;
@@ -56,5 +61,21 @@ public class StatisticsQuery extends BaseQuery {
 
     public void setIssueIdStr(String issueIdStr) {
         this.issueIdStr = issueIdStr;
+    }
+
+    public Date getBusTimeStart() {
+        return busTimeStart;
+    }
+
+    public void setBusTimeStart(Date busTimeStart) {
+        this.busTimeStart = busTimeStart;
+    }
+
+    public Date getBusTimeEnd() {
+        return busTimeEnd;
+    }
+
+    public void setBusTimeEnd(Date busTimeEnd) {
+        this.busTimeEnd = busTimeEnd;
     }
 }

@@ -53,6 +53,16 @@ public class BusinessDaoImpl extends BaseDaoImpl<BusinessEntity> implements Busi
             hqlsb.append(" and {0}.createTime <= :createTimeEnd");
             params.put("createTimeEnd", bQuery.getCreateTimeEnd());
         }
+
+        if (bQuery.getBusTimeStart() != null) {
+            hqlsb.append(" and {0}.busTime >= :busTimeStart");
+            params.put("busTimeStart", bQuery.getBusTimeStart());
+        }
+        if (bQuery.getBusTimeEnd() != null) {
+            hqlsb.append(" and {0}.busTime <= :busTimeEnd");
+            params.put("busTimeEnd", bQuery.getBusTimeEnd());
+        }
+
         if (bQuery.getStatus() != null){
             hqlsb.append(" and {0}.status = :status");
             params.put("status", bQuery.getStatus());

@@ -10,25 +10,25 @@
             <form class="form-inline">
                 <div class="ws-search-input-group">
                     <div class="form-group">
-                        <label title="创建时间起" for="createTimeStart">创建时间起</label>
+                        <label title="创建时间起" for="busTimeStart">业务时间起</label>
                         <div class="input-group input-group-sm">
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
-                            <input size="16" type="text" id="createTimeStart" name="createTimeStart"
+                            <input size="16" type="text" id="busTimeStart" name="busTimeStart"
                                    class="form-control input-sm"
-                                   placeholder="年-月-日 时:分" ng-model="searchParams.startCreate">
+                                   placeholder="年-月-日 时:分" ng-model="searchParams.busTimeStart">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label title="创建时间止" for="createTimeEnd"> 创建时间止</label>
+                        <label title="创建时间止" for="busTimeEnd"> 业务时间止</label>
                         <div class="input-group input-group-sm">
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
-                            <input size="16" type="text" id="createTimeEnd" ng-init="initDtp()"
+                            <input size="16" type="text" id="busTimeEnd" ng-init="initDtp()"
                                    class="form-control input-sm" placeholder="年-月-日 时:分"
-                                   ng-model="searchParams.createTimeEnd">
+                                   ng-model="searchParams.busTimeEnd">
                         </div>
                     </div>
                     <div class="ws-search-btn-group ws-inline">

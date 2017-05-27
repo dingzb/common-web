@@ -7,11 +7,11 @@ angular.module('ws.app').controller('taxPersonCtrl', ['$rootScope', '$scope', '$
     //日期控件初始化
     $scope.initDtp = function (e) {
         console.info(e);
-        $scope.datetimepicker('#createTimeStart').onChange(function (d) {
-            $scope.searchParams.startCreate = d;
+        $scope.datetimepicker('#busTimeStart').onChange(function (d) {
+            $scope.searchParams.busTimeStart = d;
         });
-        $scope.datetimepicker('#createTimeEnd').onChange(function (d) {
-            $scope.searchParams.endCreate = d;
+        $scope.datetimepicker('#busTimeEnd').onChange(function (d) {
+            $scope.searchParams.busTimeEnd = d;
         });
     };
 
@@ -19,8 +19,8 @@ angular.module('ws.app').controller('taxPersonCtrl', ['$rootScope', '$scope', '$
 
         $http.post('app/tax/statistics/person', {
             // agencyIdsStr: agencyIdStr,
-            startCreate: $scope.searchParams.startCreate,
-            endCreate: $scope.searchParams.endCreate
+            busTimeStart: $scope.searchParams.busTimeStart,
+            busTimeEnd: $scope.searchParams.busTimeEnd
         }).success(function (data) {
             if (data.success) {
                 var rrrs = data.data;

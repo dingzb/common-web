@@ -300,18 +300,17 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
     @Override
     @Transactional
     public List<XianjuModel> xianju(XianjuQuery query) throws ServiceException {
+
         BusinessQuery bQuery = new BusinessQuery();
-        bQuery.setCreateTimeStart(query.getStartCreate());
-        bQuery.setCreateTimeEnd(query.getEndCreate());
+
+        bQuery.setBusTimeStart(query.getBusTimeStart());
+        bQuery.setBusTimeEnd(query.getBusTimeEnd());
 
         List<XianjuModel> sms = new ArrayList<>();
 
         try {
             for (String agencyId : query.getAgencyIds()) {
                 bQuery.setAgencyId(agencyId);
-                bQuery.setCreateTimeStart(query.getStartCreate());
-                bQuery.setCreateTimeEnd(query.getEndCreate());
-
                 AgencyEntity agency = agencyDao.getById(agencyId);
                 XianjuModel sm = new XianjuModel();
                 sm.setAgencyName(agency.getName());
@@ -415,9 +414,11 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
     @Transactional
     @Override
     public List<FenjuModel> fenju(FenjuQuery query) throws ServiceException {
+
         BusinessQuery bQuery = new BusinessQuery();
-        bQuery.setCreateTimeStart(query.getStartCreate());
-        bQuery.setCreateTimeEnd(query.getEndCreate());
+
+        bQuery.setBusTimeStart(query.getBusTimeStart());
+        bQuery.setBusTimeEnd(query.getBusTimeEnd());
 
         List<FenjuModel> fms = new ArrayList<>();
 
@@ -527,10 +528,14 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
     @Transactional
     @Override
     public List<StatisticsCategoryTypeModel> person(StatisticsQuery query) throws ServiceException {
+
         BusinessQuery bQuery = new BusinessQuery();
-        bQuery.setCreateTimeStart(query.getStartCreate());
-        bQuery.setCreateTimeEnd(query.getEndCreate());
+
+        bQuery.setBusTimeStart(query.getBusTimeStart());
+        bQuery.setBusTimeEnd(query.getBusTimeEnd());
+
         bQuery.setCreateUserId(query.getUserId());
+
         List<StatisticsCategoryTypeModel> sctms = new ArrayList<>();
         try {
             List<BusinessEntity> bes = businessDao.getList(bQuery);
@@ -695,6 +700,7 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
 
         if (examine.getHasIssue()) {
             business.setStatus(BUS_STATUS.HAS_ISSUE);
+            business.setAmendment(false);
         } else {
             business.setStatus((business.getStatus() + 1) > BUS_STATUS.THIRD ? BUS_STATUS.FINISH : business.getStatus() + 1);
         }
@@ -713,6 +719,20 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
     @Transactional
     @Override
     public void commitAmendment(String[] ids) throws ServiceException {
-        changeStatus(ids, BUS_STATUS.FINISH);
+
+        try {
+            for (String id : ids) {
+                BusinessEntity business = businessDao.getById(id);
+                if (business == null) {
+                    throw new ServiceException("业务不存在");
+                }
+                business.setStatus(BUS_STATUS.FINISH);
+                business.setAmendment(true);
+                businessDao.update(business);
+            }
+        } catch (Exception e) {
+            logger.error("", e);
+            throw new ServiceException();
+        }
     }
 }
