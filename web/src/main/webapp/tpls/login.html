@@ -15,7 +15,7 @@
     <div class="login-bg-xiangsu">
         <div class="login-main">
             <div class="login-zhuce">
-                <div class="login-zhuce-top">{{'login.page.login' | translate}}</div>
+                <div class="login-zhuce-top">登录</div>
                 <div class="Dl_zhuce_biaodan">
                     <div class="row">
                         <div class="col-md-10 col-ms-offset-1 logo">
@@ -25,11 +25,11 @@
                         </div>
                     </div>
                     <form class="form-horizontal" role="form" name="formLogin">
-                        <input class="zhuce_input01" ng-model="username" name="username" maxlength="10" placeholder="{{'login.page.username' | translate}}">
-                        <input type="password" class="zhuce_input02" placeholder="{{'login.page.password' | translate}}" ng-model="password" name="{{'login.page.password' | translate}}">
-                        <input id="imgCode" ng-blur="validateVerifyCode()" class="zhuce_input00" placeholder="{{'login.page.verify' | translate}}" name="verifyCode" ng-model="verifyCode">
-                        <img style="cursor: pointer; width: 76px" alt="{{'login.page.verify.alt' | translate}}" src="app/verifyCode/image" onclick="this.src='app/verifyCode/image?t='+new Date()">
-                        <input type="submit" class="zhuce_input03" value="{{'login.page.login' | translate}}" ng-click="login()">
+                        <input class="zhuce_input01" ng-model="username" name="username" maxlength="10" placeholder="用户名">
+                        <input type="password" class="zhuce_input02" placeholder="密码" ng-model="password">
+                        <input id="imgCode" ng-blur="validateVerifyCode()" class="zhuce_input00" placeholder="验证码" name="verifyCode" ng-model="verifyCode">
+                        <img style="cursor: pointer; width: 76px" alt="点击刷新" src="app/verifyCode/image" onclick="this.src='app/verifyCode/image?t='+new Date()">
+                        <input type="submit" class="zhuce_input03" value="登录" ng-click="login()">
                     </form>
                 </div>
             </div>
