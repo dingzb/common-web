@@ -57,6 +57,7 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
     @Transactional
     @Override
     public PagingModel pagingCreated(BusinessQuery query) throws ServiceException {
+        queryBasicAssert(query);
         query.setStatus(BUS_STATUS.CREATE);
         return paging(query);
     }
@@ -64,6 +65,7 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
     @Transactional
     @Override
     public PagingModel pagingFirst(BusinessQuery query) throws ServiceException {
+        queryBasicAssert(query);
         query.setIncludeStatus(new Integer[]{BUS_STATUS.FIRST, BUS_STATUS.SECOND, BUS_STATUS.THIRD, BUS_STATUS.HAS_ISSUE, BUS_STATUS.FINISH});
         return paging(query);
     }
@@ -71,6 +73,7 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
     @Transactional
     @Override
     public PagingModel pagingSecond(BusinessQuery query) throws ServiceException {
+        queryBasicAssert(query);
         query.setIncludeStatus(new Integer[]{BUS_STATUS.SECOND, BUS_STATUS.THIRD, BUS_STATUS.HAS_ISSUE, BUS_STATUS.FINISH});
         return paging(query);
     }
@@ -78,6 +81,7 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
     @Transactional
     @Override
     public PagingModel pagingThird(BusinessQuery query) throws ServiceException {
+        queryBasicAssert(query);
         query.setIncludeStatus(new Integer[]{BUS_STATUS.THIRD, BUS_STATUS.HAS_ISSUE, BUS_STATUS.FINISH});
         return paging(query);
     }
@@ -85,16 +89,20 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
     @Transactional
     @Override
     public PagingModel pagingAmendment(BusinessQuery query) throws ServiceException {
+        queryBasicAssert(query);
         query.setStatus(BUS_STATUS.HAS_ISSUE);
         return paging(query);
     }
 
-    @Transactional
-    @Override
-    public PagingModel paging(BusinessQuery query) throws ServiceException {
-
+    /**
+     * 基于登陆用户的分页获取
+     *
+     * @param query
+     * @return
+     * @throws ServiceException
+     */
+    private PagingModel pagingBaseUser(BusinessQuery query) throws ServiceException {
         queryBasicAssert(query);
-
         try {
             UserEntity curUser = userDao.getById(query.getUserId());
             if (UserType.NORMAL.equals(curUser.getType())) {                     //非管理员
@@ -116,7 +124,14 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
             logger.error("", e);
             throw new ServiceException();
         }
+        return paging(query);
+    }
 
+    @Transactional
+    @Override
+    public PagingModel paging(BusinessQuery query) throws ServiceException {
+
+        queryBasicAssert(query);
 
         List<BusinessModel> businessModels = new ArrayList<>();
         PagingModel paging = new PagingModel();
@@ -540,85 +555,85 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
         try {
             List<BusinessEntity> bes = businessDao.getList(bQuery);
 
-                for (BusinessEntity be : bes) {
-                    StatisticsCategoryTypeModel sctmTmp = null;
-                    BusCategoryTypeEntity bcte = be.getCategory().getType();
+            for (BusinessEntity be : bes) {
+                StatisticsCategoryTypeModel sctmTmp = null;
+                BusCategoryTypeEntity bcte = be.getCategory().getType();
 
-                    for (StatisticsCategoryTypeModel sctm : sctms) {
-                        if (sctm.getId().equals(bcte.getId())) {
-                            sctmTmp = sctm;
+                for (StatisticsCategoryTypeModel sctm : sctms) {
+                    if (sctm.getId().equals(bcte.getId())) {
+                        sctmTmp = sctm;
+                        break;
+                    }
+                }
+                if (sctmTmp == null) {
+                    sctmTmp = new StatisticsCategoryTypeModel();
+                    sctmTmp.setName(bcte.getName());
+                    sctmTmp.setId(bcte.getId());
+                    sctms.add(sctmTmp);
+                }
+
+                BusCategoryEntity bce = be.getCategory();
+
+                List<StatisticsCategoryModel> scms = sctmTmp.getRecs();
+                StatisticsCategoryModel scmTmp = null;
+
+                if (scms != null) {
+                    for (StatisticsCategoryModel scm : scms) {
+                        if (scm.getId().equals(bce.getId())) {
+                            scmTmp = scm;
                             break;
                         }
                     }
-                    if (sctmTmp == null) {
-                        sctmTmp = new StatisticsCategoryTypeModel();
-                        sctmTmp.setName(bcte.getName());
-                        sctmTmp.setId(bcte.getId());
-                        sctms.add(sctmTmp);
-                    }
-
-                    BusCategoryEntity bce = be.getCategory();
-
-                    List<StatisticsCategoryModel> scms = sctmTmp.getRecs();
-                    StatisticsCategoryModel scmTmp = null;
-
-                    if (scms != null) {
-                        for (StatisticsCategoryModel scm : scms) {
-                            if (scm.getId().equals(bce.getId())) {
-                                scmTmp = scm;
-                                break;
-                            }
-                        }
-                    } else {
-                        scms = new ArrayList<>();
-                        sctmTmp.setRecs(scms);
-                    }
-
-                    if (scmTmp == null) {
-                        scmTmp = new StatisticsCategoryModel();
-                        scmTmp.setName(bce.getName());
-                        scmTmp.setId(bce.getId());
-                        scms.add(scmTmp);
-                    }
-
-                    scmTmp.setCount(scmTmp.getCount() + 1);     // 业务总数
-
-                    boolean hasIssue = false;
-                    if (be.getStatus() != BUS_STATUS.FINISH) { // 排除业务处在完成状态的业务，如三级审核后都没有问题或月经整改
-                        if (be.getFirstExamine() != null && be.getFirstExamine().getHasIssue()) {
-                            hasIssue = true;
-                            Set<String> issueNames = new HashSet<>();
-                            Set<BusIssueEntity> busIssueEntities = be.getFirstExamine().getIssues();
-                            busIssueEntities.forEach(busIssueEntity -> issueNames.add(busIssueEntity.getName()));
-                            Set<String> oldIssueNames = scmTmp.getIssueNames();
-                            if (oldIssueNames == null) {
-                                oldIssueNames = new HashSet<>();
-                            }
-                            oldIssueNames.addAll(issueNames);
-                        } else if (be.getSecondExamine() != null && be.getSecondExamine().getHasIssue()) {
-                            hasIssue = true;
-                            Set<String> issueNames = new HashSet<>();
-                            Set<BusIssueEntity> busIssueEntities = be.getSecondExamine().getIssues();
-                            busIssueEntities.forEach(busIssueEntity -> issueNames.add(busIssueEntity.getName()));
-                            Set<String> oldIssueNames = scmTmp.getIssueNames();
-                            if (oldIssueNames == null) {
-                                oldIssueNames = new HashSet<>();
-                            }
-                            oldIssueNames.addAll(issueNames);
-                        } else if (be.getThirdExamine() != null && be.getThirdExamine().getHasIssue()) {
-                            hasIssue = true;
-                            Set<String> issueNames = new HashSet<>();
-                            Set<BusIssueEntity> busIssueEntities = be.getThirdExamine().getIssues();
-                            busIssueEntities.forEach(busIssueEntity -> issueNames.add(busIssueEntity.getName()));
-                            Set<String> oldIssueNames = scmTmp.getIssueNames();
-                            if (oldIssueNames == null) {
-                                oldIssueNames = new HashSet<>();
-                            }
-                            oldIssueNames.addAll(issueNames);
-                        }
-                    }
-                    scmTmp.setIssueCount(scmTmp.getIssueCount() + (hasIssue ? 1 : 0));      //问题业务总数
+                } else {
+                    scms = new ArrayList<>();
+                    sctmTmp.setRecs(scms);
                 }
+
+                if (scmTmp == null) {
+                    scmTmp = new StatisticsCategoryModel();
+                    scmTmp.setName(bce.getName());
+                    scmTmp.setId(bce.getId());
+                    scms.add(scmTmp);
+                }
+
+                scmTmp.setCount(scmTmp.getCount() + 1);     // 业务总数
+
+                boolean hasIssue = false;
+                if (be.getStatus() != BUS_STATUS.FINISH) { // 排除业务处在完成状态的业务，如三级审核后都没有问题或月经整改
+                    if (be.getFirstExamine() != null && be.getFirstExamine().getHasIssue()) {
+                        hasIssue = true;
+                        Set<String> issueNames = new HashSet<>();
+                        Set<BusIssueEntity> busIssueEntities = be.getFirstExamine().getIssues();
+                        busIssueEntities.forEach(busIssueEntity -> issueNames.add(busIssueEntity.getName()));
+                        Set<String> oldIssueNames = scmTmp.getIssueNames();
+                        if (oldIssueNames == null) {
+                            oldIssueNames = new HashSet<>();
+                        }
+                        oldIssueNames.addAll(issueNames);
+                    } else if (be.getSecondExamine() != null && be.getSecondExamine().getHasIssue()) {
+                        hasIssue = true;
+                        Set<String> issueNames = new HashSet<>();
+                        Set<BusIssueEntity> busIssueEntities = be.getSecondExamine().getIssues();
+                        busIssueEntities.forEach(busIssueEntity -> issueNames.add(busIssueEntity.getName()));
+                        Set<String> oldIssueNames = scmTmp.getIssueNames();
+                        if (oldIssueNames == null) {
+                            oldIssueNames = new HashSet<>();
+                        }
+                        oldIssueNames.addAll(issueNames);
+                    } else if (be.getThirdExamine() != null && be.getThirdExamine().getHasIssue()) {
+                        hasIssue = true;
+                        Set<String> issueNames = new HashSet<>();
+                        Set<BusIssueEntity> busIssueEntities = be.getThirdExamine().getIssues();
+                        busIssueEntities.forEach(busIssueEntity -> issueNames.add(busIssueEntity.getName()));
+                        Set<String> oldIssueNames = scmTmp.getIssueNames();
+                        if (oldIssueNames == null) {
+                            oldIssueNames = new HashSet<>();
+                        }
+                        oldIssueNames.addAll(issueNames);
+                    }
+                }
+                scmTmp.setIssueCount(scmTmp.getIssueCount() + (hasIssue ? 1 : 0));      //问题业务总数
+            }
         } catch (Exception e) {
             logger.error("", e);
             throw new ServiceException();

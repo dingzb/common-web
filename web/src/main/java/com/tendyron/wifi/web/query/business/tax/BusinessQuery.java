@@ -13,6 +13,10 @@ public class BusinessQuery extends PagingQuery {
     private String content;
     private String categoryId;
     private Boolean hasIssue;
+    private Boolean firstHasIssue;
+    private Boolean secondHasIssue;
+    private Boolean thirdHasIssue;
+
     private String issueId;
     private String agencyId;
 
@@ -159,5 +163,29 @@ public class BusinessQuery extends PagingQuery {
 
     public void setCreateUserIds(Set<String> createUserIds) {
         this.createUserIds = createUserIds;
+    }
+
+    public Boolean getFirstHasIssue() {
+        return firstHasIssue;
+    }
+
+    public void setFirstHasIssue(Boolean firstHasIssue) {
+        this.firstHasIssue = firstHasIssue;
+    }
+
+    public Boolean getSecondHasIssue() {
+        return secondHasIssue;
+    }
+
+    public void setSecondHasIssue(Boolean secondHasIssue) {
+        this.secondHasIssue = secondHasIssue;
+    }
+
+    public Boolean getThirdHasIssue() {
+        return thirdHasIssue;
+    }
+
+    public void setThirdHasIssue(Boolean thirdHasIssue) {
+        this.thirdHasIssue = thirdHasIssue;
     }
 }
