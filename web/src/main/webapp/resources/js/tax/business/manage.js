@@ -76,23 +76,23 @@ angular.module('ws.app').controller('taxManageCtrl', ['$rootScope', '$scope', '$
             field: 'categoryName',
             title: '业务项目'
         }, {
-                field: 'agencyName',
-                title: '主管税务机关'
-            }, {
-                field: 'createName',
-                title: '税收管理员'
-            }, {
-                field: 'createTime',
-                title: '创建时间'
-            }, {
-                field: 'id',
-                title: '操作',
-                formatter: function (row) {
-                    var str = JSON.stringify(row);
-                    str = str.replace(/"/g, "'");
-                    return "<button type=\"button\" class=\"btn btn-link btn-sm\" title='详情' onClick=\"angular.custom.taxBusinessDetail(" + str + ")\"><span class=\"glyphicon glyphicon-link\" > </span></button>";
-                }
-            }],
+            field: 'agencyName',
+            title: '主管税务机关'
+        }, {
+            field: 'createName',
+            title: '税收管理员'
+        }, {
+            field: 'busTime',
+            title: '业务时间'
+        }, {
+            field: 'id',
+            title: '操作',
+            formatter: function (row) {
+                var str = JSON.stringify(row);
+                str = str.replace(/"/g, "'");
+                return "<button type=\"button\" class=\"btn btn-link btn-sm\" title='详情' onClick=\"angular.custom.taxBusinessDetail(" + str + ")\"><span class=\"glyphicon glyphicon-link\" > </span></button>";
+            }
+        }],
         checkbox: true,
         sizes: [10, 20, 50, 80],
         pageSize: 10

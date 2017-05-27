@@ -85,8 +85,8 @@ angular.module('ws.app').controller('taxAmendmentCtrl', ['$rootScope', '$scope',
             field: 'createName',
             title: '税收管理员'
         }, {
-            field: 'createTime',
-            title: '创建时间'
+            field: 'busTime',
+            title: '业务时间'
         }, {
             field: 'firstExamine',
             title: '自查意见',

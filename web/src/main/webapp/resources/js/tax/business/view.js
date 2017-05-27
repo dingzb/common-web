@@ -56,8 +56,8 @@ angular.module('ws.app').controller('taxViewCtrl', ['$rootScope', '$scope', '$ht
             field: 'createName',
             title: '税收管理员'
         }, {
-            field: 'createTime',
-            title: '创建时间'
+            field: 'busTime',
+            title: '业务时间'
         }, {
             field: 'status',
             title: '状态',

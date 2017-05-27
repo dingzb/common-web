@@ -86,7 +86,7 @@ public class BusinessDaoImpl extends BaseDaoImpl<BusinessEntity> implements Busi
     @Override
     public List<BusinessEntity> paging(BusinessQuery query) {
         Map<String, Object> params = new HashMap<>();
-        String hql = getHql(query, "business", params) + " order by business.createTime desc";
+        String hql = getHql(query, "business", params) + " order by business.busTime desc";
         return getByHqlPaging(hql, params, query.getPage(), query.getSize());
     }
 }
