@@ -201,9 +201,7 @@ angular.module('ws.app').controller('taxViewCtrl', ['$rootScope', '$scope', '$ht
     };
 
 
-    //=============== 提交业务 =====================
-
-    $scope.commit = function () {
+    $scope.del = function () {
         var checkeds = $scope.innerCtrl.getChecked();
         if (checkeds.length <= 0) {
             $scope.alert("至少选择一条记录！", 'error');
@@ -213,11 +211,11 @@ angular.module('ws.app').controller('taxViewCtrl', ['$rootScope', '$scope', '$ht
         for (var i = 0; i < checkeds.length; i++) {
             ids.push(checkeds[i].id);
         }
-        $scope.confirm("将要提交" + ids.length + "条记录", function (y) {
+        $scope.confirm("将要删除" + ids.length + "条记录", function (y) {
             if (!y) {
                 return;
             }
-            $http.post('app/tax/business/commit', {
+            $http.post('app/tax/business/del', {
                 'ids': ids
             }).success(function (data) {
                 if (data.success) {
