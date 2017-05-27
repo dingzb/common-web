@@ -106,9 +106,9 @@ public class UserController extends BaseController {
      */
     @RequestMapping("del")
     @ResponseBody
-    public Json deleteUsers(@RequestParam("param[]") String userIds[]) {
+    public Json deleteUsers(String userId) {
         try {
-            userService.removeUser(userIds);
+            userService.removeUser(userId);
         } catch (ServiceException e) {
             return fail(e.getMessage());
         }

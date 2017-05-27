@@ -2,6 +2,7 @@ package com.tendyron.wifi.web.service.system;
 
 import com.tendyron.wifi.web.dao.business.tax.AgencyDao;
 import com.tendyron.wifi.web.entity.business.tax.AgencyEntity;
+import com.tendyron.wifi.web.entity.business.tax.BusinessEntity;
 import com.tendyron.wifi.web.model.PagingModel;
 import com.tendyron.wifi.web.model.business.tax.AgencyModel;
 import com.tendyron.wifi.web.service.BaseServiceImpl;
@@ -322,7 +323,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity> implements User
             if (!StringTools.isEmpty(userModel.getPhone())) {
                 userEntity.setPhone(userModel.getPhone());
             }
-            if(userModel.getAgencyBoss() != null){
+            if (userModel.getAgencyBoss() != null) {
                 userEntity.setAgencyBoss(userModel.getAgencyBoss());
             }
 
@@ -340,30 +341,41 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity> implements User
     @BusinessLog(content = "删除用户", operation = LogOperationType.DELETE)
     @Override
     @Transactional
-    public int removeUser(String[] userIds) throws ServiceException {
-        if (userIds == null) {
+    public void removeUser(String userId) throws ServiceException {
+        if (userId == null) {
             throw new ServiceException("删除失败");
         }
-        // TODO
-        //删除用户时删除 用户组 用户角色
-        for (String userId : userIds) {
+        UserEntity user = null;
+
+        try {
+            user = userDao.getById(userId);
+            Set<BusinessEntity> businesses = user.getCreateBusinesses();
+        } catch (Exception e) {
+            logger.catching(e);
+            throw new ServiceException();
+        }
+        if (user.getCreateBusinesses() != null && !user.getCreateBusinesses().isEmpty()) {
+            throw new ServiceException("用户存在已经创建的业务，请先删除关联业务");
+        }
+        try {
+            // TODO
+            //删除用户时删除 用户组 用户角色
             GroupEntity groupEntity = groupDao.getUserGroup(userId);
             RoleEntity roleEntity = roleDao.getUserRole(userId);
             groupDao.delete(groupEntity);
             roleDao.delete(roleEntity);
+
+            userDao.delete(user);
+        } catch (Exception e) {
+            logger.catching(e);
+            throw new ServiceException();
         }
-
-        // 包含角色、组删除时 ，首先删除用户的角色组信息
-
-
-        return userDao.delByIds(userIds);
     }
 
     @BusinessLog(content = "给用户设置角色", operation = LogOperationType.MODIFY)
     @Override
     @Transactional
-    public Serializable addRolesTouser(String[] userParam, String[] roleParam)
-            throws ServiceException {
+    public Serializable addRolesTouser(String[] userParam, String[] roleParam) throws ServiceException {
         String userId = null;
         String roleId = null;
         Set<RoleEntity> roleEntity = new HashSet<RoleEntity>();

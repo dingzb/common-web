@@ -61,11 +61,11 @@ public interface UserService extends BaseService<UserEntity> {
 	 * </p>
 	 * 
 	 * @since 2015-07-25
-	 * @param userIds
+	 * @param userId
 	 * @return
 	 * @throws ServiceException
 	 */
-	int removeUser(String[] userIds) throws ServiceException;
+	void removeUser(String userId) throws ServiceException;
 
 	/**
 	 * <h2>功能描述</h2>

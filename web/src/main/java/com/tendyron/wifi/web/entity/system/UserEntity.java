@@ -3,6 +3,7 @@ package com.tendyron.wifi.web.entity.system;
 import com.tendyron.wifi.web.entity.BaseEntity;
 import com.tendyron.wifi.web.config.UserType;
 import com.tendyron.wifi.web.entity.business.tax.AgencyEntity;
+import com.tendyron.wifi.web.entity.business.tax.BusinessEntity;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -33,8 +34,10 @@ public class UserEntity extends BaseEntity implements java.io.Serializable {
     private Set<GroupEntity> groups = new HashSet<GroupEntity>(0);
     private Set<RoleEntity> roles = new HashSet<RoleEntity>(0);
 
+    //for tax
     private AgencyEntity agency;
     private Boolean agencyBoss;
+    private Set<BusinessEntity> createBusinesses;
 
     public UserEntity() {
     }
@@ -190,6 +193,15 @@ public class UserEntity extends BaseEntity implements java.io.Serializable {
 
     public void setAgencyBoss(Boolean agencyBoss) {
         this.agencyBoss = agencyBoss;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "create")
+    public Set<BusinessEntity> getCreateBusinesses() {
+        return createBusinesses;
+    }
+
+    public void setCreateBusinesses(Set<BusinessEntity> createBusinesses) {
+        this.createBusinesses = createBusinesses;
     }
 
     @Override

@@ -518,19 +518,15 @@ angular.module('ws.app').controller('systemUserCtrl', ['$rootScope', '$scope', '
     //删除用户
     $scope.onDelete = function () {
         var checkeds = $scope.innerCtrl.getChecked();
-        if (checkeds.length <= 0) {
-            $scope.alert("必须勾选一条记录才能删除！", 'error');
+        if (checkeds.length !== 1) {
+            $scope.alert("只能选择一条记录！", 'error');
             return;
-        }
-        var selectRowIds = [];
-        for (var i = 0; i < checkeds.length; i++) {
-            selectRowIds[i] = checkeds[i].id;
         }
 
         $scope.confirm("将要删除" + checkeds.length + "条记录", function (y) {
             if (y) {
                 $http.post('app/system/user/del', {
-                    'param': selectRowIds
+                    'userId': checkeds[0].id
                 }).success(function (data) {
                     if (data.success) {
                         $scope.innerCtrl.load($scope.datagrid.params);
