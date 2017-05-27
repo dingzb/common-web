@@ -96,8 +96,8 @@ angular.module('ws.app').controller('taxThirdCtrl', ['$rootScope', '$scope', '$h
                 str = str.replace(/"/g, "'");
                 if(row.firstExamine){
                     return row.firstExamine.hasIssue ?
-                        '<button type="button" class="btn btn-link btn-sm" title="否" onClick="angular.custom.taxBusinessIssueDetail(' + str + ', 1)">否</button>' :
-                        '<button type="button" class="btn btn-link btn-sm" title="是" disabled>是</button>';
+                        '<button type="button" class="btn btn-link btn-sm" title="有问题" onClick="angular.custom.taxBusinessIssueDetail(' + str + ', 1)">有问题</button>' :
+                        '<button type="button" class="btn btn-link btn-sm" title="没问题" disabled>没问题</button>';
                 } else {
                     return '';
                 }
@@ -110,8 +110,8 @@ angular.module('ws.app').controller('taxThirdCtrl', ['$rootScope', '$scope', '$h
                 str = str.replace(/"/g, "'");
                 if(row.secondExamine){
                     return row.secondExamine.hasIssue ?
-                        '<button type="button" class="btn btn-link btn-sm" title="否" onClick="angular.custom.taxBusinessIssueDetail(' + str + ', 2)">否</button>' :
-                        '<button type="button" class="btn btn-link btn-sm" title="是" disabled>是</button>';
+                        '<button type="button" class="btn btn-link btn-sm" title="有问题" onClick="angular.custom.taxBusinessIssueDetail(' + str + ', 2)">有问题</button>' :
+                        '<button type="button" class="btn btn-link btn-sm" title="没问题" disabled>没问题</button>';
                 } else {
                     return '';
                 }
@@ -124,8 +124,8 @@ angular.module('ws.app').controller('taxThirdCtrl', ['$rootScope', '$scope', '$h
                 str = str.replace(/"/g, "'");
                 if(row.thirdExamine){
                     return row.thirdExamine.hasIssue ?
-                        '<button type="button" class="btn btn-link btn-sm" title="否" onClick="angular.custom.taxBusinessIssueDetail(' + str + ', 3)">否</button>' :
-                        '<button type="button" class="btn btn-link btn-sm" title="是" disabled>是</button>';
+                        '<button type="button" class="btn btn-link btn-sm" title="有问题" onClick="angular.custom.taxBusinessIssueDetail(' + str + ', 3)">有问题</button>' :
+                        '<button type="button" class="btn btn-link btn-sm" title="没问题" disabled>没问题</button>';
                 } else {
                     return '';
                 }

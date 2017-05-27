@@ -96,8 +96,8 @@ angular.module('ws.app').controller('taxFirstCtrl', ['$rootScope', '$scope', '$h
                 str = str.replace(/"/g, "'");
                 if (row.firstExamine) {
                     return row.firstExamine.hasIssue ?
-                        '<button type="button" class="btn btn-link btn-sm" title="否" onClick="angular.custom.taxBusinessIssueDetail(' + str + ', 1)">否</button>' :
-                        '<button type="button" class="btn btn-link btn-sm" title="是" disabled>是</button>';
+                        '<button type="button" class="btn btn-link btn-sm" title="有问题" onClick="angular.custom.taxBusinessIssueDetail(' + str + ', 1)">有问题</button>' :
+                        '<button type="button" class="btn btn-link btn-sm" title="没问题" disabled>没问题</button>';
                 } else {
                     return '';
                 }
