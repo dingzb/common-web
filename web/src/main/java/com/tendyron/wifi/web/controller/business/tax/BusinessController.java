@@ -1,6 +1,7 @@
 package com.tendyron.wifi.web.controller.business.tax;
 
 import com.tendyron.wifi.web.controller.BaseController;
+import com.tendyron.wifi.web.entity.business.tax.BusinessEntity.BUS_STATUS;
 import com.tendyron.wifi.web.model.Json;
 import com.tendyron.wifi.web.model.business.tax.BusinessModel;
 import com.tendyron.wifi.web.query.business.tax.BusinessQuery;
@@ -56,6 +57,7 @@ public class BusinessController extends BaseController {
     @RequestMapping("paging/error")
     @ResponseBody
     public Json pagingError (BusinessQuery query) {
+        query.setStatus(BUS_STATUS.HAS_ISSUE);
         try {
             if (query.getHasIssue() == null){
                 return success(businessService.paging(query));

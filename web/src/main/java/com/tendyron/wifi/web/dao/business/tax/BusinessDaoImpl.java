@@ -114,7 +114,7 @@ public class BusinessDaoImpl extends BaseDaoImpl<BusinessEntity> implements Busi
     public List<BusinessEntity> pagingError(BusinessQuery query) {
         Map<String, Object> params = new HashMap<>();
         String hql = "select new BusinessEntity(business.id,business.taxpayerCode,business.taxpayerName,business.description,business.busTime,first.hasIssue,second.hasIssue,third.hasIssue,business.amendment,business.category,business.agency,business.create,business.createTime,business.modifyTime,business.status)"
-                + getHql(query, "business", params) + " and business.status !=5 order by business.busTime desc";
+                + getHql(query, "business", params) + " order by business.busTime desc";
         return getByHqlPaging(hql, params, query.getPage(), query.getSize());
     }
 }
