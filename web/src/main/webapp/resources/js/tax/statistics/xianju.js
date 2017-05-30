@@ -171,6 +171,9 @@ angular.module('ws.app').controller('taxXianjuCtrl', ['$rootScope', '$scope', '$
             field: 'createName',
             title: '税收管理员'
         }, {
+            field: 'agencyName',
+            title: '分局'
+        }, {
             field: 'busTime',
             title: '业务时间'
         }, {
