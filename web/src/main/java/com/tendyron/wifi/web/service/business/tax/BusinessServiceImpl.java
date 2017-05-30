@@ -581,6 +581,7 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
                                 oldIssueNames = new HashSet<>();
                             }
                             oldIssueNames.addAll(issueNames);
+                            scmTmp.setFirstIssueCount(scmTmp.getFirstIssueCount() + 1);
                         } else if (be.getSecondExamine() != null && be.getSecondExamine().getHasIssue()) {
                             hasIssue = true;
                             Set<String> issueNames = new HashSet<>();
@@ -591,6 +592,7 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
                                 oldIssueNames = new HashSet<>();
                             }
                             oldIssueNames.addAll(issueNames);
+                            scmTmp.setSecondIssueCount(scmTmp.getSecondIssueCount() + 1);
                         } else if (be.getThirdExamine() != null && be.getThirdExamine().getHasIssue()) {
                             hasIssue = true;
                             Set<String> issueNames = new HashSet<>();
@@ -601,6 +603,7 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
                                 oldIssueNames = new HashSet<>();
                             }
                             oldIssueNames.addAll(issueNames);
+                            scmTmp.setThirdIssueCount(scmTmp.getThirdIssueCount() + 1);
                         }
                     }
                     scmTmp.setIssueCount(scmTmp.getIssueCount() + (hasIssue ? 1 : 0));      //问题业务总数

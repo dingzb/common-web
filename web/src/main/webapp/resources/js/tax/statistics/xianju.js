@@ -102,6 +102,7 @@ angular.module('ws.app').controller('taxXianjuCtrl', ['$rootScope', '$scope', '$
 
     var issueDetailParams = {};
     $scope.issueDetail = function (agencyId, categoryTypeId, categoryId, issueStep) {
+        issueDetailParams = {};
 
         var hasIssueDetail = {
             firstHasIssue: undefined,
