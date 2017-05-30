@@ -4,6 +4,8 @@
 
 angular.module('ws.app').controller('taxXianjuCtrl', ['$rootScope', '$scope', '$http', function ($rootScope, $scope, $http) {
     $scope.searchParams = {};
+    $scope.issues ={};
+    $scope.issueDetailSearchParams = {};
     //日期控件初始化
     $scope.initDtp = function (e) {
         console.info(e);
@@ -18,6 +20,16 @@ angular.module('ws.app').controller('taxXianjuCtrl', ['$rootScope', '$scope', '$
     $http.post('app/tax/agency/list', {}).success(function (data) {
         if (data.success) {
             $scope.agencies = data.data;
+        } else if (data.message) {
+            $scope.alert(data.message, 'error');
+        }
+    }).error(function (data) {
+        $scope.alert(data, 'error');
+    });
+
+    $http.post('app/tax/business/issue/list', {}).success(function (data) {
+        if (data.success) {
+            $.extend($scope.issues, data.data);
         } else if (data.message) {
             $scope.alert(data.message, 'error');
         }
@@ -88,6 +100,7 @@ angular.module('ws.app').controller('taxXianjuCtrl', ['$rootScope', '$scope', '$
     };
 
 
+    var issueDetailParams = {};
     $scope.issueDetail = function (agencyId, categoryTypeId, categoryId, issueStep) {
 
         var hasIssueDetail = {
@@ -99,28 +112,53 @@ angular.module('ws.app').controller('taxXianjuCtrl', ['$rootScope', '$scope', '$
         var hasIssue = undefined;
 
         if (issueStep === 1) {
-            hasIssue.firstHasIssue = true;
+            hasIssueDetail.firstHasIssue = true;
+            $scope.issueDetail.title = '自控有问题';
         } else if (issueStep === 2) {
-            hasIssue.secondHasIssue = true;
+            hasIssueDetail.secondHasIssue = true;
+            $scope.issueDetail.title = '防控有问题';
         } else if (issueStep === 3) {
-            hasIssue.thirdHasIssue = true;
+            hasIssueDetail.thirdHasIssue = true;
+            $scope.issueDetail.title = '监控有问题';
         } else if (issueStep === 4) {
             hasIssue = true;
+            $scope.issueDetail.title = '有问题';
+        } else if (issueStep === 5) {
+            $scope.issueDetail.title = '';
         }
 
-        $scope.innerCtrl.load($.extend({
+        $scope.innerCtrl.load($.extend(issueDetailParams, {
             agencyId: agencyId,
             categoryTypeId: categoryTypeId,
             categoryId: categoryId,
             hasIssue: hasIssue
         }, hasIssueDetail, $scope.searchParams));
         $('#issueDetailModal').modal('show');
+
+        console.info($scope.datagrid.params);
+        console.info($scope.datagrid);
+    };
+
+
+    //查询
+    $scope.search = function () {
+        console.info($scope.issueDetailSearchParams);
+        $scope.innerCtrl.load($.extend({}, issueDetailParams, $scope.issueDetailSearchParams));
+    };
+
+    //清空
+    $scope.resetSearch = function () {
+        var clearSearch = {
+            taxpayerName: ''
+        };
+        $.extend($scope.datagrid.params, clearSearch);
+        $.extend($scope.issueDetailSearchParams, clearSearch);
     };
 
     //初始化组列表
     $scope.datagrid = {
         queryOnLoad: false,
-        url: 'app/tax/business/paging/all',
+        url: 'app/tax/business/paging/error',
         method: 'post',
         params: {},
         columns: [{
@@ -129,12 +167,6 @@ angular.module('ws.app').controller('taxXianjuCtrl', ['$rootScope', '$scope', '$
         }, {
             field: 'taxpayerName',
             title: '纳税人名称'
-        }, {
-            field: 'categoryName',
-            title: '业务项目'
-        }, {
-            field: 'agencyName',
-            title: '主管税务机关'
         }, {
             field: 'createName',
             title: '税收管理员'
@@ -161,13 +193,13 @@ angular.module('ws.app').controller('taxXianjuCtrl', ['$rootScope', '$scope', '$
                 }
             }
         }, {
-            field: 'firstExamine',
+            field: 'firstHasIssue',
             title: '自查意见',
             formatter: function (row) {
                 var str = JSON.stringify(row);
                 str = str.replace(/"/g, "'");
-                if (row.firstExamine) {
-                    return row.firstExamine.hasIssue ?
+                if (row.firstHasIssue !== null) {
+                    return row.firstHasIssue ?
                         '<button type="button" class="btn btn-link btn-sm" title="有问题" onClick="angular.custom.taxBusinessIssueDetail(' + str + ', 1)">有问题</button>' :
                         '<button type="button" class="btn btn-link btn-sm" title="没问题" disabled>没问题</button>';
                 } else {
@@ -175,13 +207,13 @@ angular.module('ws.app').controller('taxXianjuCtrl', ['$rootScope', '$scope', '$
                 }
             }
         }, {
-            field: 'secondExamine',
+            field: 'secondHasIssue',
             title: '审查意见',
             formatter: function (row) {
                 var str = JSON.stringify(row);
                 str = str.replace(/"/g, "'");
-                if (row.secondExamine) {
-                    return row.secondExamine.hasIssue ?
+                if (row.secondHasIssue !== null) {
+                    return row.secondHasIssue ?
                         '<button type="button" class="btn btn-link btn-sm" title="有问题" onClick="angular.custom.taxBusinessIssueDetail(' + str + ', 2)">有问题</button>' :
                         '<button type="button" class="btn btn-link btn-sm" title="没问题" disabled>没问题</button>';
                 } else {
@@ -194,8 +226,8 @@ angular.module('ws.app').controller('taxXianjuCtrl', ['$rootScope', '$scope', '$
             formatter: function (row) {
                 var str = JSON.stringify(row);
                 str = str.replace(/"/g, "'");
-                if (row.thirdExamine) {
-                    return row.thirdExamine.hasIssue ?
+                if (row.thirdHasIssue !== null) {
+                    return row.thirdHasIssue ?
                         '<button type="button" class="btn btn-link btn-sm" title="有问题" onClick="angular.custom.taxBusinessIssueDetail(' + str + ', 3)">有问题</button>' :
                         '<button type="button" class="btn btn-link btn-sm" title="没问题" disabled>没问题</button>';
                 } else {
@@ -224,6 +256,56 @@ angular.module('ws.app').controller('taxXianjuCtrl', ['$rootScope', '$scope', '$
         checkbox: true,
         sizes: [10, 20, 50, 80],
         pageSize: 10
+    };
+
+    //=========详情===================
+    angular.custom.taxBusinessDetail = function (row) {
+        $scope.$apply(function () {
+            $scope.detailObj = row;
+        });
+        $("#detailModal").modal('show');
+    };
+
+    angular.custom.taxBusinessIssueDetail = function (row, step) {
+        var issues = null;
+
+        $scope.$apply(function () {
+
+            $http.post('app/tax/business/examine/detail', {
+                busId: row.id,
+                step: step
+            }).success(function (data) {
+                if (data.success) {
+                    $scope.examineDetail = data.data;
+                    switch (step) {
+                        case 1:
+                            $scope.examineDetail.title = '自查';
+                            break;
+                        case 2:
+                            $scope.examineDetail.title = '审查';
+                            break;
+                        case 3:
+                            $scope.examineDetail.title = '核查';
+                    }
+                } else {
+                    $scope.alert(data.message, 'error');
+                }
+
+                $('#issue_issues').find('input').prop('checked', false);
+
+                if ($scope.examineDetail.issues){
+                    $scope.examineDetail.issues.forEach(function (issue) {
+                        $('#issue_issues').find('input[value=' + issue.id + ']').prop('checked', true);
+                    });
+                }
+
+                console.info($scope.examineDetail);
+                console.info($scope.issues);
+            });
+
+            $('#examineDetailModal').modal('show');
+        });
+
     };
 
 }]);

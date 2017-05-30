@@ -9,6 +9,9 @@ public class StatisticsCategoryModel {
     private String id;
     private int count = 0;
     private int issueCount = 0;
+    private int firstIssueCount = 0;
+    private int secondIssueCount = 0;
+    private int thirdIssueCount = 0;
     private Set<String> issueNames = new HashSet<>();
 
     public String getName() {
@@ -49,5 +52,29 @@ public class StatisticsCategoryModel {
 
     public void setIssueCount(int issueCount) {
         this.issueCount = issueCount;
+    }
+
+    public int getFirstIssueCount() {
+        return firstIssueCount;
+    }
+
+    public void setFirstIssueCount(int firstIssueCount) {
+        this.firstIssueCount = firstIssueCount;
+    }
+
+    public int getSecondIssueCount() {
+        return secondIssueCount;
+    }
+
+    public void setSecondIssueCount(int secondIssueCount) {
+        this.secondIssueCount = secondIssueCount;
+    }
+
+    public int getThirdIssueCount() {
+        return thirdIssueCount;
+    }
+
+    public void setThirdIssueCount(int thirdIssueCount) {
+        this.thirdIssueCount = thirdIssueCount;
     }
 }

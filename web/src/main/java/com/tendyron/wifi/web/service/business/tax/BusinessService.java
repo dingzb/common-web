@@ -2,6 +2,7 @@ package com.tendyron.wifi.web.service.business.tax;
 
 import com.tendyron.wifi.web.entity.business.tax.BusinessEntity;
 import com.tendyron.wifi.web.model.PagingModel;
+import com.tendyron.wifi.web.model.business.tax.BusIssueModel;
 import com.tendyron.wifi.web.model.business.tax.BusinessModel;
 import com.tendyron.wifi.web.model.business.tax.ExamineModel;
 import com.tendyron.wifi.web.model.business.tax.statistics.FenjuModel;
@@ -14,6 +15,7 @@ import com.tendyron.wifi.web.query.business.tax.XianjuQuery;
 import com.tendyron.wifi.web.service.BaseService;
 import com.tendyron.wifi.web.service.ServiceException;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -22,13 +24,22 @@ import java.util.List;
 public interface BusinessService extends BaseService<BusinessEntity> {
 
     /**
-     * 获取所有业务分页数据
+     * 基于登陆用户的分页获取
      *
      * @param query
      * @return
      * @throws ServiceException
      */
-    PagingModel paging(BusinessQuery query) throws ServiceException;
+    PagingModel pagingBaseUser(BusinessQuery query) throws ServiceException;
+
+//    /**
+//     * 获取所有业务分页数据
+//     *
+//     * @param query
+//     * @return
+//     * @throws ServiceException
+//     */
+//    PagingModel paging(BusinessQuery query) throws ServiceException;
 
     /**
      * 获取 新建业务
@@ -70,6 +81,18 @@ public interface BusinessService extends BaseService<BusinessEntity> {
      * @throws ServiceException
      */
     PagingModel pagingAmendment(BusinessQuery query) throws ServiceException;
+
+    /**
+     * 统计页面 业务详情专用
+     *
+     * @param query
+     * @return
+     * @throws ServiceException
+     */
+    PagingModel pagingError(BusinessQuery query) throws ServiceException;
+
+    @Transactional
+    PagingModel paging(BusinessQuery query) throws ServiceException;
 
     void add(BusinessModel businessModel) throws ServiceException;
 
@@ -128,5 +151,13 @@ public interface BusinessService extends BaseService<BusinessEntity> {
      */
     void commitAmendment(String[] ids) throws ServiceException;
 
-
+    /**
+     * 获取业务中问题详情
+     *
+     * @param busId
+     * @param step
+     * @return
+     * @throws ServiceException
+     */
+    ExamineModel examineDetail(String busId, String step) throws ServiceException;
 }

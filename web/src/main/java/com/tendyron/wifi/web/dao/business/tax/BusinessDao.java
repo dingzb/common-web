@@ -13,4 +13,11 @@ import java.util.List;
 public interface BusinessDao extends BaseDao<BusinessEntity> {
 
     List<BusinessEntity> paging(BusinessQuery query);
+
+    /**
+     * 统计页面 业务详情专用
+     * @param query
+     * @return
+     */
+    List<BusinessEntity> pagingError(BusinessQuery query);
 }

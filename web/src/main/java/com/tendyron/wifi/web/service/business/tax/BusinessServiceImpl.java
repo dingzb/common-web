@@ -59,7 +59,7 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
     public PagingModel pagingCreated(BusinessQuery query) throws ServiceException {
         queryBasicAssert(query);
         query.setStatus(BUS_STATUS.CREATE);
-        return paging(query);
+        return pagingBaseUser(query);
     }
 
     @Transactional
@@ -67,7 +67,7 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
     public PagingModel pagingFirst(BusinessQuery query) throws ServiceException {
         queryBasicAssert(query);
         query.setIncludeStatus(new Integer[]{BUS_STATUS.FIRST, BUS_STATUS.SECOND, BUS_STATUS.THIRD, BUS_STATUS.HAS_ISSUE, BUS_STATUS.FINISH});
-        return paging(query);
+        return pagingBaseUser(query);
     }
 
     @Transactional
@@ -75,7 +75,7 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
     public PagingModel pagingSecond(BusinessQuery query) throws ServiceException {
         queryBasicAssert(query);
         query.setIncludeStatus(new Integer[]{BUS_STATUS.SECOND, BUS_STATUS.THIRD, BUS_STATUS.HAS_ISSUE, BUS_STATUS.FINISH});
-        return paging(query);
+        return pagingBaseUser(query);
     }
 
     @Transactional
@@ -83,7 +83,7 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
     public PagingModel pagingThird(BusinessQuery query) throws ServiceException {
         queryBasicAssert(query);
         query.setIncludeStatus(new Integer[]{BUS_STATUS.THIRD, BUS_STATUS.HAS_ISSUE, BUS_STATUS.FINISH});
-        return paging(query);
+        return pagingBaseUser(query);
     }
 
     @Transactional
@@ -91,17 +91,80 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
     public PagingModel pagingAmendment(BusinessQuery query) throws ServiceException {
         queryBasicAssert(query);
         query.setStatus(BUS_STATUS.HAS_ISSUE);
-        return paging(query);
+        return pagingBaseUser(query);
     }
 
-    /**
-     * 基于登陆用户的分页获取
-     *
-     * @param query
-     * @return
-     * @throws ServiceException
-     */
-    private PagingModel pagingBaseUser(BusinessQuery query) throws ServiceException {
+    @Transactional
+    @Override
+    public PagingModel pagingError(BusinessQuery query) throws ServiceException {
+        PagingModel result = new PagingModel();
+        List<BusinessModel> businessModels = new ArrayList<>();
+        result.setRows(businessModels);
+        try {
+            List<BusinessEntity> businessEntities = businessDao.pagingError(query);
+            businessEntities.forEach(businessEntity -> {
+                BusinessModel businessModel = new BusinessModel();
+                BeanUtils.copyProperties(businessEntity, businessModel);
+
+                AgencyEntity agencyEntity = businessEntity.getAgency();
+                if (agencyEntity != null) {
+                    businessModel.setAgencyId(agencyEntity.getId());
+                    businessModel.setAgencyName(agencyEntity.getName());
+                }
+
+                BusCategoryEntity categoryEntity = businessEntity.getCategory();
+                if (categoryEntity != null) {
+                    businessModel.setCategoryId(categoryEntity.getId());
+                    businessModel.setCategoryName(categoryEntity.getName());
+
+                    BusCategoryTypeEntity categoryTypeEntity = categoryEntity.getType();
+                    if (categoryTypeEntity != null) {
+                        businessModel.setCategoryTypeId(categoryTypeEntity.getId());
+                        businessModel.setCategoryTypeName(categoryTypeEntity.getName());
+                    }
+                }
+
+                ExamineEntity first = businessEntity.getFirstExamine();
+                convertIssue(first, businessModel, businessModel::setFirstHasIssue, businessModel::setFirstExamine);
+
+                ExamineEntity second = businessEntity.getSecondExamine();
+                convertIssue(second, businessModel, businessModel::setSecondHasIssue, businessModel::setSecondExamine);
+
+                ExamineEntity third = businessEntity.getThirdExamine();
+                convertIssue(third, businessModel, businessModel::setThirdHasIssue, businessModel::setThirdExamine);
+
+                UserEntity create = businessEntity.getCreate();
+                if (create != null) {
+                    businessModel.setCreateId(create.getId());
+                    businessModel.setCreateName(create.getName());
+                }
+
+                UserEntity check = businessEntity.getCheck();
+                if (check != null) {
+                    businessModel.setCheckId(check.getId());
+                    businessModel.setCheckName(check.getName());
+                }
+
+                UserEntity finalCheck = businessEntity.getFinalCheck();
+                if (finalCheck != null) {
+                    businessModel.setFinalCheckId(finalCheck.getId());
+                    businessModel.setFinalCheckName(finalCheck.getName());
+                }
+
+                businessModels.add(businessModel);
+            });
+        } catch (Exception e) {
+            logger.error("", e);
+            throw new ServiceException();
+        }
+
+        result.setTotal(businessDao.getCount(query));
+        return result;
+    }
+
+    @Transactional
+    @Override
+    public PagingModel pagingBaseUser(BusinessQuery query) throws ServiceException {
         queryBasicAssert(query);
         try {
             UserEntity curUser = userDao.getById(query.getUserId());
@@ -126,6 +189,7 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
         }
         return paging(query);
     }
+
 
     @Transactional
     @Override
@@ -162,14 +226,26 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
                     }
                 }
 
-                ExamineEntity first = businessEntity.getFirstExamine();
-                convertIssue(first, businessModel, businessModel::setFirstHasIssue, businessModel::setFirstExamine);
+                if (businessEntity.getFirstHasIssue() != null) {
+                    businessModel.setFirstHasIssue(businessEntity.getFirstHasIssue());
+                } else {
+                    ExamineEntity first = businessEntity.getFirstExamine();
+                    convertIssue(first, businessModel, businessModel::setFirstHasIssue, businessModel::setFirstExamine);
+                }
 
-                ExamineEntity second = businessEntity.getSecondExamine();
-                convertIssue(second, businessModel, businessModel::setSecondHasIssue, businessModel::setSecondExamine);
+                if (businessEntity.getSecondHasIssue() != null) {
+                    businessModel.setSecondHasIssue(businessEntity.getSecondHasIssue());
+                } else {
+                    ExamineEntity second = businessEntity.getSecondExamine();
+                    convertIssue(second, businessModel, businessModel::setSecondHasIssue, businessModel::setSecondExamine);
+                }
 
-                ExamineEntity third = businessEntity.getThirdExamine();
-                convertIssue(third, businessModel, businessModel::setThirdHasIssue, businessModel::setThirdExamine);
+                if (businessEntity.getThirdHasIssue() != null) {
+                    businessModel.setThirdHasIssue(businessEntity.getThirdHasIssue());
+                } else {
+                    ExamineEntity third = businessEntity.getThirdExamine();
+                    convertIssue(third, businessModel, businessModel::setThirdHasIssue, businessModel::setThirdExamine);
+                }
 
                 UserEntity create = businessEntity.getCreate();
                 if (create != null) {
@@ -388,6 +464,7 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
                                 oldIssueNames = new HashSet<>();
                             }
                             oldIssueNames.addAll(issueNames);
+                            scmTmp.setFirstIssueCount(scmTmp.getFirstIssueCount() + 1);
                         } else if (be.getSecondExamine() != null && be.getSecondExamine().getHasIssue()) {
                             hasIssue = true;
                             Set<String> issueNames = new HashSet<>();
@@ -398,6 +475,7 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
                                 oldIssueNames = new HashSet<>();
                             }
                             oldIssueNames.addAll(issueNames);
+                            scmTmp.setSecondIssueCount(scmTmp.getSecondIssueCount() + 1);
                         } else if (be.getThirdExamine() != null && be.getThirdExamine().getHasIssue()) {
                             hasIssue = true;
                             Set<String> issueNames = new HashSet<>();
@@ -408,6 +486,7 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
                                 oldIssueNames = new HashSet<>();
                             }
                             oldIssueNames.addAll(issueNames);
+                            scmTmp.setThirdIssueCount(scmTmp.getThirdIssueCount() + 1);
                         }
                     }
                     scmTmp.setIssueCount(scmTmp.getIssueCount() + (hasIssue ? 1 : 0));      //问题业务总数
@@ -749,5 +828,39 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
             logger.error("", e);
             throw new ServiceException();
         }
+    }
+
+    @Transactional
+    @Override
+    public ExamineModel examineDetail(String busId, String step) throws ServiceException {
+        ExamineModel examineModel = new ExamineModel();
+        try {
+            BusinessEntity businessEntity = businessDao.getById(busId);
+            ExamineEntity examineEntity = null;
+            if ("1".equals(step)) {
+                examineEntity = businessEntity.getFirstExamine();
+            } else if ("2".equals(step)) {
+                examineEntity = businessEntity.getSecondExamine();
+            } else if ("3".equals(step)) {
+                examineEntity = businessEntity.getThirdExamine();
+            }
+            if (examineEntity != null) {
+                BeanUtils.copyProperties(examineEntity, examineModel);
+                Set<BusIssueEntity> issues = examineEntity.getIssues();
+                if (issues != null) {
+                    Set<BusIssueModel> busIssueModels = new HashSet<>();
+                    for (BusIssueEntity issue : issues) {
+                        BusIssueModel busIssueModel = new BusIssueModel();
+                        BeanUtils.copyProperties(issue, busIssueModel);
+                        busIssueModels.add(busIssueModel);
+                    }
+                    examineModel.setIssues(busIssueModels);
+                }
+            }
+        } catch (Exception e) {
+            logger.error("", e);
+            throw new ServiceException();
+        }
+        return examineModel;
     }
 }

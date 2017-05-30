@@ -20,8 +20,11 @@ public class BusinessEntity extends BaseEntity {
     private Date busTime;   //业务发生时间
 
     private ExamineEntity firstExamine;
+    private Boolean firstHasIssue;
     private ExamineEntity secondExamine;
+    private Boolean secondHasIssue;
     private ExamineEntity thirdExamine;
+    private Boolean thirdHasIssue;
 
     private Boolean amendment; //是否已经整改
 
@@ -37,6 +40,29 @@ public class BusinessEntity extends BaseEntity {
     private Date modifyTime;
 
     private Integer status; // 0: 创建, 1: 待自查, 2: 待审查, 3: 待核查, 4: 有问题，待整改, 5: 整改完成
+
+    public BusinessEntity() {
+    }
+
+    public BusinessEntity(String id, String taxpayerCode, String taxpayerName, String description, Date busTime, Boolean firstHasIssue, Boolean secondHasIssue, Boolean thirdHasIssue, Boolean amendment, BusCategoryEntity category, AgencyEntity agency, UserEntity create, Date createTime, Date modifyTime, Integer status) {
+        setId(id);
+        this.taxpayerCode = taxpayerCode;
+        this.taxpayerName = taxpayerName;
+        this.description = description;
+        this.busTime = busTime;
+        this.firstHasIssue = firstHasIssue;
+        this.secondHasIssue = secondHasIssue;
+        this.thirdHasIssue = thirdHasIssue;
+        this.amendment = amendment;
+        this.category = category;
+        this.agency = agency;
+        this.create = create;
+//        this.check = check;
+//        this.finalCheck = finalCheck;
+        this.createTime = createTime;
+        this.modifyTime = modifyTime;
+        this.status = status;
+    }
 
     @Column(name = "taxpayer_code", length = 50)
     public String getTaxpayerCode() {
@@ -55,15 +81,6 @@ public class BusinessEntity extends BaseEntity {
     public void setTaxpayerName(String taxpayerName) {
         this.taxpayerName = taxpayerName;
     }
-
-//    @Column(name = "content", length = 4096)
-//    public String getContent() {
-//        return content;
-//    }
-//
-//    public void setContent(String content) {
-//        this.content = content;
-//    }
 
     @Column(name = "description", length = 4096)
     public String getDescription() {
@@ -197,6 +214,33 @@ public class BusinessEntity extends BaseEntity {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    @Transient
+    public Boolean getFirstHasIssue() {
+        return firstHasIssue;
+    }
+
+    public void setFirstHasIssue(Boolean firstHasIssue) {
+        this.firstHasIssue = firstHasIssue;
+    }
+
+    @Transient
+    public Boolean getSecondHasIssue() {
+        return secondHasIssue;
+    }
+
+    public void setSecondHasIssue(Boolean secondHasIssue) {
+        this.secondHasIssue = secondHasIssue;
+    }
+
+    @Transient
+    public Boolean getThirdHasIssue() {
+        return thirdHasIssue;
+    }
+
+    public void setThirdHasIssue(Boolean thirdHasIssue) {
+        this.thirdHasIssue = thirdHasIssue;
     }
 
     public static class BUS_STATUS {

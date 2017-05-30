@@ -24,8 +24,29 @@ public class BusinessDaoImpl extends BaseDaoImpl<BusinessEntity> implements Busi
     protected StringBuilder getExtensionSql(BaseQuery query, Map<String, Object> params) {
 
         BusinessQuery bQuery = (BusinessQuery) query;
+        StringBuilder hqlsb = new StringBuilder();
 
-        StringBuilder hqlsb = new StringBuilder("from BusinessEntity {0} where 1=1");
+        hqlsb.append(" from BusinessEntity {0}");
+
+        if (bQuery.getHasIssue() != null) {
+            hqlsb.append(" left join {0}.firstExamine first left join {0}.secondExamine second left join {0}.thirdExamine third ");
+        }
+
+        hqlsb.append(" where 1=1");
+
+        if (bQuery.getHasIssue() != null) {
+            hqlsb.append(" and (first.hasIssue = true or second.hasIssue = true or third.hasIssue = true)");
+        }
+
+        if (bQuery.getHasIssue() == null && bQuery.getFirstHasIssue() != null){
+            hqlsb.append(" and {0}.firstExamine.hasIssue = true");
+        }
+        if (bQuery.getHasIssue() == null && bQuery.getSecondHasIssue() != null){
+            hqlsb.append(" and {0}.secondExamine.hasIssue = true");
+        }
+        if (bQuery.getHasIssue() == null && bQuery.getThirdHasIssue() != null){
+            hqlsb.append(" and {0}.thirdExamine.hasIssue = true");
+        }
 
         if (!StringTools.isEmpty(bQuery.getTaxpayerName())) {
             hqlsb.append(" and {0}.taxpayerName like :taxpayerName");
@@ -39,11 +60,6 @@ public class BusinessDaoImpl extends BaseDaoImpl<BusinessEntity> implements Busi
             hqlsb.append(" and {0}.category.id = :categoryId");
             params.put("categoryId", bQuery.getCategoryId());
         }
-        if (bQuery.getHasIssue() != null) {
-            hqlsb.append(" and {0}.hasIssue = :hasIssue");
-            params.put("hasIssue", bQuery.getHasIssue());
-        }
-
         if (!StringTools.isEmpty(bQuery.getIssueId())) {
             hqlsb.append(" and {0}.issue.id = :issueId");
             params.put("issueId", bQuery.getIssueId());
@@ -91,6 +107,14 @@ public class BusinessDaoImpl extends BaseDaoImpl<BusinessEntity> implements Busi
     public List<BusinessEntity> paging(BusinessQuery query) {
         Map<String, Object> params = new HashMap<>();
         String hql = getHql(query, "business", params) + " order by business.busTime desc";
+        return getByHqlPaging(hql, params, query.getPage(), query.getSize());
+    }
+
+    @Override
+    public List<BusinessEntity> pagingError(BusinessQuery query) {
+        Map<String, Object> params = new HashMap<>();
+        String hql = "select new BusinessEntity(business.id,business.taxpayerCode,business.taxpayerName,business.description,business.busTime,first.hasIssue,second.hasIssue,third.hasIssue,business.amendment,business.category,business.agency,business.create,business.createTime,business.modifyTime,business.status)"
+                + getHql(query, "business", params) + " and business.status !=5 order by business.busTime desc";
         return getByHqlPaging(hql, params, query.getPage(), query.getSize());
     }
 }

@@ -37,7 +37,7 @@ public class BusinessController extends BaseController {
     @ResponseBody
     public Json pagingAll(BusinessQuery query) {
         try {
-            return success(businessService.paging(query));
+            return success(businessService.pagingBaseUser(query));
         } catch (ServiceException e) {
             return fail(e);
         }
@@ -48,6 +48,20 @@ public class BusinessController extends BaseController {
     public Json pagingAmendment (BusinessQuery query) {
         try {
             return success(businessService.pagingAmendment(query));
+        } catch (ServiceException e) {
+            return fail(e);
+        }
+    }
+
+    @RequestMapping("paging/error")
+    @ResponseBody
+    public Json pagingError (BusinessQuery query) {
+        try {
+            if (query.getHasIssue() == null){
+                return success(businessService.paging(query));
+            } else {
+                return success(businessService.pagingError(query));
+            }
         } catch (ServiceException e) {
             return fail(e);
         }
@@ -104,6 +118,17 @@ public class BusinessController extends BaseController {
         try {
             businessService.commitAmendment(ids);
             return success("提交成功");
+        } catch (ServiceException e) {
+            return fail(e);
+        }
+    }
+
+
+    @RequestMapping("examine/detail")
+    @ResponseBody
+    public Json examineDetail(String busId, String step){
+        try {
+            return success(businessService.examineDetail(busId, step));
         } catch (ServiceException e) {
             return fail(e);
         }
