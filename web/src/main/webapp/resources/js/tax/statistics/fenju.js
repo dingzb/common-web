@@ -229,20 +229,6 @@ angular.module('ws.app').controller('taxFenjuCtrl', ['$rootScope', '$scope', '$h
                 }
             }
         }, {
-            field: 'thirdExamine',
-            title: '核查意见',
-            formatter: function (row) {
-                var str = JSON.stringify(row);
-                str = str.replace(/"/g, "'");
-                if (row.thirdHasIssue !== null) {
-                    return row.thirdHasIssue ?
-                        '<button type="button" class="btn btn-link btn-sm" title="有问题" onClick="angular.custom.taxBusinessIssueDetail(' + str + ', 3)">有问题</button>' :
-                        '<button type="button" class="btn btn-link btn-sm" title="没问题" disabled>没问题</button>';
-                } else {
-                    return '';
-                }
-            }
-        }, {
             field: 'status',
             title: '整改状态',
             translator: function (row) {
