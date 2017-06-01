@@ -889,8 +889,14 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
         if (businessEntity == null){
             throw new ServiceException("业务记录不存在");
         }
+
+        final StringBuilder url = new StringBuilder();
+
         try {
-            finalName = UploadTools.save(is, UploadTools.UPLOAD_TYPE.TAX, fileName, path -> getAbsPath.apply(path) + File.separator + id);
+            UploadTools.save(is, UploadTools.UPLOAD_TYPE.TAX, fileName, path -> {
+                url.append(path).append("/").append(id).append("/").append(fileName);
+                return getAbsPath.apply(path) + File.separator + id;
+            });
         } catch (IOException e) {
             throw new ServiceException( fileName + "文件保存错误");
         }
@@ -904,7 +910,7 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
             BusAttachmentEntity attachmentEntity = new BusAttachmentEntity();
             attachmentEntity.setId(StringTools.randomUUID());
             attachmentEntity.setSort(attachmentEntities.size() + 1);
-            attachmentEntity.setUri(finalName);
+            attachmentEntity.setUri(url.toString().replace("\\", "/"));
             attachmentEntity.setBusiness(businessEntity);
             attachmentEntities.add(attachmentEntity);
             businessEntity.setAttachments(attachmentEntities);

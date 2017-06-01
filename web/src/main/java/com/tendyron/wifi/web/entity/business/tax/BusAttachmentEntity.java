@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Table(name = "bus_tax_bus_attachment")
 public class BusAttachmentEntity extends BaseEntity {
     private BusinessEntity business;
-    private String uri;
+    private String url;
     private Integer sort;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -24,13 +24,13 @@ public class BusAttachmentEntity extends BaseEntity {
         this.business = business;
     }
 
-    @Column(name = "uri", length = 255)
-    public String getUri() {
-        return uri;
+    @Column(name = "url", length = 255)
+    public String getUrl() {
+        return url;
     }
 
-    public void setUri(String uri) {
-        this.uri = uri;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     @Column(name = "sort")

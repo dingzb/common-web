@@ -339,6 +339,11 @@ angular.module('ws.app').controller('taxManageCtrl', ['$rootScope', '$scope', '$
             busId: checkeds[0].id
         }).success(function (data) {
             if (data.success) {
+                var initialPreview = [];
+                var initialPreviewConfig = [];
+                data.data.forEach(function (val) {
+                   initialPreview.push(val.url);
+                });
                 initFileinput(checkeds[0].id);
             } else if (data.message) {
                 $scope.alert(data.message, 'error');
@@ -360,7 +365,7 @@ angular.module('ws.app').controller('taxManageCtrl', ['$rootScope', '$scope', '$
         }
     });
 
-    function initFileinput (busId) {
+    function initFileinput (busId, initialPreview, initialPreviewConfig) {
         <!-- must load the font-awesome.css for this example -->
         $("#input-ke-2").fileinput({
             language : 'zh',
