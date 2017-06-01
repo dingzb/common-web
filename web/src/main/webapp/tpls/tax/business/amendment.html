@@ -44,7 +44,7 @@
                                 <td>
                                     <input id="edit_taxpayer_code" class="form-control input-sm" type="text" name="taxpayerCode"
                                            placeholder="纳税人识别号"
-                                           ng-model="editObj.taxpayerCode" required maxlength="10">
+                                           ng-model="editObj.taxpayerCode" required maxlength="50">
                                     <div ng-messages="editForm.taxpayerCode.$error"
                                          ng-show="editForm.taxpayerCode.$dirty && editForm.taxpayerCode.$invalid"
                                          ng-messages-multiple class="ws-form-msg-err">
@@ -55,7 +55,7 @@
                                 <td>
                                     <input id="edit_taxpayer_name" class="form-control input-sm" type="text" name="taxpayerName"
                                            placeholder="纳税人名称"
-                                           ng-model="editObj.taxpayerName" required maxlength="10">
+                                           ng-model="editObj.taxpayerName" required maxlength="50">
                                     <div ng-messages="editForm.taxpayerName.$error"
                                          ng-show="editForm.taxpayerName.$dirty && editForm.taxpayerName.$invalid"
                                          ng-messages-multiple class="ws-form-msg-err">
