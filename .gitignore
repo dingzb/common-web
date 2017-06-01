@@ -7,4 +7,4 @@ web/src/main/webapp/2.html
 web/src/main/webapp/preview.html
 web/src/main/webapp/upload/
 web/tmp/
-base/src/test/java/Tmp.java
+base/src/test/java/com/tendyron.wifi.test.Tmp.java
