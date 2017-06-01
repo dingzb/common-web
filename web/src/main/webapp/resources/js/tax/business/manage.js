@@ -325,11 +325,31 @@ angular.module('ws.app').controller('taxManageCtrl', ['$rootScope', '$scope', '$
 
     //==================配置附件=========================
 
+    // $('#input-ke-2').on('fileuploaded', function (event, data, previewId, index) {
+    //     var form = data.form, files = data.files, extra = data.extra, response = data.response, reader = data.reader;
+    //
+    //     if (!response.success) {
+    //         $scope.$apply(function () {
+    //             $scope.alert(response.message, 'error');
+    //         });
+    //     }
+    // });
+    //
+    // $('#input-ke-2').on('filepredelete', function(event, key, jqXHR, data) {
+    //     console.log('Key = ' + key);
+    //     console.log('filepredelete');
+    //     console.log(jqXHR);
+    //     jqXHR.promise.then(function (val) {
+    //         console.info(val);
+    //     })
+    // });
+
+
     $scope.closeAttachmentModal = function () {
-      $('#attachmentModal').modal('hide');
-      $('#input-ke-2').fileinput('clear');
+        $('#attachmentModal').modal('hide');
+        $('#input-ke-2').fileinput('clear');
     };
-    $scope.showAttachment= function () {
+    $scope.showAttachment = function () {
         var checkeds = $scope.innerCtrl.getChecked();
         if (checkeds.length !== 1) {
             $scope.alert("只能选择一个进行编辑", 'error');
@@ -342,9 +362,16 @@ angular.module('ws.app').controller('taxManageCtrl', ['$rootScope', '$scope', '$
                 var initialPreview = [];
                 var initialPreviewConfig = [];
                 data.data.forEach(function (val) {
-                   initialPreview.push(val.url);
+                    initialPreview.push(val.url);
+                    initialPreviewConfig.push($.extend({
+                        caption: val.fileName,
+                        size: val.size ? val.size : 0,
+                        url: "app/tax/business/attachment/del",
+                        key: val.id
+                    }, getType(val.fileName)));
                 });
-                initFileinput(checkeds[0].id);
+
+                initFileinput(checkeds[0].id, initialPreview, initialPreviewConfig);
             } else if (data.message) {
                 $scope.alert(data.message, 'error');
             }
@@ -355,23 +382,36 @@ angular.module('ws.app').controller('taxManageCtrl', ['$rootScope', '$scope', '$
         $("#attachmentModal").modal('show');
     };
 
-    $('#input-ke-2').on('fileuploaded', function(event, data, previewId, index) {
-        var form = data.form, files = data.files, extra = data.extra, response = data.response, reader = data.reader;
 
-        if (!response.success){
-            $scope.$apply(function () {
-                $scope.alert(response.message, 'error');
-            });
+
+    function getType(fileName) {
+        if (!fileName) {
+            return {type: 'object'};
         }
-    });
+        if (fileName.match(/pdf$/)) {
+            return {type: 'pdf'};
+        }
+        if (fileName.match(/(jpg|gif|png)$/)) {
+            return {type: 'image'};
+        }
+        if (fileName.match(/(mp4|ogg)$/)) {
+            return {type: 'video', fileType: 'video/mp4'};
+        }
+    }
 
-    function initFileinput (busId, initialPreview, initialPreviewConfig) {
-        <!-- must load the font-awesome.css for this example -->
-        $("#input-ke-2").fileinput({
-            language : 'zh',
+    /**
+     * 文件上传
+     * @param busId
+     * @param initialPreview
+     * @param initialPreviewConfig
+     */
+    function initFileinput(busId, initialPreview, initialPreviewConfig) {
+        var option = {
+            language: 'zh',
             theme: "explorer",
             uploadUrl: "app/tax/business/attachment/upload",
-            // minFileCount: 2,
+            allowedFileExtensions: ['jpg', 'png', 'gif', 'pdf', 'mp4'],
+            minFileCount: 1,
             maxFileCount: 5,
             maxFileSize: 102400,
             overwriteInitial: false,
@@ -398,32 +438,38 @@ angular.module('ws.app').controller('taxManageCtrl', ['$rootScope', '$scope', '$
                 'png': '<span class="ws-tax-font fa-file-photo-o text-primary"></span>'
             },
             previewFileExtSettings: { // configure the logic for determining icon file extensions
-                'doc': function(ext) {
+                'doc': function (ext) {
                     return ext.match(/(doc|docx)$/i);
                 },
-                'xls': function(ext) {
+                'xls': function (ext) {
                     return ext.match(/(xls|xlsx)$/i);
                 },
-                'ppt': function(ext) {
+                'ppt': function (ext) {
                     return ext.match(/(ppt|pptx)$/i);
                 },
-                'zip': function(ext) {
+                'zip': function (ext) {
                     return ext.match(/(zip|rar|tar|gzip|gz|7z)$/i);
                 },
-                'htm': function(ext) {
+                'htm': function (ext) {
                     return ext.match(/(htm|html)$/i);
                 },
-                'txt': function(ext) {
+                'txt': function (ext) {
                     return ext.match(/(txt|ini|csv|java|php|js|css)$/i);
                 },
-                'mov': function(ext) {
+                'mov': function (ext) {
                     return ext.match(/(avi|mpg|mkv|mov|mp4|3gp|webm|wmv)$/i);
                 },
-                'mp3': function(ext) {
+                'mp3': function (ext) {
                     return ext.match(/(mp3|wav)$/i);
                 }
             }
-        });
+        };
+        var fileInput = $("#input-ke-2");
+        fileInput.fileinput('destroy');
+        fileInput.fileinput($.extend({}, option, {
+            initialPreview: initialPreview,
+            initialPreviewConfig: initialPreviewConfig
+        }));
     }
 
 }]);

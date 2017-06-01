@@ -891,12 +891,14 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
         }
 
         final StringBuilder url = new StringBuilder();
-
+        final long size;
+        String randomFileName = StringTools.randomUUID();
         try {
-            UploadTools.save(is, UploadTools.UPLOAD_TYPE.TAX, fileName, path -> {
-                url.append(path).append("/").append(id).append("/").append(fileName);
+            File finalFile = UploadTools.save(is, UploadTools.UPLOAD_TYPE.TAX, randomFileName, path -> {
+                url.append(path).append("/").append(id).append("/").append(randomFileName);
                 return getAbsPath.apply(path) + File.separator + id;
             });
+            size = finalFile.length();
         } catch (IOException e) {
             throw new ServiceException( fileName + "文件保存错误");
         }
@@ -910,7 +912,9 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
             BusAttachmentEntity attachmentEntity = new BusAttachmentEntity();
             attachmentEntity.setId(StringTools.randomUUID());
             attachmentEntity.setSort(attachmentEntities.size() + 1);
-            attachmentEntity.setUri(url.toString().replace("\\", "/"));
+            attachmentEntity.setUrl(url.toString().replace("\\", "/"));
+            attachmentEntity.setSize(size);
+            attachmentEntity.setFileName(fileName);
             attachmentEntity.setBusiness(businessEntity);
             attachmentEntities.add(attachmentEntity);
             businessEntity.setAttachments(attachmentEntities);

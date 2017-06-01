@@ -1,10 +1,14 @@
 package com.tendyron.wifi.web.model.business.tax;
 
+import com.tendyron.wifi.web.model.BaseModel;
+
 /**
  * Created by Neo on 2017/6/1.
  */
-public class BusAttachmentModel {
+public class BusAttachmentModel extends BaseModel {
     private String busId;
+    private String fileName;
+    private Long size;
     private String url;
     private Integer sort;
 
@@ -14,6 +18,22 @@ public class BusAttachmentModel {
 
     public void setBusId(String busId) {
         this.busId = busId;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public Long getSize() {
+        return size;
+    }
+
+    public void setSize(Long size) {
+        this.size = size;
     }
 
     public String getUrl() {

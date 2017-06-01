@@ -11,6 +11,8 @@ import javax.persistence.*;
 @Table(name = "bus_tax_bus_attachment")
 public class BusAttachmentEntity extends BaseEntity {
     private BusinessEntity business;
+    private String fileName;
+    private Long size;
     private String url;
     private Integer sort;
 
@@ -22,6 +24,24 @@ public class BusAttachmentEntity extends BaseEntity {
 
     public void setBusiness(BusinessEntity business) {
         this.business = business;
+    }
+
+    @Column(name = "file_name", length = 255)
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    @Column(name = "size")
+    public Long getSize() {
+        return size;
+    }
+
+    public void setSize(Long size) {
+        this.size = size;
     }
 
     @Column(name = "url", length = 255)

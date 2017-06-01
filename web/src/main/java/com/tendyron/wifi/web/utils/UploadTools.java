@@ -36,7 +36,7 @@ public class UploadTools {
      * @return the file path if success
      * @throws IOException
      */
-    public static String save(InputStream is, String type, String fileName, Function<String, String> getPath) throws IOException{
+    public static File save(InputStream is, String type, String fileName, Function<String, String> getPath) throws IOException{
         String pathStr = getPath(type);
         if (getPath != null){
             pathStr = getPath.apply(pathStr);
@@ -82,8 +82,15 @@ public class UploadTools {
             }
 
         }
-        return finalFile.getPath();
+        return finalFile;
     }
+
+    public static boolean del(String fileName) throws IOException {
+        File finalFile = new File(fileName);
+        return !finalFile.exists() || finalFile.delete();
+    }
+
+
 
     private static String getPath (String type){
         if (UPLOAD_TYPE.TAX.equals(type)){
@@ -92,6 +99,9 @@ public class UploadTools {
             return "";
         }
     }
+
+
+
     public static class UPLOAD_TYPE {
         public static final String TAX = "TAX";
     }
