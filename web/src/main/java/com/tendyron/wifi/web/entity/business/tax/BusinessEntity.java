@@ -5,6 +5,7 @@ import com.tendyron.wifi.web.entity.system.UserEntity;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * Created by Neo on 2017/5/9.
@@ -15,7 +16,7 @@ public class BusinessEntity extends BaseEntity {
 
     private String taxpayerCode;
     private String taxpayerName;
-    //    private String content;
+    private Set<BusAttachmentEntity> attachments;
     private String description;
     private Date busTime;   //业务发生时间
 
@@ -80,6 +81,15 @@ public class BusinessEntity extends BaseEntity {
 
     public void setTaxpayerName(String taxpayerName) {
         this.taxpayerName = taxpayerName;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "business", cascade = CascadeType.ALL)
+    public Set<BusAttachmentEntity> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(Set<BusAttachmentEntity> attachments) {
+        this.attachments = attachments;
     }
 
     @Column(name = "description", length = 4096)

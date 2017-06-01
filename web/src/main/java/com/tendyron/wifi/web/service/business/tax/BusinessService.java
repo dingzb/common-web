@@ -2,7 +2,7 @@ package com.tendyron.wifi.web.service.business.tax;
 
 import com.tendyron.wifi.web.entity.business.tax.BusinessEntity;
 import com.tendyron.wifi.web.model.PagingModel;
-import com.tendyron.wifi.web.model.business.tax.BusIssueModel;
+import com.tendyron.wifi.web.model.business.tax.BusAttachmentModel;
 import com.tendyron.wifi.web.model.business.tax.BusinessModel;
 import com.tendyron.wifi.web.model.business.tax.ExamineModel;
 import com.tendyron.wifi.web.model.business.tax.statistics.FenjuModel;
@@ -16,7 +16,9 @@ import com.tendyron.wifi.web.service.BaseService;
 import com.tendyron.wifi.web.service.ServiceException;
 
 import javax.transaction.Transactional;
+import java.io.InputStream;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * Created by Neo on 2017/5/9.
@@ -160,4 +162,16 @@ public interface BusinessService extends BaseService<BusinessEntity> {
      * @throws ServiceException
      */
     ExamineModel examineDetail(String busId, String step) throws ServiceException;
+
+    /**
+     * 添加附件
+     * @param id
+     * @param getAbsPath
+     * @param fileName
+     * @param is
+     * @throws ServiceException
+     */
+    void addAttachment(String id, Function<String, String> getAbsPath, String fileName, InputStream is) throws ServiceException;
+
+    List<BusAttachmentModel> listAttachment(String busId) throws ServiceException;
 }

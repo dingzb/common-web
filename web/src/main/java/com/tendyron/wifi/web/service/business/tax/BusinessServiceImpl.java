@@ -22,6 +22,7 @@ import com.tendyron.wifi.web.query.business.tax.XianjuQuery;
 import com.tendyron.wifi.web.service.BaseServiceImpl;
 import com.tendyron.wifi.web.service.ServiceException;
 import com.tendyron.wifi.web.utils.StringTools;
+import com.tendyron.wifi.web.utils.UploadTools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -29,8 +30,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * Created by Neo on 2017/5/9.
@@ -868,5 +873,67 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
             throw new ServiceException();
         }
         return examineModel;
+    }
+
+    @Transactional
+    @Override
+    public void addAttachment(String id, Function<String, String> getAbsPath, String fileName, InputStream is) throws ServiceException {
+        String finalName = null;
+        BusinessEntity businessEntity = null;
+        try {
+            businessEntity = businessDao.getById(id);
+        } catch (Exception e){
+            logger.error("", e);
+            throw new ServiceException();
+        }
+        if (businessEntity == null){
+            throw new ServiceException("业务记录不存在");
+        }
+        try {
+            finalName = UploadTools.save(is, UploadTools.UPLOAD_TYPE.TAX, fileName, path -> getAbsPath.apply(path) + File.separator + id);
+        } catch (IOException e) {
+            throw new ServiceException( fileName + "文件保存错误");
+        }
+
+        try{
+
+            Set<BusAttachmentEntity> attachmentEntities = businessEntity.getAttachments();
+            if (attachmentEntities == null){
+                attachmentEntities = new HashSet<>();
+            }
+            BusAttachmentEntity attachmentEntity = new BusAttachmentEntity();
+            attachmentEntity.setId(StringTools.randomUUID());
+            attachmentEntity.setSort(attachmentEntities.size() + 1);
+            attachmentEntity.setUri(finalName);
+            attachmentEntity.setBusiness(businessEntity);
+            attachmentEntities.add(attachmentEntity);
+            businessEntity.setAttachments(attachmentEntities);
+            businessDao.update(businessEntity);
+        } catch (Exception e) {
+            logger.error("", e);
+            throw new ServiceException();
+        }
+
+    }
+
+    @Transactional
+    @Override
+    public List<BusAttachmentModel> listAttachment(String busId) throws ServiceException {
+        List<BusAttachmentModel> result = new ArrayList<>();
+        try{
+            BusinessEntity businessEntity = businessDao.getById(busId);
+            Set<BusAttachmentEntity> attachmentEntities = businessEntity.getAttachments();
+            if (attachmentEntities!=null){
+                attachmentEntities.forEach(busAttachmentEntity -> {
+                    BusAttachmentModel busAttachmentModel = new BusAttachmentModel();
+                    BeanUtils.copyProperties(busAttachmentEntity, busAttachmentModel);
+                    result.add(busAttachmentModel);
+                });
+            }
+            return result;
+        } catch (Exception e){
+            logger.error("", e);
+            throw new ServiceException();
+        }
     }
 }
