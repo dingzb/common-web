@@ -2,7 +2,9 @@ package com.tendyron.wifi.web.controller.business.tax;
 
 import com.tendyron.wifi.web.controller.BaseController;
 import com.tendyron.wifi.web.entity.business.tax.BusinessEntity.BUS_STATUS;
+import com.tendyron.wifi.web.model.FileInputResponseBuilder;
 import com.tendyron.wifi.web.model.Json;
+import com.tendyron.wifi.web.model.business.tax.BusAttachmentModel;
 import com.tendyron.wifi.web.model.business.tax.BusinessModel;
 import com.tendyron.wifi.web.query.business.tax.BusinessQuery;
 import com.tendyron.wifi.web.service.ServiceException;
@@ -19,7 +21,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -104,26 +108,39 @@ public class BusinessController extends BaseController {
 
     @RequestMapping("attachment/upload")
     @ResponseBody
-    public Map<String, String> attachmentUpload(@RequestParam(value = "attachment", required = false) MultipartFile file, @RequestParam("busId") String busId, HttpServletRequest request) {
-        Map<String, String> json = new HashMap<>();
+    public Map<String, Object> attachmentUpload(@RequestParam(value = "attachment", required = false) MultipartFile file,
+                                                @RequestParam("busId") String busId, HttpServletRequest request) {
+        FileInputResponseBuilder builder = new FileInputResponseBuilder();
         if (file == null) {
-            return json;
+            return builder.build();
+        }
+        String newAttId = null;
+        try {
+            newAttId = businessAttachmentService.add(busId, path -> request.getServletContext().getRealPath(path), file.getOriginalFilename(), file.getInputStream());
+        } catch (ServiceException | IOException e) {
+            builder.setError(e.getMessage());
+            return builder.build();
         }
         try {
-            businessService.addAttachment(busId, path -> request.getServletContext().getRealPath(path), file.getOriginalFilename(), file.getInputStream());
-        } catch (ServiceException | IOException e) {
-            json.put("error", e.getMessage());
-            return json;
+            BusAttachmentModel attachmentModel =businessAttachmentService.getById(newAttId);
+            builder.addPreviewItem(attachmentModel);
+        } catch (ServiceException e) {
+            builder.setError(e.getMessage());
+            return builder.build();
         }
 
-        return json;
+
+        return builder.build();
     }
 
     @RequestMapping("attachment/list")
     @ResponseBody
     public Json attachmentList(@RequestParam("busId") String busId) {
+        FileInputResponseBuilder builder = new FileInputResponseBuilder();
         try {
-            return success(businessService.listAttachment(busId));
+            List<BusAttachmentModel> attachmentModels = businessService.listAttachment(busId);
+            attachmentModels.forEach(builder::addPreviewItem);
+            return success(builder.build());
         } catch (ServiceException e) {
             return fail(e);
         }
@@ -131,23 +148,23 @@ public class BusinessController extends BaseController {
 
     @RequestMapping("attachment/del")
     @ResponseBody
-    public Map<String, String> attachmentDel(@RequestParam(value = "id[]", required = false) String[] ids,
+    public Map<String, Object> attachmentDel(@RequestParam(value = "id[]", required = false) String[] ids,
                                              @RequestParam(value = "key", required = false) String id, HttpServletRequest request) {
-        Map<String, String> json = new HashMap<>();
+        FileInputResponseBuilder builder = new FileInputResponseBuilder();
         try {
             if (!StringTools.isEmpty(ids)) {
                 businessAttachmentService.del(ids);
             } else if (!StringTools.isEmpty(id)) {
                 businessAttachmentService.del(id, path -> request.getServletContext().getRealPath(path));
             } else {
-                json.put("error", "没有指定任何删除内容");
-                return json;
+                builder.setError("没有指定任何删除内容");
+                return builder.build();
             }
         } catch (ServiceException e) {
-            json.put("error", e.getMessage());
-            return json;
+            builder.setError(e.getMessage());
+            return builder.build();
         }
-        return json;
+        return builder.build();
     }
 
     @RequestMapping("del")

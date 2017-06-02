@@ -280,7 +280,7 @@ angular.module('ws.app').controller('taxAmendmentCtrl', ['$rootScope', '$scope',
     };
 
 
-    //=============== 提交业务 =====================
+    //=============== 提交整改 =====================
 
     $scope.commit = function () {
         var checkeds = $scope.innerCtrl.getChecked();
@@ -307,4 +307,107 @@ angular.module('ws.app').controller('taxAmendmentCtrl', ['$rootScope', '$scope',
             });
         });
     };
+
+    //==================配置附件=========================
+
+    $scope.closeAttachmentModal = function () {
+        $('#attachmentModal').modal('hide');
+        $('#input-ke-2').fileinput('clear');
+    };
+    $scope.showAttachment = function () {
+        var checkeds = $scope.innerCtrl.getChecked();
+        if (checkeds.length !== 1) {
+            $scope.alert("只能选择一个进行编辑", 'error');
+            return;
+        }
+        $http.post('app/tax/business/attachment/list', {
+            busId: checkeds[0].id
+        }).success(function (data) {
+            if (data.success) {
+                initFileinput(checkeds[0].id, data.data.initialPreview, data.data.initialPreviewConfig);
+            } else if (data.message) {
+                $scope.alert(data.message, 'error');
+            }
+        }).error(function (data) {
+            $scope.alert(data, 'error');
+        });
+
+        $("#attachmentModal").modal('show');
+    };
+
+    /**
+     * 文件上传
+     * @param busId
+     * @param initialPreview
+     * @param initialPreviewConfig
+     */
+    function initFileinput(busId, initialPreview, initialPreviewConfig) {
+        var option = {
+            language: 'zh',
+            theme: "explorer",
+            uploadUrl: "app/tax/business/attachment/upload",
+            deleteUrl: 'app/tax/business/attachment/del',
+            allowedFileExtensions: ['pdf'],
+            minFileCount: 1,
+            maxFileCount: 5,
+            maxFileSize: 102400,
+            overwriteInitial: false,
+            previewFileIcon: '<span class="ws-tax-font fa-file"></span>',
+            initialPreview: [],
+            initialPreviewAsData: true, // defaults markup
+            initialPreviewConfig: [],
+            uploadExtraData: {
+                busId: busId
+            },
+            preferIconicPreview: true, // this will force thumbnails to display icons for following file extensions
+            previewFileIconSettings: { // configure your icon file extensions
+                'doc': '<span class="ws-tax-font fa-file-word-o text-primary"></span>',
+                'xls': '<span class="ws-tax-font fa-file-excel-o text-success"></span>',
+                'ppt': '<span class="ws-tax-font fa-file-powerpoint-o text-danger"></span>',
+                'pdf': '<span class="ws-tax-font fa-file-pdf-o text-danger"></span>',
+                'zip': '<span class="ws-tax-font fa-file-archive-o text-muted"></span>',
+                'htm': '<span class="ws-tax-font fa-file-code-o text-info"></span>',
+                'txt': '<span class="ws-tax-font fa-file-text-o text-info"></span>',
+                'mov': '<span class="ws-tax-font fa-file-movie-o text-warning"></span>',
+                'mp3': '<span class="ws-tax-font fa-file-audio-o text-warning"></span>',
+                'jpg': '<span class="ws-tax-font fa-file-photo-o text-danger"></span>',
+                'gif': '<span class="ws-tax-font fa-file-photo-o text-muted"></span>',
+                'png': '<span class="ws-tax-font fa-file-photo-o text-primary"></span>'
+            },
+            previewFileExtSettings: { // configure the logic for determining icon file extensions
+                'doc': function (ext) {
+                    return ext.match(/(doc|docx)$/i);
+                },
+                'xls': function (ext) {
+                    return ext.match(/(xls|xlsx)$/i);
+                },
+                'ppt': function (ext) {
+                    return ext.match(/(ppt|pptx)$/i);
+                },
+                'zip': function (ext) {
+                    return ext.match(/(zip|rar|tar|gzip|gz|7z)$/i);
+                },
+                'htm': function (ext) {
+                    return ext.match(/(htm|html)$/i);
+                },
+                'txt': function (ext) {
+                    return ext.match(/(txt|ini|csv|java|php|js|css)$/i);
+                },
+                'mov': function (ext) {
+                    return ext.match(/(avi|mpg|mkv|mov|mp4|3gp|webm|wmv)$/i);
+                },
+                'mp3': function (ext) {
+                    return ext.match(/(mp3|wav)$/i);
+                }
+            }
+        };
+        var fileInput = $("#input-ke-2");
+
+        fileInput.fileinput('destroy');
+        fileInput.fileinput($.extend({}, option, {
+            initialPreview: initialPreview,
+            initialPreviewConfig: initialPreviewConfig
+        }));
+    }
+
 }]);

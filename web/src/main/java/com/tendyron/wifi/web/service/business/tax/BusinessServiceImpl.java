@@ -877,57 +877,6 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
 
     @Transactional
     @Override
-    public void addAttachment(String id, Function<String, String> getAbsPath, String fileName, InputStream is) throws ServiceException {
-        String finalName = null;
-        BusinessEntity businessEntity = null;
-        try {
-            businessEntity = businessDao.getById(id);
-        } catch (Exception e){
-            logger.error("", e);
-            throw new ServiceException();
-        }
-        if (businessEntity == null){
-            throw new ServiceException("业务记录不存在");
-        }
-
-        final StringBuilder url = new StringBuilder();
-        final long size;
-        String randomFileName = StringTools.randomUUID();
-        try {
-            File finalFile = UploadTools.save(is, UploadTools.UPLOAD_TYPE.TAX, randomFileName, path -> {
-                url.append(path).append("/").append(id).append("/").append(randomFileName);
-                return getAbsPath.apply(path) + File.separator + id;
-            });
-            size = finalFile.length();
-        } catch (IOException e) {
-            throw new ServiceException( fileName + "文件保存错误");
-        }
-
-        try{
-
-            Set<BusAttachmentEntity> attachmentEntities = businessEntity.getAttachments();
-            if (attachmentEntities == null){
-                attachmentEntities = new HashSet<>();
-            }
-            BusAttachmentEntity attachmentEntity = new BusAttachmentEntity();
-            attachmentEntity.setId(StringTools.randomUUID());
-            attachmentEntity.setSort(attachmentEntities.size() + 1);
-            attachmentEntity.setUrl(url.toString().replace("\\", "/"));
-            attachmentEntity.setSize(size);
-            attachmentEntity.setFileName(fileName);
-            attachmentEntity.setBusiness(businessEntity);
-            attachmentEntities.add(attachmentEntity);
-            businessEntity.setAttachments(attachmentEntities);
-            businessDao.update(businessEntity);
-        } catch (Exception e) {
-            logger.error("", e);
-            throw new ServiceException();
-        }
-
-    }
-
-    @Transactional
-    @Override
     public List<BusAttachmentModel> listAttachment(String busId) throws ServiceException {
         List<BusAttachmentModel> result = new ArrayList<>();
         try{
@@ -940,6 +889,7 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
                     result.add(busAttachmentModel);
                 });
             }
+            result.sort(Comparator.comparing(BusAttachmentModel::getFileName));
             return result;
         } catch (Exception e){
             logger.error("", e);

@@ -163,15 +163,6 @@ public interface BusinessService extends BaseService<BusinessEntity> {
      */
     ExamineModel examineDetail(String busId, String step) throws ServiceException;
 
-    /**
-     * 添加附件
-     * @param id
-     * @param getAbsPath
-     * @param fileName
-     * @param is
-     * @throws ServiceException
-     */
-    void addAttachment(String id, Function<String, String> getAbsPath, String fileName, InputStream is) throws ServiceException;
 
     List<BusAttachmentModel> listAttachment(String busId) throws ServiceException;
 }

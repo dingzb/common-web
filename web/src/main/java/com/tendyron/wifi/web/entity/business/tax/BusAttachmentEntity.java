@@ -14,7 +14,7 @@ public class BusAttachmentEntity extends BaseEntity {
     private String fileName;
     private Long size;
     private String url;
-    private Integer sort;
+    private Integer sort;   //暂时没啥用
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bus_id")

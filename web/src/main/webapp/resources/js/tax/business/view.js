@@ -135,7 +135,8 @@ angular.module('ws.app').controller('taxViewCtrl', ['$rootScope', '$scope', '$ht
             formatter: function (row) {
                 var str = JSON.stringify(row);
                 str = str.replace(/"/g, "'");
-                return "<button type=\"button\" class=\"btn btn-link btn-sm\" title='详情' onClick=\"angular.custom.taxBusinessDetail(" + str + ")\"><span class=\"glyphicon glyphicon-link\" > </span></button>";
+                return "<button type=\"button\" class=\"btn btn-link btn-sm\" title='详情' onClick=\"angular.custom.taxBusinessDetail(" + str + ")\"><span class=\"glyphicon glyphicon-link\" > </span></button>" +
+                       "<button type=\"button\" class=\"btn btn-link btn-sm\" title='查看附件' onClick=\"angular.custom.showAttachment(" + str + ")\"><span class=\"glyphicon glyphicon-paperclip\" ></span></button>";
             }
         }],
         checkbox: true,
@@ -226,4 +227,38 @@ angular.module('ws.app').controller('taxViewCtrl', ['$rootScope', '$scope', '$ht
             });
         });
     };
+
+    /////// 附件 ///////////////
+    angular.custom.showAttachment = function (row) {
+        $scope.attachments = [];
+        $http.post('app/tax/business/attachment/list', {
+            busId: row.id
+        }).success(function (data) {
+            if (data.success && data.data.initialPreviewConfig) {
+                for(i = 0; i < data.data.initialPreviewConfig.length; i++){
+                    $scope.attachments.push($.extend(data.data.initialPreviewConfig[i], {
+                        url: data.data.initialPreview[i]
+                    }));
+                }
+            } else if (data.message) {
+                $scope.alert(data.message, 'error');
+            }
+        }).error(function (data) {
+            $scope.alert(data, 'error');
+        });
+        $('#attachmentModal').modal('show');
+    };
+
+    $scope.getSize = function (size) {
+
+        if (size < 1024) {
+            return parseInt(Math.round(size * 100)) / 100 + ' Byte';
+        }else if ((size = size / 1024) < 1024) {
+            return parseInt(Math.round(size * 100)) / 100 + ' KB';
+        } else if ((size = size / 1024) < 1024) {
+            return parseInt(Math.round(size * 100)) / 100 + ' MB';
+        } else if ((size = size / 1024) < 1024) {
+            return parseInt(Math.round(size * 100)) / 100 + ' GB';
+        }
+    }
 }]);

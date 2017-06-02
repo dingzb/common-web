@@ -325,26 +325,6 @@ angular.module('ws.app').controller('taxManageCtrl', ['$rootScope', '$scope', '$
 
     //==================配置附件=========================
 
-    // $('#input-ke-2').on('fileuploaded', function (event, data, previewId, index) {
-    //     var form = data.form, files = data.files, extra = data.extra, response = data.response, reader = data.reader;
-    //
-    //     if (!response.success) {
-    //         $scope.$apply(function () {
-    //             $scope.alert(response.message, 'error');
-    //         });
-    //     }
-    // });
-    //
-    // $('#input-ke-2').on('filepredelete', function(event, key, jqXHR, data) {
-    //     console.log('Key = ' + key);
-    //     console.log('filepredelete');
-    //     console.log(jqXHR);
-    //     jqXHR.promise.then(function (val) {
-    //         console.info(val);
-    //     })
-    // });
-
-
     $scope.closeAttachmentModal = function () {
         $('#attachmentModal').modal('hide');
         $('#input-ke-2').fileinput('clear');
@@ -359,19 +339,7 @@ angular.module('ws.app').controller('taxManageCtrl', ['$rootScope', '$scope', '$
             busId: checkeds[0].id
         }).success(function (data) {
             if (data.success) {
-                var initialPreview = [];
-                var initialPreviewConfig = [];
-                data.data.forEach(function (val) {
-                    initialPreview.push(val.url);
-                    initialPreviewConfig.push($.extend({
-                        caption: val.fileName,
-                        size: val.size ? val.size : 0,
-                        url: "app/tax/business/attachment/del",
-                        key: val.id
-                    }, getType(val.fileName)));
-                });
-
-                initFileinput(checkeds[0].id, initialPreview, initialPreviewConfig);
+                initFileinput(checkeds[0].id, data.data.initialPreview, data.data.initialPreviewConfig);
             } else if (data.message) {
                 $scope.alert(data.message, 'error');
             }
@@ -382,23 +350,6 @@ angular.module('ws.app').controller('taxManageCtrl', ['$rootScope', '$scope', '$
         $("#attachmentModal").modal('show');
     };
 
-
-
-    function getType(fileName) {
-        if (!fileName) {
-            return {type: 'object'};
-        }
-        if (fileName.match(/pdf$/)) {
-            return {type: 'pdf'};
-        }
-        if (fileName.match(/(jpg|gif|png)$/)) {
-            return {type: 'image'};
-        }
-        if (fileName.match(/(mp4|ogg)$/)) {
-            return {type: 'video', fileType: 'video/mp4'};
-        }
-    }
-
     /**
      * 文件上传
      * @param busId
@@ -406,11 +357,15 @@ angular.module('ws.app').controller('taxManageCtrl', ['$rootScope', '$scope', '$
      * @param initialPreviewConfig
      */
     function initFileinput(busId, initialPreview, initialPreviewConfig) {
+
+        var btns = '<button type="button" class="kv-cust-btn btn btn-xs btn-default" title="Download" data-key="{dataKey}"><i class="glyphicon glyphicon-download"></i></button>';
+
         var option = {
             language: 'zh',
             theme: "explorer",
             uploadUrl: "app/tax/business/attachment/upload",
-            allowedFileExtensions: ['jpg', 'png', 'gif', 'pdf', 'mp4'],
+            deleteUrl: 'app/tax/business/attachment/del',
+            allowedFileExtensions: ['pdf'],
             minFileCount: 1,
             maxFileCount: 5,
             maxFileSize: 102400,
@@ -422,6 +377,7 @@ angular.module('ws.app').controller('taxManageCtrl', ['$rootScope', '$scope', '$
             uploadExtraData: {
                 busId: busId
             },
+            otherActionButtons: btns,
             preferIconicPreview: true, // this will force thumbnails to display icons for following file extensions
             previewFileIconSettings: { // configure your icon file extensions
                 'doc': '<span class="ws-tax-font fa-file-word-o text-primary"></span>',
@@ -465,6 +421,7 @@ angular.module('ws.app').controller('taxManageCtrl', ['$rootScope', '$scope', '$
             }
         };
         var fileInput = $("#input-ke-2");
+
         fileInput.fileinput('destroy');
         fileInput.fileinput($.extend({}, option, {
             initialPreview: initialPreview,

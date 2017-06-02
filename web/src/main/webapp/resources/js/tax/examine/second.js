@@ -122,7 +122,8 @@ angular.module('ws.app').controller('taxSecondCtrl', ['$rootScope', '$scope', '$
             formatter: function (row) {
                 var str = JSON.stringify(row);
                 str = str.replace(/"/g, "'");
-                return '<button type="button" class="btn btn-link btn-sm" title="审查" onClick="angular.custom.taxBusinessSecond(' + str + ')">审查</button>';
+                return '<button type="button" class="btn btn-link btn-sm" title="审查" onClick="angular.custom.taxBusinessSecond(' + str + ')">审查</button>'
+                    + "<button type=\"button\" class=\"btn btn-link btn-sm\" title='查看附件' onClick=\"angular.custom.showAttachment(" + str + ")\"><span class=\"glyphicon glyphicon-paperclip\" ></span></button>";
             }
         }],
         checkbox: true,
@@ -220,5 +221,40 @@ angular.module('ws.app').controller('taxSecondCtrl', ['$rootScope', '$scope', '$
                 $scope.alert(data.message, 'error');
         });
     };
+
+
+    /////// 附件 ///////////////
+    angular.custom.showAttachment = function (row) {
+        $scope.attachments = [];
+        $http.post('app/tax/business/attachment/list', {
+            busId: row.id
+        }).success(function (data) {
+            if (data.success && data.data.initialPreviewConfig) {
+                for(i = 0; i < data.data.initialPreviewConfig.length; i++){
+                    $scope.attachments.push($.extend(data.data.initialPreviewConfig[i], {
+                        url: data.data.initialPreview[i]
+                    }));
+                }
+            } else if (data.message) {
+                $scope.alert(data.message, 'error');
+            }
+        }).error(function (data) {
+            $scope.alert(data, 'error');
+        });
+        $('#attachmentModal').modal('show');
+    };
+
+    $scope.getSize = function (size) {
+
+        if (size < 1024) {
+            return size.toFixed(2) + ' Byte';
+        }else if ((size = size / 1024) < 1024) {
+            return size.toFixed(2) + ' KB';
+        } else if ((size = size / 1024) < 1024) {
+            return size.toFixed(2) + ' MB';
+        } else if ((size = size / 1024) < 1024) {
+            return size.toFixed(2) + ' GB';
+        }
+    }
 
 }]);

@@ -11,7 +11,9 @@
                     <div class="ws-search-btn-group ws-inline">
                         <button class="btn btn-info btn-sm" type="submit" ng-click="search()">查询</button>
                         <button class="btn btn-info btn-sm" type="button" ng-click="resetSearch()">清空</button>
-                        <button class="btn btn-danger btn-sm" type="button" ng-click="del()" ws-permcode="tax.business.view.del">删除</button>
+                        <button class="btn btn-danger btn-sm" type="button" ng-click="del()"
+                                ws-permcode="tax.business.view.del">删除
+                        </button>
                     </div>
                 </div>
             </form>
@@ -35,13 +37,15 @@
                             <tr>
                                 <th><label for="detail_taxpayer_code">纳税人识别号：</label></th>
                                 <td>
-                                    <input id="detail_taxpayer_code" class="form-control input-sm" type="text" name="taxpayerCode"
+                                    <input id="detail_taxpayer_code" class="form-control input-sm" type="text"
+                                           name="taxpayerCode"
                                            placeholder="纳税人识别号" readonly
                                            ng-model="detailObj.taxpayerCode">
                                 </td>
                                 <th><label for="detail_taxpayer_name">纳税人名称：</label></th>
                                 <td>
-                                    <input id="detail_taxpayer_name" class="form-control input-sm" type="text" name="taxpayerName"
+                                    <input id="detail_taxpayer_name" class="form-control input-sm" type="text"
+                                           name="taxpayerName"
                                            placeholder="纳税人名称" readonly
                                            ng-model="detailObj.taxpayerName">
                                 </td>
@@ -72,9 +76,11 @@
                                 </td>
                                 <th><label for="detail_desc">业务描述：</label></th>
                                 <td>
-                                    <textarea id="detail_desc" class="form-control" type="text" name="description" readonly
+                                    <textarea id="detail_desc" class="form-control" type="text" name="description"
+                                              readonly
                                               style="resize: none; height: 100px; width: 250px; margin-top: 10px;"
-                                              placeholder="业务描述" ng-model="detailObj.description" maxlength="500" required></textarea>
+                                              placeholder="业务描述" ng-model="detailObj.description" maxlength="500"
+                                              required></textarea>
                                 </td>
                             </tr>
                         </table>
@@ -183,6 +189,76 @@
                                           ng-model="issueDetail.description"
                                           style="resize: none; height: 100px; width: 100%; margin-top: 10px;"
                                           placeholder="问题描述" maxlength="500" readonly></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-info btn btn-sm" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 附件详情 -->
+    <div class="modal fade" id="attachmentModal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" data-backdrop="static">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">业务附件详情</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="file-input theme-explorer file-input-ajax-new">
+                        <div class="file-preview ">
+                            <div class=" file-drop-zone">
+                                <div ng-show="attachments.length == 0" class="file-drop-zone-title">没有附件</div>
+                                <table class="table table-bordered table-hover" ng-show="attachments.length > 0">
+                                    <tbody class="file-preview-thumbnails">
+                                    <tr class="file-preview-frame explorer-frame  file-preview-initial file-sortable kv-preview-thumb"
+                                        id="preview-1496380507371-init_0" data-fileindex="init_0" data-template="pdf"
+                                        title="{{attachment.caption}}" ng-repeat="attachment in attachments">
+                                        <td class="kv-file-content" style="height: auto;">
+                                            <div class="kv-preview-data file-preview-other-frame">
+                                                <div class="file-preview-other">
+                                                    <span class="file-other-icon" style="font-size: 2.5em;">
+                                                        <span class="ws-tax-font fa-file-pdf-o text-danger"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="file-details-cell">
+                                            <div class="explorer-caption" title="{{attachment.caption}}">
+                                                {{attachment.caption}}
+                                            </div>
+                                            <samp>({{getSize(attachment.size)}})</samp>
+                                            <div class="file-thumb-progress hide">
+                                                <div class="progress">
+                                                    <div class="progress-bar progress-bar-success progress-bar-striped active"
+                                                         role="progressbar" aria-valuenow="0" aria-valuemin="0"
+                                                         aria-valuemax="100"
+                                                         style="width:0%;">
+                                                        初始化...
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="file-actions-cell">
+                                            <div class="file-actions">
+                                                <div class="file-footer-buttons">
+                                                    <a title="查看详情" style="cursor: pointer;" target="_blank" href="{{attachment.url}}">
+                                                        <i class="glyphicon glyphicon-zoom-in"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
