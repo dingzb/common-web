@@ -12,6 +12,7 @@ public class StatisticsCategoryModel {
     private int firstIssueCount = 0;
     private int secondIssueCount = 0;
     private int thirdIssueCount = 0;
+    private int amendmentCount = 0;             //已经整改的数量
     private Set<String> issueNames = new HashSet<>();
 
     public String getName() {
@@ -76,5 +77,13 @@ public class StatisticsCategoryModel {
 
     public void setThirdIssueCount(int thirdIssueCount) {
         this.thirdIssueCount = thirdIssueCount;
+    }
+
+    public int getAmendmentCount() {
+        return amendmentCount;
+    }
+
+    public void setAmendmentCount(int amendmentCount) {
+        this.amendmentCount = amendmentCount;
     }
 }

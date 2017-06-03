@@ -46,10 +46,10 @@
         <table class="ws-statement">
             <thead>
             <tr>
-                <th colspan="9" class="ws-heading"><span>内控情况统计表</span></th>
+                <th colspan="10" class="ws-heading"><span>内控情况统计表</span></th>
             </tr>
             <tr>
-                <th colspan="9" class="ws-subheading">统计单位：左云县国家税务局</th>
+                <th colspan="10" class="ws-subheading">统计单位：左云县国家税务局</th>
             </tr>
             <tr class="ws-header">
                 <th>主管税务机关</th>
@@ -59,6 +59,7 @@
                 <th>自控问题数</th>
                 <th>防控问题数</th>
                 <th>监控问题数</th>
+                <th>已整改问题数</th>
                 <th>总数</th>
                 <th>问题类型</th>
             </tr>
@@ -79,6 +80,9 @@
                 </td>
                 <td>
                     <a href="javascript:void(0);" ng-click="issueDetail(rec.agencyId, rec.categoryTypeId, rec.id, 3)">{{rec.thirdIssueCount}}</a>
+                </td>
+                <td>
+                    <a href="javascript:void(0);" ng-click="issueDetail(rec.agencyId, rec.categoryTypeId, rec.id, 5)">{{rec.amendmentCount}}</a>
                 </td>
                 <td ng-bind="rec.count"></td>
                 <td>

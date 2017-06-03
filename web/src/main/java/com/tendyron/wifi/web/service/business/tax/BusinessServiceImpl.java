@@ -417,8 +417,8 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
 
                 for (BusinessEntity be : bes) {
                     StatisticsCategoryTypeModel sctmTmp = null;
-                    if (be.getCategory() == null){
-                        System.err.print("skip:"+be.getId());
+                    if (be.getCategory() == null) {
+                        System.err.print("skip:" + be.getId());
                         continue;
                     }
                     BusCategoryTypeEntity bcte = be.getCategory().getType();
@@ -463,43 +463,48 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
                     scmTmp.setCount(scmTmp.getCount() + 1);     // 业务总数
 
                     boolean hasIssue = false;
-                    if (be.getStatus() != BUS_STATUS.FINISH) { // 排除业务处在完成状态的业务，如三级审核后都没有问题或月经整改
-                        if (be.getFirstExamine() != null && be.getFirstExamine().getHasIssue()) {
-                            hasIssue = true;
-                            Set<String> issueNames = new HashSet<>();
-                            Set<BusIssueEntity> busIssueEntities = be.getFirstExamine().getIssues();
-                            busIssueEntities.forEach(busIssueEntity -> issueNames.add(busIssueEntity.getName()));
-                            Set<String> oldIssueNames = scmTmp.getIssueNames();
-                            if (oldIssueNames == null) {
-                                oldIssueNames = new HashSet<>();
-                            }
-                            oldIssueNames.addAll(issueNames);
-                            scmTmp.setFirstIssueCount(scmTmp.getFirstIssueCount() + 1);
-                        } else if (be.getSecondExamine() != null && be.getSecondExamine().getHasIssue()) {
-                            hasIssue = true;
-                            Set<String> issueNames = new HashSet<>();
-                            Set<BusIssueEntity> busIssueEntities = be.getSecondExamine().getIssues();
-                            busIssueEntities.forEach(busIssueEntity -> issueNames.add(busIssueEntity.getName()));
-                            Set<String> oldIssueNames = scmTmp.getIssueNames();
-                            if (oldIssueNames == null) {
-                                oldIssueNames = new HashSet<>();
-                            }
-                            oldIssueNames.addAll(issueNames);
-                            scmTmp.setSecondIssueCount(scmTmp.getSecondIssueCount() + 1);
-                        } else if (be.getThirdExamine() != null && be.getThirdExamine().getHasIssue()) {
-                            hasIssue = true;
-                            Set<String> issueNames = new HashSet<>();
-                            Set<BusIssueEntity> busIssueEntities = be.getThirdExamine().getIssues();
-                            busIssueEntities.forEach(busIssueEntity -> issueNames.add(busIssueEntity.getName()));
-                            Set<String> oldIssueNames = scmTmp.getIssueNames();
-                            if (oldIssueNames == null) {
-                                oldIssueNames = new HashSet<>();
-                            }
-                            oldIssueNames.addAll(issueNames);
-                            scmTmp.setThirdIssueCount(scmTmp.getThirdIssueCount() + 1);
+
+                    if (be.getFirstExamine() != null && be.getFirstExamine().getHasIssue()) {
+                        hasIssue = true;
+                        Set<String> issueNames = new HashSet<>();
+                        Set<BusIssueEntity> busIssueEntities = be.getFirstExamine().getIssues();
+                        busIssueEntities.forEach(busIssueEntity -> issueNames.add(busIssueEntity.getName()));
+                        Set<String> oldIssueNames = scmTmp.getIssueNames();
+                        if (oldIssueNames == null) {
+                            oldIssueNames = new HashSet<>();
                         }
+                        oldIssueNames.addAll(issueNames);
+                        scmTmp.setFirstIssueCount(scmTmp.getFirstIssueCount() + 1);
+                    } else if (be.getSecondExamine() != null && be.getSecondExamine().getHasIssue()) {
+                        hasIssue = true;
+                        Set<String> issueNames = new HashSet<>();
+                        Set<BusIssueEntity> busIssueEntities = be.getSecondExamine().getIssues();
+                        busIssueEntities.forEach(busIssueEntity -> issueNames.add(busIssueEntity.getName()));
+                        Set<String> oldIssueNames = scmTmp.getIssueNames();
+                        if (oldIssueNames == null) {
+                            oldIssueNames = new HashSet<>();
+                        }
+                        oldIssueNames.addAll(issueNames);
+                        scmTmp.setSecondIssueCount(scmTmp.getSecondIssueCount() + 1);
+                    } else if (be.getThirdExamine() != null && be.getThirdExamine().getHasIssue()) {
+                        hasIssue = true;
+                        Set<String> issueNames = new HashSet<>();
+                        Set<BusIssueEntity> busIssueEntities = be.getThirdExamine().getIssues();
+                        busIssueEntities.forEach(busIssueEntity -> issueNames.add(busIssueEntity.getName()));
+                        Set<String> oldIssueNames = scmTmp.getIssueNames();
+                        if (oldIssueNames == null) {
+                            oldIssueNames = new HashSet<>();
+                        }
+                        oldIssueNames.addAll(issueNames);
+                        scmTmp.setThirdIssueCount(scmTmp.getThirdIssueCount() + 1);
                     }
-                    scmTmp.setIssueCount(scmTmp.getIssueCount() + (hasIssue ? 1 : 0));      //问题业务总数
+
+                    if (hasIssue && be.getStatus() == BUS_STATUS.FINISH) {
+                        scmTmp.setAmendmentCount(scmTmp.getAmendmentCount() + 1);
+                    }
+                    if (hasIssue) {
+                        scmTmp.setIssueCount(scmTmp.getIssueCount() + 1);      //问题业务总数
+                    }
 
                     sm.setDetailCount(sm.getDetailCount() + 1);
 
@@ -538,8 +543,8 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
 
                 for (BusinessEntity be : bes) {
                     StatisticsCategoryTypeModel sctmTmp = null;
-                    if (be.getCategory() == null){
-                        System.err.print("skip:"+be.getId());
+                    if (be.getCategory() == null) {
+                        System.err.print("skip:" + be.getId());
                         continue;
                     }
                     BusCategoryTypeEntity bcte = be.getCategory().getType();
@@ -584,43 +589,47 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
                     scmTmp.setCount(scmTmp.getCount() + 1);     // 业务总数
 
                     boolean hasIssue = false;
-                    if (be.getStatus() != BUS_STATUS.FINISH) { // 排除业务处在完成状态的业务，如三级审核后都没有问题或月经整改
-                        if (be.getFirstExamine() != null && be.getFirstExamine().getHasIssue()) {
-                            hasIssue = true;
-                            Set<String> issueNames = new HashSet<>();
-                            Set<BusIssueEntity> busIssueEntities = be.getFirstExamine().getIssues();
-                            busIssueEntities.forEach(busIssueEntity -> issueNames.add(busIssueEntity.getName()));
-                            Set<String> oldIssueNames = scmTmp.getIssueNames();
-                            if (oldIssueNames == null) {
-                                oldIssueNames = new HashSet<>();
-                            }
-                            oldIssueNames.addAll(issueNames);
-                            scmTmp.setFirstIssueCount(scmTmp.getFirstIssueCount() + 1);
-                        } else if (be.getSecondExamine() != null && be.getSecondExamine().getHasIssue()) {
-                            hasIssue = true;
-                            Set<String> issueNames = new HashSet<>();
-                            Set<BusIssueEntity> busIssueEntities = be.getSecondExamine().getIssues();
-                            busIssueEntities.forEach(busIssueEntity -> issueNames.add(busIssueEntity.getName()));
-                            Set<String> oldIssueNames = scmTmp.getIssueNames();
-                            if (oldIssueNames == null) {
-                                oldIssueNames = new HashSet<>();
-                            }
-                            oldIssueNames.addAll(issueNames);
-                            scmTmp.setSecondIssueCount(scmTmp.getSecondIssueCount() + 1);
-                        } else if (be.getThirdExamine() != null && be.getThirdExamine().getHasIssue()) {
-                            hasIssue = true;
-                            Set<String> issueNames = new HashSet<>();
-                            Set<BusIssueEntity> busIssueEntities = be.getThirdExamine().getIssues();
-                            busIssueEntities.forEach(busIssueEntity -> issueNames.add(busIssueEntity.getName()));
-                            Set<String> oldIssueNames = scmTmp.getIssueNames();
-                            if (oldIssueNames == null) {
-                                oldIssueNames = new HashSet<>();
-                            }
-                            oldIssueNames.addAll(issueNames);
-                            scmTmp.setThirdIssueCount(scmTmp.getThirdIssueCount() + 1);
+                    if (be.getFirstExamine() != null && be.getFirstExamine().getHasIssue()) {
+                        hasIssue = true;
+                        Set<String> issueNames = new HashSet<>();
+                        Set<BusIssueEntity> busIssueEntities = be.getFirstExamine().getIssues();
+                        busIssueEntities.forEach(busIssueEntity -> issueNames.add(busIssueEntity.getName()));
+                        Set<String> oldIssueNames = scmTmp.getIssueNames();
+                        if (oldIssueNames == null) {
+                            oldIssueNames = new HashSet<>();
                         }
+                        oldIssueNames.addAll(issueNames);
+                        scmTmp.setFirstIssueCount(scmTmp.getFirstIssueCount() + 1);
+                    } else if (be.getSecondExamine() != null && be.getSecondExamine().getHasIssue()) {
+                        hasIssue = true;
+                        Set<String> issueNames = new HashSet<>();
+                        Set<BusIssueEntity> busIssueEntities = be.getSecondExamine().getIssues();
+                        busIssueEntities.forEach(busIssueEntity -> issueNames.add(busIssueEntity.getName()));
+                        Set<String> oldIssueNames = scmTmp.getIssueNames();
+                        if (oldIssueNames == null) {
+                            oldIssueNames = new HashSet<>();
+                        }
+                        oldIssueNames.addAll(issueNames);
+                        scmTmp.setSecondIssueCount(scmTmp.getSecondIssueCount() + 1);
+                    } else if (be.getThirdExamine() != null && be.getThirdExamine().getHasIssue()) {
+                        hasIssue = true;
+                        Set<String> issueNames = new HashSet<>();
+                        Set<BusIssueEntity> busIssueEntities = be.getThirdExamine().getIssues();
+                        busIssueEntities.forEach(busIssueEntity -> issueNames.add(busIssueEntity.getName()));
+                        Set<String> oldIssueNames = scmTmp.getIssueNames();
+                        if (oldIssueNames == null) {
+                            oldIssueNames = new HashSet<>();
+                        }
+                        oldIssueNames.addAll(issueNames);
+                        scmTmp.setThirdIssueCount(scmTmp.getThirdIssueCount() + 1);
                     }
-                    scmTmp.setIssueCount(scmTmp.getIssueCount() + (hasIssue ? 1 : 0));      //问题业务总数
+
+                    if (hasIssue && be.getStatus() == BUS_STATUS.FINISH) {
+                        scmTmp.setAmendmentCount(scmTmp.getAmendmentCount() + 1);
+                    }
+                    if (hasIssue) {
+                        scmTmp.setIssueCount(scmTmp.getIssueCount() + 1);      //问题业务总数
+                    }
 
                     fm.setDetailCount(fm.getDetailCount() + 1);
 
@@ -653,8 +662,8 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
 
             for (BusinessEntity be : bes) {
                 StatisticsCategoryTypeModel sctmTmp = null;
-                if (be.getCategory() == null){
-                    System.err.print("skip:"+be.getId());
+                if (be.getCategory() == null) {
+                    System.err.print("skip:" + be.getId());
                     continue;
                 }
                 BusCategoryTypeEntity bcte = be.getCategory().getType();
@@ -699,43 +708,48 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
                 scmTmp.setCount(scmTmp.getCount() + 1);     // 业务总数
 
                 boolean hasIssue = false;
-                if (be.getStatus() != BUS_STATUS.FINISH) { // 排除业务处在完成状态的业务，如三级审核后都没有问题或月经整改
-                    if (be.getFirstExamine() != null && be.getFirstExamine().getHasIssue()) {
-                        hasIssue = true;
-                        Set<String> issueNames = new HashSet<>();
-                        Set<BusIssueEntity> busIssueEntities = be.getFirstExamine().getIssues();
-                        busIssueEntities.forEach(busIssueEntity -> issueNames.add(busIssueEntity.getName()));
-                        Set<String> oldIssueNames = scmTmp.getIssueNames();
-                        if (oldIssueNames == null) {
-                            oldIssueNames = new HashSet<>();
-                        }
-                        oldIssueNames.addAll(issueNames);
-                        scmTmp.setFirstIssueCount(scmTmp.getFirstIssueCount() + 1);
-                    } else if (be.getSecondExamine() != null && be.getSecondExamine().getHasIssue()) {
-                        hasIssue = true;
-                        Set<String> issueNames = new HashSet<>();
-                        Set<BusIssueEntity> busIssueEntities = be.getSecondExamine().getIssues();
-                        busIssueEntities.forEach(busIssueEntity -> issueNames.add(busIssueEntity.getName()));
-                        Set<String> oldIssueNames = scmTmp.getIssueNames();
-                        if (oldIssueNames == null) {
-                            oldIssueNames = new HashSet<>();
-                        }
-                        oldIssueNames.addAll(issueNames);
-                        scmTmp.setSecondIssueCount(scmTmp.getSecondIssueCount() + 1);
-                    } else if (be.getThirdExamine() != null && be.getThirdExamine().getHasIssue()) {
-                        hasIssue = true;
-                        Set<String> issueNames = new HashSet<>();
-                        Set<BusIssueEntity> busIssueEntities = be.getThirdExamine().getIssues();
-                        busIssueEntities.forEach(busIssueEntity -> issueNames.add(busIssueEntity.getName()));
-                        Set<String> oldIssueNames = scmTmp.getIssueNames();
-                        if (oldIssueNames == null) {
-                            oldIssueNames = new HashSet<>();
-                        }
-                        oldIssueNames.addAll(issueNames);
-                        scmTmp.setThirdIssueCount(scmTmp.getThirdIssueCount() + 1);
+
+                if (be.getFirstExamine() != null && be.getFirstExamine().getHasIssue()) {
+                    hasIssue = true;
+                    Set<String> issueNames = new HashSet<>();
+                    Set<BusIssueEntity> busIssueEntities = be.getFirstExamine().getIssues();
+                    busIssueEntities.forEach(busIssueEntity -> issueNames.add(busIssueEntity.getName()));
+                    Set<String> oldIssueNames = scmTmp.getIssueNames();
+                    if (oldIssueNames == null) {
+                        oldIssueNames = new HashSet<>();
                     }
+                    oldIssueNames.addAll(issueNames);
+                    scmTmp.setFirstIssueCount(scmTmp.getFirstIssueCount() + 1);
+                } else if (be.getSecondExamine() != null && be.getSecondExamine().getHasIssue()) {
+                    hasIssue = true;
+                    Set<String> issueNames = new HashSet<>();
+                    Set<BusIssueEntity> busIssueEntities = be.getSecondExamine().getIssues();
+                    busIssueEntities.forEach(busIssueEntity -> issueNames.add(busIssueEntity.getName()));
+                    Set<String> oldIssueNames = scmTmp.getIssueNames();
+                    if (oldIssueNames == null) {
+                        oldIssueNames = new HashSet<>();
+                    }
+                    oldIssueNames.addAll(issueNames);
+                    scmTmp.setSecondIssueCount(scmTmp.getSecondIssueCount() + 1);
+                } else if (be.getThirdExamine() != null && be.getThirdExamine().getHasIssue()) {
+                    hasIssue = true;
+                    Set<String> issueNames = new HashSet<>();
+                    Set<BusIssueEntity> busIssueEntities = be.getThirdExamine().getIssues();
+                    busIssueEntities.forEach(busIssueEntity -> issueNames.add(busIssueEntity.getName()));
+                    Set<String> oldIssueNames = scmTmp.getIssueNames();
+                    if (oldIssueNames == null) {
+                        oldIssueNames = new HashSet<>();
+                    }
+                    oldIssueNames.addAll(issueNames);
+                    scmTmp.setThirdIssueCount(scmTmp.getThirdIssueCount() + 1);
                 }
-                scmTmp.setIssueCount(scmTmp.getIssueCount() + (hasIssue ? 1 : 0));      //问题业务总数
+
+                if (hasIssue && be.getStatus() == BUS_STATUS.FINISH) {
+                    scmTmp.setAmendmentCount(scmTmp.getAmendmentCount() + 1);
+                }
+                if (hasIssue) {
+                    scmTmp.setIssueCount(scmTmp.getIssueCount() + 1);      //问题业务总数
+                }
             }
         } catch (Exception e) {
             logger.error("", e);
@@ -892,10 +906,10 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
     @Override
     public List<BusAttachmentModel> listAttachment(String busId) throws ServiceException {
         List<BusAttachmentModel> result = new ArrayList<>();
-        try{
+        try {
             BusinessEntity businessEntity = businessDao.getById(busId);
             Set<BusAttachmentEntity> attachmentEntities = businessEntity.getAttachments();
-            if (attachmentEntities!=null){
+            if (attachmentEntities != null) {
                 attachmentEntities.forEach(busAttachmentEntity -> {
                     BusAttachmentModel busAttachmentModel = new BusAttachmentModel();
                     BeanUtils.copyProperties(busAttachmentEntity, busAttachmentModel);
@@ -904,7 +918,7 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
             }
             result.sort(Comparator.comparing(BusAttachmentModel::getFileName));
             return result;
-        } catch (Exception e){
+        } catch (Exception e) {
             logger.error("", e);
             throw new ServiceException();
         }

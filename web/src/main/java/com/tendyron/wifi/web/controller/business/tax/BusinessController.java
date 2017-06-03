@@ -72,7 +72,13 @@ public class BusinessController extends BaseController {
     @RequestMapping("paging/error")
     @ResponseBody
     public Json pagingError(BusinessQuery query) {
-        query.setStatus(BUS_STATUS.HAS_ISSUE);
+//        query.setStatus(BUS_STATUS.HAS_ISSUE);
+        if (query.getAmendmentIssue() != null && query.getAmendmentIssue()) { //当查询的是 整改后的业务时，这里自动添加 hasIssue = true 条件 以限定为【有错误的完成状态业务】
+            query.setStatus(BUS_STATUS.FINISH);
+            query.setHasIssue(true);
+        } else {
+            query.setIncludeStatus(new Integer[]{BUS_STATUS.HAS_ISSUE, BUS_STATUS.FINISH});  // 修改为包含已经整改的业务，这里添加状态 5 但是由于query中同时指定了 第一次、第二次或第三次检查是必须包含错误，这样就避免了把没有错误的 处于完成状态的业务也统计进来
+        }
         try {
             if (query.getHasIssue() == null) {
                 return success(businessService.paging(query));

@@ -73,7 +73,8 @@ angular.module('ws.app').controller('taxPersonCtrl', ['$rootScope', '$scope', '$
         var hasIssueDetail = {
             firstHasIssue: undefined,
             secondHasIssue: undefined,
-            thirdHasIssue: undefined
+            thirdHasIssue: undefined,
+            amendmentIssue: undefined
         };
 
         var hasIssue = undefined;
@@ -91,11 +92,12 @@ angular.module('ws.app').controller('taxPersonCtrl', ['$rootScope', '$scope', '$
             hasIssue = true;
             $scope.issueDetail.title = '有问题';
         } else if (issueStep === 5) {
-            $scope.issueDetail.title = '';
+            hasIssueDetail.amendmentIssue = true;
+            $scope.issueDetail.title = '已经整改问题';
         }
 
         $scope.innerCtrl.load($.extend(issueDetailParams, {
-            userId: $scope.user.id,
+            createUserId: $scope.user.id,
             categoryTypeId: categoryTypeId,
             categoryId: categoryId,
             hasIssue: hasIssue

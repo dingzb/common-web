@@ -16,6 +16,7 @@ public class BusinessQuery extends PagingQuery {
     private Boolean firstHasIssue;
     private Boolean secondHasIssue;
     private Boolean thirdHasIssue;
+    private Boolean amendmentIssue;
 
     private String issueId;
     private String agencyId;
@@ -187,5 +188,13 @@ public class BusinessQuery extends PagingQuery {
 
     public void setThirdHasIssue(Boolean thirdHasIssue) {
         this.thirdHasIssue = thirdHasIssue;
+    }
+
+    public Boolean getAmendmentIssue() {
+        return amendmentIssue;
+    }
+
+    public void setAmendmentIssue(Boolean amendmentIssue) {
+        this.amendmentIssue = amendmentIssue;
     }
 }

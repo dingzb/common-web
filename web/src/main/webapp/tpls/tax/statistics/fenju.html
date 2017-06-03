@@ -44,10 +44,10 @@
         <table class="ws-statement">
             <thead>
             <tr>
-                <th colspan="9" class="ws-heading"><span>内控情况统计表</span></th>
+                <th colspan="10" class="ws-heading"><span>内控情况统计表</span></th>
             </tr>
             <tr>
-                <th colspan="9" class="ws-subheading">统计单位：{{agency == null ? '空' : agency.name}}</th>
+                <th colspan="10" class="ws-subheading">统计单位：{{agency == null ? '空' : agency.name}}</th>
             </tr>
             <tr class="ws-header">
                 <th>录入人员</th>
@@ -57,6 +57,7 @@
                 <th>自控问题数</th>
                 <th>防控问题数</th>
                 <th>监控问题数</th>
+                <th>已整改问题数</th>
                 <th>总数</th>
                 <th>问题类型</th>
             </tr>
@@ -77,6 +78,9 @@
                 </td>
                 <td>
                     <a href="javascript:void(0);" ng-click="issueDetail(rec.userId, rec.categoryTypeId, rec.id, 3)">{{rec.thirdIssueCount}}</a>
+                </td>
+                <td>
+                    <a href="javascript:void(0);" ng-click="issueDetail(rec.userId, rec.categoryTypeId, rec.id, 5)">{{rec.amendmentCount}}</a>
                 </td>
                 <td ng-bind="rec.count"></td>
                 <td>
