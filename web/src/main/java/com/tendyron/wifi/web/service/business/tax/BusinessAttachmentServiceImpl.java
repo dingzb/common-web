@@ -115,6 +115,7 @@ public class BusinessAttachmentServiceImpl extends BaseServiceImpl<BusAttachment
 
     }
 
+    @Transactional
     @Override
     public BusAttachmentModel getById(String id) throws ServiceException {
         BusAttachmentModel busAttachmentModel = new BusAttachmentModel();
