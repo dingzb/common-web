@@ -63,6 +63,7 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
     @Override
     public PagingModel pagingCreated(BusinessQuery query) throws ServiceException {
         queryBasicAssert(query);
+//        query.setIncludeStatus(new Integer[] {BUS_STATUS.CREATE, BUS_STATUS.SECOND, BUS_STATUS.THIRD, BUS_STATUS.HAS_ISSUE, BUS_STATUS.FIRST});
         query.setStatus(BUS_STATUS.CREATE);
         return pagingBaseUser(query);
     }
@@ -416,6 +417,10 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
 
                 for (BusinessEntity be : bes) {
                     StatisticsCategoryTypeModel sctmTmp = null;
+                    if (be.getCategory() == null){
+                        System.err.print("skip:"+be.getId());
+                        continue;
+                    }
                     BusCategoryTypeEntity bcte = be.getCategory().getType();
 
                     for (StatisticsCategoryTypeModel sctm : sctms) {
@@ -533,6 +538,10 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
 
                 for (BusinessEntity be : bes) {
                     StatisticsCategoryTypeModel sctmTmp = null;
+                    if (be.getCategory() == null){
+                        System.err.print("skip:"+be.getId());
+                        continue;
+                    }
                     BusCategoryTypeEntity bcte = be.getCategory().getType();
 
                     for (StatisticsCategoryTypeModel sctm : sctms) {
@@ -644,6 +653,10 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
 
             for (BusinessEntity be : bes) {
                 StatisticsCategoryTypeModel sctmTmp = null;
+                if (be.getCategory() == null){
+                    System.err.print("skip:"+be.getId());
+                    continue;
+                }
                 BusCategoryTypeEntity bcte = be.getCategory().getType();
 
                 for (StatisticsCategoryTypeModel sctm : sctms) {
