@@ -358,8 +358,6 @@ angular.module('ws.app').controller('taxManageCtrl', ['$rootScope', '$scope', '$
      */
     function initFileinput(busId, initialPreview, initialPreviewConfig) {
 
-        var btns = '<button type="button" class="kv-cust-btn btn btn-xs btn-default" title="Download" data-key="{dataKey}"><i class="glyphicon glyphicon-download"></i></button>';
-
         var option = {
             language: 'zh',
             theme: "explorer",
@@ -377,7 +375,6 @@ angular.module('ws.app').controller('taxManageCtrl', ['$rootScope', '$scope', '$
             uploadExtraData: {
                 busId: busId
             },
-            otherActionButtons: btns,
             preferIconicPreview: true, // this will force thumbnails to display icons for following file extensions
             previewFileIconSettings: { // configure your icon file extensions
                 'doc': '<span class="ws-tax-font fa-file-word-o text-primary"></span>',
