@@ -100,7 +100,14 @@ public interface BusinessService extends BaseService<BusinessEntity> {
 
     void edit(BusinessModel business) throws ServiceException;
 
-    Integer del(String[] ids) throws ServiceException;
+    /**
+     *
+     * @param ids
+     * @param getAbsPath 附件的绝对路径
+     * @return
+     * @throws ServiceException
+     */
+    Integer del(String[] ids, Function<String, String> getAbsPath) throws ServiceException;
 
     /**
      * 县局报表统计

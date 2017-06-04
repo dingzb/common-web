@@ -1,10 +1,7 @@
 package com.tendyron.wifi.web.service.business.tax;
 
 import com.tendyron.wifi.web.config.UserType;
-import com.tendyron.wifi.web.dao.business.tax.AgencyDao;
-import com.tendyron.wifi.web.dao.business.tax.BusinessCategoryDao;
-import com.tendyron.wifi.web.dao.business.tax.BusinessDao;
-import com.tendyron.wifi.web.dao.business.tax.BusinessIssueDao;
+import com.tendyron.wifi.web.dao.business.tax.*;
 import com.tendyron.wifi.web.dao.system.UserDao;
 import com.tendyron.wifi.web.entity.business.tax.*;
 import com.tendyron.wifi.web.entity.business.tax.BusinessEntity.BUS_STATUS;
@@ -59,12 +56,15 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
     @Autowired
     private AgencyDao agencyDao;
 
+    @Autowired
+    private BusinessAttachmentDao businessAttachmentDao;
+
     @Transactional
     @Override
     public PagingModel pagingCreated(BusinessQuery query) throws ServiceException {
         queryBasicAssert(query);
-//        query.setIncludeStatus(new Integer[] {BUS_STATUS.CREATE, BUS_STATUS.SECOND, BUS_STATUS.THIRD, BUS_STATUS.HAS_ISSUE, BUS_STATUS.FIRST});
-        query.setStatus(BUS_STATUS.CREATE);
+        query.setIncludeStatus(new Integer[]{BUS_STATUS.CREATE, BUS_STATUS.FIRST, BUS_STATUS.SECOND, BUS_STATUS.THIRD, BUS_STATUS.HAS_ISSUE, BUS_STATUS.FINISH});
+//        query.setStatus(BUS_STATUS.CREATE);
         return pagingBaseUser(query);
     }
 
@@ -383,10 +383,22 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
 
     @Override
     @Transactional
-    public Integer del(String[] ids) throws ServiceException {
-        Integer result = null;
+    public Integer del(String[] ids, Function<String, String> getAbsPath) throws ServiceException {
+        Integer result = 0;
         try {
-            result = businessDao.delByIds(ids);
+            for (String id : ids) {
+                BusinessEntity businessEntity = businessDao.getById(id);
+                Set<BusAttachmentEntity> attachmentEntities = businessEntity.getAttachments();
+                if (attachmentEntities != null) {
+                    for (BusAttachmentEntity attachmentEntity : attachmentEntities) {
+                        UploadTools.del(getAbsPath.apply(attachmentEntity.getUrl()));
+                        businessAttachmentDao.delete(attachmentEntity);
+                    }
+                }
+                businessDao.delete(businessEntity);
+                result++;
+            }
+
         } catch (Exception e) {
             logger.error("", e);
             throw new ServiceException();

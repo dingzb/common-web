@@ -175,10 +175,10 @@ public class BusinessController extends BaseController {
 
     @RequestMapping("del")
     @ResponseBody
-    public Json del(@RequestParam("ids[]") String[] ids) {
+    public Json del(@RequestParam("ids[]") String[] ids, HttpServletRequest request) {
         Integer result = null;
         try {
-            result = businessService.del(ids);
+            result = businessService.del(ids, path -> request.getServletContext().getRealPath(path));
         } catch (ServiceException e) {
             return fail(e.getMessage());
         }
