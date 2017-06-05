@@ -12,6 +12,11 @@
         </developer>
     </developers>
 
+    <modules>
+        <module>base</module>
+        <module>web</module>
+    </modules>
+
     <groupId>com.dingzb.common</groupId>
     <artifactId>common-web</artifactId>
     <version>0.0.1-SNAPSHOT</version>
