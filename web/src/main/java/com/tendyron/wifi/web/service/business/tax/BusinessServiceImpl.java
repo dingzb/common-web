@@ -63,8 +63,8 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
     @Override
     public PagingModel pagingCreated(BusinessQuery query) throws ServiceException {
         queryBasicAssert(query);
-        query.setIncludeStatus(new Integer[]{BUS_STATUS.CREATE, BUS_STATUS.FIRST, BUS_STATUS.SECOND, BUS_STATUS.THIRD, BUS_STATUS.HAS_ISSUE, BUS_STATUS.FINISH});
-//        query.setStatus(BUS_STATUS.CREATE);
+//        query.setIncludeStatus(new Integer[]{BUS_STATUS.CREATE, BUS_STATUS.FIRST, BUS_STATUS.SECOND, BUS_STATUS.THIRD, BUS_STATUS.HAS_ISSUE, BUS_STATUS.FINISH});
+        query.setStatus(BUS_STATUS.CREATE);
         return pagingBaseUser(query);
     }
 
