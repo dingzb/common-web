@@ -169,10 +169,12 @@ angular.module('ws.app').controller('taxManageCtrl', ['$rootScope', '$scope', '$
     function validateAddForm() {
         if ($scope.addForm.$invalid) {
             console.info($scope.addForm);
+            console.info($scope.addObj);
             $scope.addForm.taxpayerCode.$setDirty();
             $scope.addForm.taxpayerName.$setDirty();
             $scope.addForm.categoryTypeId.$setDirty();
             $scope.addForm.categoryId.$setDirty();
+            $scope.addForm.busTime.$setDirty();
             $scope.addForm.description.$setDirty();
             return false;
         }
@@ -252,6 +254,7 @@ angular.module('ws.app').controller('taxManageCtrl', ['$rootScope', '$scope', '$
             $scope.editForm.taxpayerName.$setDirty();
             $scope.editForm.categoryTypeId.$setDirty();
             $scope.editForm.categoryId.$setDirty();
+            $scope.editForm.busTime.$setDirty();
             $scope.editForm.description.$setDirty();
             return false;
         }

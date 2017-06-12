@@ -77,15 +77,15 @@
                             <tr>
                                 <th><label for="add_category_type">业务类型：</label></th>
                                 <td>
-                                    <select id="add_category_type" class="form-control input-sm" name="categoryTypeId"
+                                    <select id="add_category_type" class="form-control input-sm" name="categoryTypeId" required="required"
                                             ng-model="addObj.categoryTypeId" ng-change="addGetCategory(addObj.categoryTypeId)">
                                         <option value="">请选择</option>
                                         <option ng-selected="categoryType.id == addObj.categoryTypeId" ng-repeat="categoryType in categoryTypes"
                                                 value="{{categoryType.id}}" ng-bind="categoryType.name"></option>
                                     </select>
                                     <div class="ws-form-msg-err"
-                                         ng-messages="addForm.categoryType.$error"
-                                         ng-show="addForm.categoryType.$dirty && addForm.categoryType.$invalid"
+                                         ng-messages="addForm.categoryTypeId.$error"
+                                         ng-show="addForm.categoryTypeId.$dirty && addForm.categoryTypeId.$invalid"
                                          ng-messages-multiple>
                                         <span ng-message="required" class="label label-danger">业务类型必选</span>
                                     </div>
@@ -93,14 +93,14 @@
                                 <th><label for="add_category">业务项目：</label></th>
                                 <td>
                                     <select id="add_category" class="form-control input-sm" name="categoryId"
-                                            ng-model="addObj.categoryId">
+                                            ng-model="addObj.categoryId" required="required">
                                         <option value="">请选择</option>
                                         <option ng-selected="category.id == addObj.categoryId" ng-repeat="category in addObj2.categories"
                                                 value="{{category.id}}" ng-bind="category.name"></option>
                                     </select>
                                     <div class="ws-form-msg-err"
-                                         ng-messages="addForm.category.$error"
-                                         ng-show="addForm.category.$dirty && addForm.category.$invalid"
+                                         ng-messages="addForm.categoryId.$error"
+                                         ng-show="addForm.categoryId.$dirty && addForm.categoryId.$invalid"
                                          ng-messages-multiple>
                                         <span ng-message="required" class="label label-danger">业务项目必选</span>
                                     </div>
@@ -114,7 +114,7 @@
                                             <span class="glyphicon glyphicon-calendar"></span>
                                         </span>
                                             <input size="16" type="text" id="add_time" name="busTime" ng-init="initDtp()"
-                                                   class="form-control input-sm" style="width: 215px;"
+                                                   class="form-control input-sm" style="width: 215px;" required="required"
                                                    placeholder="年-月-日 时:分" ng-model="addObj.busTime">
                                     </div>
                                     <div ng-messages="addForm.busTime.$error"
@@ -188,30 +188,30 @@
                             <tr>
                                 <th><label for="edit_category_type">业务类型：</label></th>
                                 <td>
-                                    <select id="edit_category_type" class="form-control input-sm" name="categoryTypeId" required
+                                    <select id="edit_category_type" class="form-control input-sm" name="categoryTypeId" required="required"
                                             ng-model="editObj.categoryTypeId" ng-change="editGetCategory(editObj.categoryTypeId)">
                                         <option value="">请选择</option>
                                         <option ng-selected="categoryType.id == editObj.categoryTypeId" ng-repeat="categoryType in categoryTypes"
                                                 value="{{categoryType.id}}" ng-bind="categoryType.name"></option>
                                     </select>
                                     <div class="ws-form-msg-err"
-                                         ng-messages="editForm.categoryType.$error"
-                                         ng-show="editForm.categoryType.$dirty && editForm.categoryType.$invalid"
+                                         ng-messages="editForm.categoryTypeId.$error"
+                                         ng-show="editForm.categoryTypeId.$dirty && editForm.categoryTypeId.$invalid"
                                          ng-messages-multiple>
                                         <span ng-message="required" class="label label-danger">业务类型必选</span>
                                     </div>
                                 </td>
                                 <th><label for="edit_category">业务项目：</label></th>
                                 <td>
-                                    <select id="edit_category" class="form-control input-sm" name="categoryId" required
+                                    <select id="edit_category" class="form-control input-sm" name="categoryId" required="required"
                                             ng-model="editObj.categoryId">
                                         <option value="">请选择</option>
                                         <option ng-selected="category.id == editObj.categoryId" ng-repeat="category in editObj2.categories"
                                                 value="{{category.id}}" ng-bind="category.name"></option>
                                     </select>
                                     <div class="ws-form-msg-err"
-                                         ng-messages="editForm.category.$error"
-                                         ng-show="editForm.category.$dirty && editForm.category.$invalid"
+                                         ng-messages="editForm.categoryId.$error"
+                                         ng-show="editForm.categoryId.$dirty && editForm.categoryId.$invalid"
                                          ng-messages-multiple>
                                         <span ng-message="required" class="label label-danger">业务项目必选</span>
                                     </div>
@@ -225,7 +225,7 @@
                                             <span class="glyphicon glyphicon-calendar"></span>
                                         </span>
                                         <input size="16" type="text" id="edit_time" name="busTime" ng-init="initDtp()"
-                                               class="form-control input-sm" style="width: 215px;"
+                                               class="form-control input-sm" style="width: 215px;" required="required"
                                                placeholder="年-月-日 时:分" ng-model="editObj.busTime">
                                     </div>
                                     <div ng-messages="addForm.busTime.$error"
