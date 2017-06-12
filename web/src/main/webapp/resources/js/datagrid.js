@@ -137,8 +137,8 @@ angular.module('ws.datagrid', []).directive('wsDatagrid', ['$sce', function ($sc
                 if (!column.sortable) {
                     return;
                 }
-                if (scope.params.sort == column.field) {
-                    if (scope.params.order == 'asc') {
+                if (scope.params.sort === column.field) {
+                    if (scope.params.order === 'asc') {
                         scope.params.order = 'desc';
                     } else {
                         scope.params.order = 'asc';
@@ -158,8 +158,8 @@ angular.module('ws.datagrid', []).directive('wsDatagrid', ['$sce', function ($sc
             scope.params = scope.configuration.params;
             scope.columns = scope.configuration.columns;
             scope.extension = scope.configuration.extension;
-            scope.toolbar = (scope.configuration.toolbar == undefined) ? true : scope.configuration.toolbar;
-            scope.paging = (scope.configuration.paging == undefined) ? true : scope.configuration.paging;
+            scope.toolbar = (scope.configuration.toolbar === undefined) ? true : scope.configuration.toolbar;
+            scope.paging = (scope.configuration.paging === undefined) ? true : scope.configuration.paging;
 
             if (scope.configuration.sortName) {
                 scope.params.sort = scope.configuration.sortName;
@@ -177,10 +177,10 @@ angular.module('ws.datagrid', []).directive('wsDatagrid', ['$sce', function ($sc
             scope.size = scope.sizes[0];
             scope.innerCtrl = ctrl[0];
             scope.checkbox = scope.configuration.checkbox;
-            if (scope.checkbox && (typeof scope.checkbox == 'boolean')) {
+            if (scope.checkbox && (typeof scope.checkbox === 'boolean')) {
                 scope.fieldCheckbox = false;
                 scope.fieldCheckField = 'checkbox';
-            } else if (scope.checkbox && (typeof scope.checkbox == 'object')) {
+            } else if (scope.checkbox && (typeof scope.checkbox === 'object')) {
                 scope.fieldCheckbox = true;
                 scope.fieldCheckField = scope.checkbox.field;
             }
@@ -195,7 +195,7 @@ angular.module('ws.datagrid', []).directive('wsDatagrid', ['$sce', function ($sc
             //页面码列表
             scope.pages = scope.getPages(1, scope.pageSize, scope.pageTotal);
             //默认加载完成后查询数据
-            if (scope.configuration.queryOnLoad || scope.configuration.queryOnLoad == undefined) {
+            if (scope.configuration.queryOnLoad || scope.configuration.queryOnLoad === undefined) {
                 ctrl[0].load(scope.params);
             }
 
@@ -238,8 +238,8 @@ angular.module('ws.datagrid', []).directive('wsDatagrid', ['$sce', function ($sc
                 $http({
                     method: $scope.method,
                     url: $scope.url,
-                    data: $scope.method != 'GET' ? params : undefined,
-                    params: $scope.method == 'GET' ? params : undefined
+                    data: $scope.method !== 'GET' ? params : undefined,
+                    params: $scope.method === 'GET' ? params : undefined
                 }).success(function (data, status, headers, config) {
                     $scope.isLoading = false;
                     if (data.success) {
@@ -253,15 +253,15 @@ angular.module('ws.datagrid', []).directive('wsDatagrid', ['$sce', function ($sc
                         /**
                          * 成功时回调的函数
                          */
-                        if (typeof callbak == 'function') {
+                        if (typeof callbak === 'function') {
                             callbak();
                         }
 
                         if ($scope.checkbox) {
-                            if ($scope.rows.length == 0) {
+                            if ($scope.rows.length === 0) {
                                 $scope.checkall.is = false;
                             } else {
-                                $scope.checkall.is = self.getChecked().length == $scope.rows.length
+                                $scope.checkall.is = self.getChecked().length === $scope.rows.length
                             }
                         }
                     } else {
@@ -276,8 +276,8 @@ angular.module('ws.datagrid', []).directive('wsDatagrid', ['$sce', function ($sc
             /**
              * 重新加载数据，当前页码不变，查询条件不变
              */
-            this.reload = function () {
-                //TODO
+            this.reload = function (callback) {
+                self.query($scope.pageCurrent, $scope.params, callback);
             };
             /**
              * 获取选中的行
