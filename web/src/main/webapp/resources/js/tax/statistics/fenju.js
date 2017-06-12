@@ -76,6 +76,14 @@ angular.module('ws.app').controller('taxFenjuCtrl', ['$rootScope', '$scope', '$h
             if (data.success) {
                 var rrrs = data.data;
                 var recs = [];
+
+                $scope.issueCount = 0;
+                $scope.firstIssueCount = 0;
+                $scope.secondIssueCount = 0;
+                $scope.thirdIssueCount = 0;
+                $scope.amendmentCount = 0;
+                $scope.count = 0;
+
                 rrrs.forEach(function (rrs) {
                     var userName = rrs.userName;
                     var userId = rrs.userId;
@@ -95,6 +103,14 @@ angular.module('ws.app').controller('taxFenjuCtrl', ['$rootScope', '$scope', '$h
                             }, r);
                             aSpan.i = aSpan.i + 1;
                             ctSpan.i = ctSpan.i + 1;
+
+                            $scope.issueCount += rec.issueCount;
+                            $scope.firstIssueCount += rec.firstIssueCount;
+                            $scope.secondIssueCount += rec.secondIssueCount;
+                            $scope.thirdIssueCount += rec.thirdIssueCount;
+                            $scope.amendmentCount += rec.amendmentCount;
+                            $scope.count += rec.count;
+
                             recs.push(rec);
                             userName = false;
                             categoryTypeName = false;

@@ -40,18 +40,34 @@ angular.module('ws.app').controller('taxPersonCtrl', ['$rootScope', '$scope', '$
             if (data.success) {
                 var rrrs = data.data;
                 var recs = [];
+
+                $scope.issueCount = 0;
+                $scope.firstIssueCount = 0;
+                $scope.secondIssueCount = 0;
+                $scope.thirdIssueCount = 0;
+                $scope.amendmentCount = 0;
+                $scope.count = 0;
+
                 rrrs.forEach(function (rrs) {
                         var categoryTypeName = rrs.name;
                         var categoryTypeId = rrs.id;
                         var ctSpan = {i: 0};
                     rrs.recs.forEach(function (r) {
-                            var rec = $.extend({
-                                categoryTypeName: categoryTypeName,
-                                categoryTypeId: categoryTypeId,
-                                ctSpan: ctSpan
-                            }, r);
-                            ctSpan.i = ctSpan.i + 1;
-                            recs.push(rec);
+                        var rec = $.extend({
+                            categoryTypeName: categoryTypeName,
+                            categoryTypeId: categoryTypeId,
+                            ctSpan: ctSpan
+                        }, r);
+                        ctSpan.i = ctSpan.i + 1;
+
+                        $scope.issueCount += rec.issueCount;
+                        $scope.firstIssueCount += rec.firstIssueCount;
+                        $scope.secondIssueCount += rec.secondIssueCount;
+                        $scope.thirdIssueCount += rec.thirdIssueCount;
+                        $scope.amendmentCount += rec.amendmentCount;
+                        $scope.count += rec.count;
+
+                        recs.push(rec);
                             categoryTypeName = false;
                         });
                     });
