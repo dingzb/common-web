@@ -230,7 +230,8 @@ angular.module('ws.app').controller('taxThirdCtrl', ['$rootScope', '$scope', '$h
 
         $http.post('app/tax/examine/third/commit', thirdData).success(function (data) {
             if (data.success) {
-                $scope.innerCtrl.load($scope.datagrid.params);
+                // $scope.innerCtrl.load($scope.datagrid.params);
+                $scope.innerCtrl.reload();
                 $scope.alert(data.message);
             } else
                 $scope.alert(data.message, 'error');

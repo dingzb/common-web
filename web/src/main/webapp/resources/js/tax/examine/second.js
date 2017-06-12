@@ -215,7 +215,8 @@ angular.module('ws.app').controller('taxSecondCtrl', ['$rootScope', '$scope', '$
 
         $http.post('app/tax/examine/second/commit', secondData).success(function (data) {
             if (data.success) {
-                $scope.innerCtrl.load($scope.datagrid.params);
+                // $scope.innerCtrl.load($scope.datagrid.params);
+                $scope.innerCtrl.reload();
                 $scope.alert(data.message);
             } else
                 $scope.alert(data.message, 'error');

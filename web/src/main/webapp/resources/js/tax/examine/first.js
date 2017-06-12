@@ -200,7 +200,8 @@ angular.module('ws.app').controller('taxFirstCtrl', ['$rootScope', '$scope', '$h
 
         $http.post('app/tax/examine/first/commit', firstData).success(function (data) {
             if (data.success) {
-                $scope.innerCtrl.load($scope.datagrid.params);
+                // $scope.innerCtrl.reload($scope.datagrid.params);
+                $scope.innerCtrl.reload();
                 $scope.alert(data.message);
             } else
                 $scope.alert(data.message, 'error');
