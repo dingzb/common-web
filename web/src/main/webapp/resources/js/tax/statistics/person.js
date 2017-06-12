@@ -30,6 +30,7 @@ angular.module('ws.app').controller('taxPersonCtrl', ['$rootScope', '$scope', '$
     });
 
     $scope.person = function () {
+        $scope.statementing = true;
 
         $http.post('app/tax/statistics/person', {
             // agencyIdsStr: agencyIdStr,
@@ -56,10 +57,13 @@ angular.module('ws.app').controller('taxPersonCtrl', ['$rootScope', '$scope', '$
                     });
                 $scope.recs = recs;
                 console.info(recs);
+                $scope.statementing = false;
             } else if (data.message) {
+                $scope.statementing = undefined;
                 $scope.alert(data.message, 'error');
             }
         }).error(function (data) {
+            $scope.statementing = undefined;
             $scope.alert(data, 'error');
         });
     };

@@ -39,6 +39,8 @@ angular.module('ws.app').controller('taxXianjuCtrl', ['$rootScope', '$scope', '$
 
     $scope.statement = function () {
 
+        $scope.statementing = true;
+
         userIds = [];
         var ags = $('#agencies').find('input');
         $.each(ags, function (i) {
@@ -91,10 +93,13 @@ angular.module('ws.app').controller('taxXianjuCtrl', ['$rootScope', '$scope', '$
                 });
                 $scope.recs = recs;
                 console.info(recs);
+                $scope.statementing = false;
             } else if (data.message) {
+                $scope.statementing = undefined;
                 $scope.alert(data.message, 'error');
             }
         }).error(function (data) {
+            $scope.statementing = undefined;
             $scope.alert(data, 'error');
         });
     };

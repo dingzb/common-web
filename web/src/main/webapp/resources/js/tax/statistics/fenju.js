@@ -49,6 +49,8 @@ angular.module('ws.app').controller('taxFenjuCtrl', ['$rootScope', '$scope', '$h
 
     $scope.fenjuStatistics = function () {
 
+        $scope.statementing = true;
+
         var userIds = [];
         var ags = $('#users').find('input');
         $.each(ags, function (i) {
@@ -101,10 +103,13 @@ angular.module('ws.app').controller('taxFenjuCtrl', ['$rootScope', '$scope', '$h
                 });
                 $scope.recs = recs;
                 console.info('======',recs);
+                $scope.statementing = false;
             } else if (data.message) {
+                $scope.statementing = undefined;
                 $scope.alert(data.message, 'error');
             }
         }).error(function (data) {
+            $scope.statementing = undefined;
             $scope.alert(data, 'error');
         });
     };
