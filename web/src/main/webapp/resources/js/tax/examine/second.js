@@ -90,7 +90,7 @@ angular.module('ws.app').controller('taxSecondCtrl', ['$rootScope', '$scope', '$
             title: '业务时间'
         }, {
             field: 'firstExamine',
-            title: '自查意见',
+            title: '自控意见',
             formatter: function (row) {
                 var str = JSON.stringify(row);
                 str = str.replace(/"/g, "'");
@@ -104,7 +104,7 @@ angular.module('ws.app').controller('taxSecondCtrl', ['$rootScope', '$scope', '$
             }
         }, {
             field: 'secondExamine',
-            title: '审查意见',
+            title: '防控意见',
             formatter: function (row) {
                 var str = JSON.stringify(row);
                 str = str.replace(/"/g, "'");
@@ -122,7 +122,7 @@ angular.module('ws.app').controller('taxSecondCtrl', ['$rootScope', '$scope', '$
             formatter: function (row) {
                 var str = JSON.stringify(row);
                 str = str.replace(/"/g, "'");
-                return '<button type="button" class="btn btn-link btn-sm" title="审查" onClick="angular.custom.taxBusinessSecond(' + str + ')">审查</button>'
+                return '<button type="button" class="btn btn-link btn-sm" title="防控" onClick="angular.custom.taxBusinessSecond(' + str + ')">防控</button>'
                     + "<button type=\"button\" class=\"btn btn-link btn-sm\" title='查看附件' onClick=\"angular.custom.showAttachment(" + str + ")\"><span class=\"glyphicon glyphicon-paperclip\" ></span></button>";
             }
         }],
@@ -145,7 +145,7 @@ angular.module('ws.app').controller('taxSecondCtrl', ['$rootScope', '$scope', '$
         $.extend($scope.searchParams, clearSearch);
     };
 
-    //========= 审查 =================
+    //========= 防控 =================
     angular.custom.taxBusinessSecond = function (row) {
         $scope.$apply(function () {
             $scope.detailObj = row;
@@ -164,17 +164,17 @@ angular.module('ws.app').controller('taxSecondCtrl', ['$rootScope', '$scope', '$
                 case 1:
                     issues = row.firstExamine.issues;
                     $scope.issueDetail = row.firstExamine;
-                    $scope.issueDetail.title = '自查';
+                    $scope.issueDetail.title = '自控';
                     break;
                 case 2:
                     issues = row.secondExamine.issues;
                     $scope.issueDetail = row.secondExamine;
-                    $scope.issueDetail.title = '审查';
+                    $scope.issueDetail.title = '防控';
                     break;
                 case 3:
                     issues = row.thirdExamine.issues;
                     $scope.issueDetail = row.thirdExamine;
-                    $scope.issueDetail.title = '核查';
+                    $scope.issueDetail.title = '监控';
             }
         });
 
@@ -190,7 +190,7 @@ angular.module('ws.app').controller('taxSecondCtrl', ['$rootScope', '$scope', '$
         $('#issueDetailModal').modal('show');
     };
 
-    //=============== 提交审查 =====================
+    //=============== 提交防控 =====================
 
     $scope.commitSecond = function (row) {
         console.info($scope.detailObj);

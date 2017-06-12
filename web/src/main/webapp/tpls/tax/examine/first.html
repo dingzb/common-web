@@ -16,7 +16,7 @@
             </form>
         </div>
     </ws-datagrid>
-    <!-- 自查 -->
+    <!-- 自控 -->
     <div class="modal fade" id="firstModal" tabindex="-1" role="dialog"
          aria-labelledby="myModalLabel" data-backdrop="static">
         <div class="modal-dialog modal-lg" role="document">
@@ -26,7 +26,7 @@
                             aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h4 class="modal-title">业务自查</h4>
+                    <h4 class="modal-title">业务自控</h4>
                 </div>
                 <div class="modal-body">
                     <table class="ws-form-table input-long">
@@ -86,7 +86,7 @@
                     <div ng-show="!isFirsted">
                         <form name="firstForm" novalidate>
                             <div class="ws-tax-form-line">
-                                <span>通过自查是否发现问题：</span>
+                                <span>通过自控是否发现问题：</span>
                                 <span>
                                 <label class="radio-inline">
                                     <input ng-model="hasIssue" type="radio" name="hasIssue" ng-value="true">是
@@ -116,12 +116,12 @@
                         </form>
                     </div>
                     <div ng-show="isFirsted" disabled>
-                        <span style="color: #f42c2a;">业务已经自查</span>
+                        <span style="color: #f42c2a;">业务已经自控</span>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button ng-disabled="isFirsted" type="button" data-dismiss="modal" class="btn-danger btn btn-sm"
-                            ng-click="commitFirst()">保存自查并提交
+                            ng-click="commitFirst()">保存自控并提交
                     </button>
                     <button type="button" class="btn-info btn btn-sm" data-dismiss="modal">关闭</button>
                 </div>

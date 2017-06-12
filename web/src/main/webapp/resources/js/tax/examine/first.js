@@ -90,7 +90,7 @@ angular.module('ws.app').controller('taxFirstCtrl', ['$rootScope', '$scope', '$h
             title: '业务时间'
         }, {
             field: 'firstExamine',
-            title: '自查意见',
+            title: '自控意见',
             formatter: function (row) {
                 var str = JSON.stringify(row);
                 str = str.replace(/"/g, "'");
@@ -108,7 +108,7 @@ angular.module('ws.app').controller('taxFirstCtrl', ['$rootScope', '$scope', '$h
             formatter: function (row) {
                 var str = JSON.stringify(row);
                 str = str.replace(/"/g, "'");
-                return '<button type="button" class="btn btn-link btn-sm" title="自查" onClick="angular.custom.taxBusinessFirst(' + str + ')">自查</button>'
+                return '<button type="button" class="btn btn-link btn-sm" title="自控" onClick="angular.custom.taxBusinessFirst(' + str + ')">自控</button>'
                     + "<button type=\"button\" class=\"btn btn-link btn-sm\" title='查看附件' onClick=\"angular.custom.showAttachment(" + str + ")\"><span class=\"glyphicon glyphicon-paperclip\" ></span></button>";
             }
         }],
@@ -131,7 +131,7 @@ angular.module('ws.app').controller('taxFirstCtrl', ['$rootScope', '$scope', '$h
         $.extend($scope.searchParams, clearSearch);
     };
 
-    //========= 自查 =================
+    //========= 自控 =================
     angular.custom.taxBusinessFirst = function (row) {
         $scope.$apply(function () {
             $scope.detailObj = row;
@@ -150,17 +150,17 @@ angular.module('ws.app').controller('taxFirstCtrl', ['$rootScope', '$scope', '$h
                 case 1:
                     issues = row.firstExamine.issues;
                     $scope.issueDetail = row.firstExamine;
-                    $scope.issueDetail.title = '自查';
+                    $scope.issueDetail.title = '自控';
                     break;
                 case 2:
                     issues = row.secondExamine.issues;
                     $scope.issueDetail = row.secondExamine;
-                    $scope.issueDetail.title = '审查';
+                    $scope.issueDetail.title = '防控';
                     break;
                 case 3:
                     issues = row.thirdExamine.issues;
                     $scope.issueDetail = row.thirdExamine;
-                    $scope.issueDetail.title = '核查';
+                    $scope.issueDetail.title = '监控';
             }
 
             $('#issue_issues').find('input').prop('checked', false);
@@ -175,7 +175,7 @@ angular.module('ws.app').controller('taxFirstCtrl', ['$rootScope', '$scope', '$h
         $('#issueDetailModal').modal('show');
     };
 
-    //=============== 提交自查 =====================
+    //=============== 提交自控 =====================
 
     $scope.commitFirst = function (row) {
         console.info($scope.detailObj);

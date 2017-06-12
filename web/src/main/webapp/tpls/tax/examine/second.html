@@ -16,7 +16,7 @@
             </form>
         </div>
     </ws-datagrid>
-    <!-- 审查 -->
+    <!-- 防控 -->
     <div class="modal fade" id="secondModal" tabindex="-1" role="dialog"
          aria-labelledby="myModalLabel" data-backdrop="static">
         <div class="modal-dialog modal-lg" role="document">
@@ -26,7 +26,7 @@
                             aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h4 class="modal-title">业务审查</h4>
+                    <h4 class="modal-title">业务防控</h4>
                 </div>
                 <div class="modal-body">
                     <table class="ws-form-table input-long">
@@ -86,7 +86,7 @@
                     <div ng-show="!isSecond && detailObj.status !== 4">
                         <form name="thirdForm" novalidate>
                             <div class="ws-tax-form-line">
-                                <span>通过自查是否发现问题：</span>
+                                <span>通过防控是否发现问题：</span>
                                 <span>
                                 <label class="radio-inline">
                                     <input ng-model="hasIssue" type="radio" name="hasIssue" ng-value="true">是
@@ -116,7 +116,7 @@
                         </form>
                     </div>
                     <div ng-show="isSecond">
-                        <span style="color: #f42c2a;">业务已经审查</span>
+                        <span style="color: #f42c2a;">业务已经防控</span>
                     </div>
                     <div ng-show="!isSecond && detailObj.status === 4">
                         <span style="color: #f42c2a;">业务已经被标记为有问题</span>
@@ -124,7 +124,7 @@
                 </div>
                 <div class="modal-footer">
                     <button ng-disabled="isSecond || detailObj.status === 4" type="button" data-dismiss="modal"
-                            class="btn-danger btn btn-sm" ng-click="commitSecond()">保存审查并提交
+                            class="btn-danger btn btn-sm" ng-click="commitSecond()">保存防控并提交
                     </button>
                     <button type="button" class="btn-info btn btn-sm" data-dismiss="modal">关闭</button>
                 </div>

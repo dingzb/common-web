@@ -90,7 +90,7 @@ angular.module('ws.app').controller('taxThirdCtrl', ['$rootScope', '$scope', '$h
             title: '业务时间'
         }, {
             field: 'firstExamine',
-            title: '自查意见',
+            title: '自控意见',
             formatter: function (row) {
                 var str = JSON.stringify(row);
                 str = str.replace(/"/g, "'");
@@ -104,7 +104,7 @@ angular.module('ws.app').controller('taxThirdCtrl', ['$rootScope', '$scope', '$h
             }
         }, {
             field: 'secondExamine',
-            title: '审查意见',
+            title: '防控意见',
             formatter: function (row) {
                 var str = JSON.stringify(row);
                 str = str.replace(/"/g, "'");
@@ -118,7 +118,7 @@ angular.module('ws.app').controller('taxThirdCtrl', ['$rootScope', '$scope', '$h
             }
         }, {
             field: 'thirdExamine',
-            title: '核查意见',
+            title: '监控意见',
             formatter: function (row) {
                 var str = JSON.stringify(row);
                 str = str.replace(/"/g, "'");
@@ -136,7 +136,7 @@ angular.module('ws.app').controller('taxThirdCtrl', ['$rootScope', '$scope', '$h
             formatter: function (row) {
                 var str = JSON.stringify(row);
                 str = str.replace(/"/g, "'");
-                return '<button type="button" class="btn btn-link btn-sm" title="核查" onClick="angular.custom.taxBusinessThird(' + str + ')">核查</button>'
+                return '<button type="button" class="btn btn-link btn-sm" title="监控" onClick="angular.custom.taxBusinessThird(' + str + ')">监控</button>'
                     + "<button type=\"button\" class=\"btn btn-link btn-sm\" title='查看附件' onClick=\"angular.custom.showAttachment(" + str + ")\"><span class=\"glyphicon glyphicon-paperclip\" ></span></button>";
             }
         }],
@@ -159,11 +159,11 @@ angular.module('ws.app').controller('taxThirdCtrl', ['$rootScope', '$scope', '$h
         $.extend($scope.searchParams, clearSearch);
     };
 
-    //========= 核查 =================
+    //========= 监控 =================
     angular.custom.taxBusinessThird = function (row) {
         $scope.$apply(function () {
             $scope.detailObj = row;
-            $scope.isThird = row.thirdExamine !== null; //是否进行过核查
+            $scope.isThird = row.thirdExamine !== null; //是否进行过监控
             $scope.hasIssue = false;
             console.info($scope.hasIssue)
         });
@@ -179,21 +179,21 @@ angular.module('ws.app').controller('taxThirdCtrl', ['$rootScope', '$scope', '$h
                 case 1:
                     issues = row.firstExamine.issues;
                     $scope.issueDetail = row.firstExamine;
-                    $scope.issueDetail.title = '自查';
+                    $scope.issueDetail.title = '自控';
                     break;
                 case 2:
                     issues = row.secondExamine.issues;
                     $scope.issueDetail = row.secondExamine;
-                    $scope.issueDetail.title = '审查';
+                    $scope.issueDetail.title = '防控';
                     break;
                 case 3:
                     issues = row.thirdExamine.issues;
                     $scope.issueDetail = row.thirdExamine;
-                    $scope.issueDetail.title = '核查';
+                    $scope.issueDetail.title = '监控';
             }
         });
 
-        $('#issue_issues').find('input').prop('checked', false);
+        $('#issue_issues').find('input').prop('chec ked', false);
 
         if (issues){
             issues.forEach(function (issue) {
@@ -205,7 +205,7 @@ angular.module('ws.app').controller('taxThirdCtrl', ['$rootScope', '$scope', '$h
         $('#issueDetailModal').modal('show');
     };
 
-    //=============== 提交核查 =====================
+    //=============== 提交监控 =====================
 
     $scope.commitThird = function (row) {
         console.info($scope.detailObj);
