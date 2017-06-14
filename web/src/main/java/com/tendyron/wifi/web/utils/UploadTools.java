@@ -64,6 +64,7 @@ public class UploadTools {
             }
         } catch (IOException e) {
             logger.error("", e);
+            throw new IOException(e.getMessage());
         } finally {
             if (is != null){
                 try {
