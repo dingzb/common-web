@@ -4,17 +4,49 @@
             <form class="form-inline">
                 <div class="ws-search-input-group">
                     <div class="form-group">
-                        <label for="taxpayerName">纳税人名称</label>
+                        <label for="taxpayerName" style="width: 103px;">纳税人名称</label>
                         <input class="form-control input-sm" type="text" placeholder="纳税人名称" id="taxpayerName"
-                               ng-model="searchParams.taxpayerName">
+                               ng-model="searchParams.taxpayerName" style="width: 146px;">
                     </div>
-                    <div class="ws-search-btn-group ws-inline">
-                        <button class="btn btn-info btn-sm" type="submit" ng-click="search()">查询</button>
-                        <button class="btn btn-info btn-sm" type="button" ng-click="resetSearch()">清空</button>
-                        <button class="btn btn-danger btn-sm" type="button" ng-click="del()"
-                                ws-permcode="tax.business.view.del">删除
-                        </button>
+                    <div class="form-group">
+                        <label for="taxpayerCode" style="width: 103px;">纳税人识别号</label>
+                        <input class="form-control input-sm" type="text" placeholder="纳税人识别号" id="taxpayerCode"
+                               ng-model="searchParams.taxpayerCode" style="width: 146px;">
                     </div>
+                    <div class="form-group">
+                        <label for="createUserName" style="width: 103px;">税收管理员</label>
+                        <input class="form-control input-sm" type="text" placeholder="税收管理员" id="createUserName"
+                               ng-model="searchParams.createUserName" style="width: 146px;">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="categoryType" style="width: 103px;">业务项目类型</label>
+                        <select id="categoryType" class="form-control input-sm" name="categoryType"
+                                ng-model="searchParams.categoryTypeId" ng-change="getCategory()"
+                                style="width: 146px;">
+                            <option value="">请选择</option>
+                            <option ng-selected="categoryType.id == searchParams.categoryTypeId"
+                                    ng-repeat="categoryType in categoryTypes"
+                                    value="{{categoryType.id}}" ng-bind="categoryType.name"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="category" style="width: 103px;">业务项目</label>
+                        <select id="category" class="form-control input-sm" name="category"
+                                ng-model="searchParams.categoryId" style="width: 146px;">
+                            <option value="">请选择</option>
+                            <option ng-selected="category.id == searchParams.categoryId"
+                                    ng-repeat="category in categories"
+                                    value="{{category.id}}" ng-bind="category.name"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="ws-search-btn-group ws-inline">
+                    <button class="btn btn-info btn-sm" type="submit" ng-click="search()">查询</button>
+                    <button class="btn btn-info btn-sm" type="button" ng-click="resetSearch()">清空</button>
+                    <button class="btn btn-danger btn-sm" type="button" ng-click="del()"
+                            ws-permcode="tax.business.view.del">删除
+                    </button>
                 </div>
             </form>
         </div>
@@ -250,7 +282,8 @@
                                         <td class="file-actions-cell">
                                             <div class="file-actions">
                                                 <div class="file-footer-buttons">
-                                                    <a title="查看详情" style="cursor: pointer;" target="_blank" href="{{attachment.url}}">
+                                                    <a title="查看详情" style="cursor: pointer;" target="_blank"
+                                                       href="{{attachment.url}}">
                                                         <i class="glyphicon glyphicon-zoom-in"></i>
                                                     </a>
                                                 </div>

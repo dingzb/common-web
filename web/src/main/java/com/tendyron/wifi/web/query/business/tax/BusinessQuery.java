@@ -12,6 +12,8 @@ import java.util.Set;
 public class BusinessQuery extends PagingQuery {
     private String content;
     private String categoryId;
+    private String categoryTypeId;
+
     private Boolean hasIssue;
     private Boolean firstHasIssue;
     private Boolean secondHasIssue;
@@ -44,6 +46,7 @@ public class BusinessQuery extends PagingQuery {
     * 为不同部门、职责，做权限区分
      */
     private String createUserId;
+    private String createUserName;
     private Set<String> createUserIds;
 
     public String getContent() {
@@ -60,6 +63,14 @@ public class BusinessQuery extends PagingQuery {
 
     public void setCategoryId(String categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public String getCategoryTypeId() {
+        return categoryTypeId;
+    }
+
+    public void setCategoryTypeId(String categoryTypeId) {
+        this.categoryTypeId = categoryTypeId;
     }
 
     public Boolean getHasIssue() {
@@ -156,6 +167,14 @@ public class BusinessQuery extends PagingQuery {
 
     public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId;
+    }
+
+    public String getCreateUserName() {
+        return createUserName;
+    }
+
+    public void setCreateUserName(String createUserName) {
+        this.createUserName = createUserName;
     }
 
     public Set<String> getCreateUserIds() {

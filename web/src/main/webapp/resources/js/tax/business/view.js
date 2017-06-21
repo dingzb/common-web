@@ -23,6 +23,33 @@ angular.module('ws.app').controller('taxViewCtrl', ['$rootScope', '$scope', '$ht
         });
     };
 
+    $http.post('app/tax/business/category/type/list', {}).success(function (data) {
+        if (data.success) {
+            $scope.categoryTypes = data.data;
+        } else if (data.message) {
+            $scope.alert(data.message, 'error');
+        }
+    }).error(function (data) {
+        $scope.alert(data, 'error');
+    });
+
+
+    $scope.getCategory = function () {
+        $scope.categories = [];
+        $scope.searchParams.categoryId = '';
+        $http.post('app/tax/business/category/list', {
+            typeId: $scope.searchParams.categoryTypeId
+        }).success(function (data) {
+            if (data.success) {
+                $.extend($scope.categories, data.data);
+            } else if (data.message) {
+                $scope.alert(data.message, 'error');
+            }
+        }).error(function (data) {
+            $scope.alert(data, 'error');
+        });
+    };
+
     function getIssue() {
         $http.post('app/tax/business/issue/list', {}).success(function (data) {
             if (data.success) {
@@ -152,7 +179,11 @@ angular.module('ws.app').controller('taxViewCtrl', ['$rootScope', '$scope', '$ht
     //清空
     $scope.resetSearch = function () {
         var clearSearch = {
-            taxpayerName: ''
+            taxpayerName: '',
+            taxpayerCode: '',
+            createUserName: '',
+            categoryTypeId: '',
+            categoryId: ''
         };
         $.extend($scope.datagrid.params, clearSearch);
         $.extend($scope.searchParams, clearSearch);

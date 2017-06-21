@@ -38,13 +38,13 @@ public class BusinessDaoImpl extends BaseDaoImpl<BusinessEntity> implements Busi
             hqlsb.append(" and (first.hasIssue = true or second.hasIssue = true or third.hasIssue = true)");
         }
 
-        if (bQuery.getHasIssue() == null && bQuery.getFirstHasIssue() != null){
+        if (bQuery.getHasIssue() == null && bQuery.getFirstHasIssue() != null) {
             hqlsb.append(" and {0}.firstExamine.hasIssue = true");
         }
-        if (bQuery.getHasIssue() == null && bQuery.getSecondHasIssue() != null){
+        if (bQuery.getHasIssue() == null && bQuery.getSecondHasIssue() != null) {
             hqlsb.append(" and {0}.secondExamine.hasIssue = true");
         }
-        if (bQuery.getHasIssue() == null && bQuery.getThirdHasIssue() != null){
+        if (bQuery.getHasIssue() == null && bQuery.getThirdHasIssue() != null) {
             hqlsb.append(" and {0}.thirdExamine.hasIssue = true");
         }
 
@@ -52,13 +52,21 @@ public class BusinessDaoImpl extends BaseDaoImpl<BusinessEntity> implements Busi
             hqlsb.append(" and {0}.taxpayerName like :taxpayerName");
             params.put("taxpayerName", "%" + bQuery.getTaxpayerName() + "%");
         }
+        if (!StringTools.isEmpty(bQuery.getTaxpayerCode())) {
+            hqlsb.append(" and {0}.taxpayerCode like :taxpayerCode");
+            params.put("taxpayerCode", "%" + bQuery.getTaxpayerCode() + "%");
+        }
         if (!StringTools.isEmpty(bQuery.getAgencyId())) {
             hqlsb.append(" and {0}.agency.id = :agencyId");
             params.put("agencyId", bQuery.getAgencyId());
         }
-        if (!StringTools.isEmpty(bQuery.getCategoryId())){
+        if (!StringTools.isEmpty(bQuery.getCategoryId())) {
             hqlsb.append(" and {0}.category.id = :categoryId");
             params.put("categoryId", bQuery.getCategoryId());
+        }
+        if (!StringTools.isEmpty(bQuery.getCategoryTypeId())) {
+            hqlsb.append(" and {0}.category.type.id = :categoryTypeId");
+            params.put("categoryTypeId", bQuery.getCategoryTypeId());
         }
         if (!StringTools.isEmpty(bQuery.getIssueId())) {
             hqlsb.append(" and {0}.issue.id = :issueId");
@@ -83,17 +91,21 @@ public class BusinessDaoImpl extends BaseDaoImpl<BusinessEntity> implements Busi
             params.put("busTimeEnd", bQuery.getBusTimeEnd());
         }
 
-        if (bQuery.getStatus() != null){
+        if (bQuery.getStatus() != null) {
             hqlsb.append(" and {0}.status = :status");
             params.put("status", bQuery.getStatus());
         }
-        if(bQuery.getIncludeStatus() != null){
+        if (bQuery.getIncludeStatus() != null) {
             hqlsb.append(" and {0}.status in (:statuses)");
             params.put("statuses", bQuery.getIncludeStatus());
         }
-        if (!StringTools.isEmpty(bQuery.getCreateUserId())){
+        if (!StringTools.isEmpty(bQuery.getCreateUserId())) {
             hqlsb.append(" and {0}.create.id = :create");
             params.put("create", bQuery.getCreateUserId());
+        }
+        if (!StringTools.isEmpty(bQuery.getCreateUserName())) {
+            hqlsb.append(" and {0}.create.name like :createUserName");
+            params.put("createUserName", "%" + bQuery.getCreateUserName() + "%");
         }
         if (bQuery.getCreateUserIds() != null) {
             hqlsb.append(" and {0}.create.id in (:creates)");
