@@ -1,58 +1,65 @@
 /**
  * Created by Dzb on 2017/3/30.
- *
  */
 
 angular.module('ws.login', []).controller('loginInCtrl', ['$scope', '$http', '$state', '$translate', 'authorizationServ', function ($scope, $http, $state, $translate, authorizationServ) {
     
-    var validate = function () {
-        if (!$scope.username){
-            $scope.errMsg = '用户名不能为空';
-            return false;
-        }
-        if (!$scope.password) {
-            $scope.errMsg = '密码不能为空';
-            return false;
-        }
+    /**
+     * verify code
+     */
+    $scope.validateVerifyCode = function (fn) {
         if (!$scope.verifyCode) {
-            $scope.errMsg = '验证码不能为空';
-            return false;
+            // $scope.errmsg = "验证码不能为空！";
+            $translate('login.error.empty.password').then(function(t){$scope.errmsg = t;});
+            $scope.error = true;
+            return;
         }
-        return true;
+        if (!(/^[a-z,A-Z0-9]{4}$/.test($scope.verifyCode))) {
+            $scope.errmsg = "验证码格式不正确！";
+            $scope.error = true;
+            return;
+        }
+        $http.post('app/verifyCode/verify', {'code': $('#imgCode').val()}).success(function (data) {
+            if (!data.success) {
+                $scope.errmsg = "验证码不对！";
+                $scope.error = true;
+            } else {
+                $scope.errmsg = "";
+                $scope.error = false;
+                if (typeof fn === 'function') {
+                    fn();
+                }
+            }
+        });
     };
     /**
      * login
      */
     $scope.login = function () {
-        if (!validate()){
+
+        if ($scope.error) {
             return;
         }
+
         $http.post('app/login', {
             'username': $scope.username,
             'password': $scope.password,
             'verify': $scope.verifyCode
         }, postCfg).success(function (data) {
             if (data.success) {
-                $scope.errMsg = undefined;
                 //保存权限认证信息
                 authorizationServ.set(data.data);
                 $state.go('main.tax');
                 // $state.go('main.welcome');
             } else {
                 if (data.message) {
-                    $scope.errMsg = data.message;
-                    $scope.password = '';
-                    $scope.verifyCode = '';
-                    $scope.updateVerify();
+                    $scope.errmsg = data.message;
                 } else {
-                    $scope.errMsg = '未知错误';
+                    $scope.errmsg = '未知错误';
                 }
+                $scope.error = true;
             }
         });
-    };
-
-    $scope.updateVerify = function () {
-        $('#verifyCode').attr('src', 'app/verifyCode/image?t='+new Date());
     };
 
     /* 设置语言 */

@@ -1,134 +1,56 @@
-.logincenter {
-    /*定位*/
-
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin: -110px 0 0 -227px;
-    width: 454px;
-    height: 220px;
-    /*设置最小宽高度*/
-
-    min-width: 450px;
-    min-height: 220px;
-    color: #fff;
-    background: rgba(94, 96, 100, .4) none repeat scroll 0 0 !important;
-    /*border: 1px solid #337ab7;*/
-
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-}
-
-.loginbg {
-    min-width: 450px;
-    min-height: 220px;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    z-index: -9999;
-}
-
-.loginbg img {
-    min-width: 700px;
-    min-height: 300px;
-    width: 100%;
-    height: 100%;
-}
-
-.copy {
-    color: #666666;
-    text-align: center;
-    font-size: 12px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
-
-.btn-login {
-    color: #fff;
-    background-color: #FD7310;
-}
-
-.btn-reg {
-    color: #000;
-    background-color: #d3d3d3;
-}
-
-.logincenter .logo {
-    margin-left: 35px;
-    height: 55px;
-}
-
-.logincenter .errmsgs {
-    margin: 20px 0 0 30px;
-    min-width: 56%;
-    border: #aa4442 solid 1px;
-    background-color: #ffe7e7;
-    color: #ff4401;
-    border-radius: 4px;
-}
-
-.logincenter .errmsgs .msg {
-    margin-left: 10px;
-}
-
-.logincenter .errmsgs .msg img {
-    margin-left: -5px;
-    margin-top: -3px;
-    margin-right: 3px;
-}
-
-.logincenter .input-group .removeicon {
-    right: 3px;
-    color: #666666;
-    z-index: 3;
-    cursor: pointer;
-    pointer-events: auto;
-}
-
-.login-bg-xiangsu {
+.login-bg {
     clear: both;
     min-width: 1280px;
-    height: 503px;
-    background: url(../images/login-bg-xiangsu.png) repeat;
-}
-.login-link li, .help {
-    float: left;
-    font-family: '黑体';
-    font-size: 14px;
-    color: #888;
+    height: 489px;
+    background: url(../images/bg_02.png) repeat;
+    position: relative;
 }
 
 .login-main {
-    background: url(../images/login-image.png) no-repeat;
-    height: 503px;
-    position: relative;
-    clear: both;
-    width: 100%;
-    margin: 0px auto;
-}
-
-.login-zhuce {
-    background: url(../images/zhuce-bg.png) no-repeat;
-    width: 361px;
-    height: 378px;
+    background: url(../images/bg_con.png) no-repeat;
     position: absolute;
-    bottom: 78px;
-    right: 190px;
+    clear: both;
+    width: 562px;
+    height: 297px;
+    top: 80px;
+    left: 80px;
 }
 
-.login-zhuce-top {
-    background: url(../images/line1.png) no-repeat;
-    background-position: bottom;
-    width: 302px;
-    margin: 0px auto;
+.login-login {
+    width: 361px;
+    height: 317px;
+    position: absolute;
+    top: 86px;
+    right: 160px;
+    background-color: #ffffff;
+    -webkit-border-radius:10px;
+    -moz-border-radius:10px;
+    border-radius:10px;
+}
+
+.login-login input {
+    height: 35px;
+}
+
+.login-login-title {
+    width: 341px;
+    border-bottom: 1px solid #bfbdbc;
     text-align: center;
     color: #606060;
-    font-size: 20px;
-    font-family: '微软雅黑';
+    font-size: 17px;
+    font-family: '微软雅黑', serif;
     height: 38px;
-    margin-top: 45px;
+    margin: 20px 10px 0 10px;
 }
+
+.login-login-error {
+    width: 341px;
+    text-align: left;
+    height: 15px;
+    color: #cd321e;
+    padding: 10px 54px 0 54px;
+}
+
 .login-top-box {
     width: 100%;
     height: 100px;
@@ -139,8 +61,7 @@
     height: 46px;
     line-height: 46px;
     width: 1200px;
-    margin: 0px auto;
-    margin-top: 37px;
+    margin: 30px auto 0 20px;
 }
 
 .login-top img {
@@ -149,7 +70,7 @@
 
 .login-title {
     font-size: 35px;
-    font-family: '黑体';
+    font-family: '黑体', serif;
     margin-left: 15px;
     color: #333;
 }
@@ -162,9 +83,56 @@
 .login-link ul {
     list-style: none;
 }
-.Dl_zhuce_biaodan {
+
+.login-login-form {
     width: 255px;
-    margin: 0px auto;
+    margin: 10px auto;
+}
+.login-login-username {
+    width: 255px;
+    margin-top: 13px;
+    border: #b2afaf 1px solid;
+    text-indent: 42px;
+    line-height: 38px;
+    font-family: '微软雅黑', serif;
+    font-size: 14px;
+    color: #4D5055;
+    background: url(../images/yonghu.png) no-repeat 10px center;
+}
+.login-login-password {
+    width: 255px;
+    margin-top: 13px;
+    border: #b2afaf 1px solid;
+    text-indent: 42px;
+    line-height: 38px;
+    font-family: '微软雅黑', serif;
+    font-size: 14px;
+    color: #4D5055;
+    background: url(../images/mima.png) no-repeat 10px center;
+}
+
+.login-login-verify {
+    width: 165px;
+    margin-top: 13px;
+    border: #b2afaf 1px solid;
+    text-indent: 12px;
+    line-height: 38px;
+    font-family: '微软雅黑', serif;
+    font-size: 14px;
+    color: #4D5055;
+}
+
+.login-login-login {
+    width: 255px;
+    margin-top: 13px;
+    background-color: #6dacf2;
+    font-family: '微软雅黑', serif;
+    text-align: center;
+    font-size: 18px;
+    color: #fff;
+    border: none;
+    height: 40px;
+    cursor: pointer;
 }
 
 .Dl_zhuce_biaodan input {
