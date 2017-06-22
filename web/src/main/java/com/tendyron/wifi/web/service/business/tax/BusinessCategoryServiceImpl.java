@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.util.BeanUtil;
 import com.tendyron.wifi.web.dao.business.tax.BusinessCategoryDao;
 import com.tendyron.wifi.web.entity.business.tax.BusCategoryEntity;
 import com.tendyron.wifi.web.model.business.tax.BusCategoryMode;
+import com.tendyron.wifi.web.model.business.tax.BusCategoryTypeModel;
 import com.tendyron.wifi.web.service.BaseServiceImpl;
 import com.tendyron.wifi.web.service.ServiceException;
 import org.slf4j.Logger;
@@ -14,7 +15,9 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Neo on 2017/5/10.

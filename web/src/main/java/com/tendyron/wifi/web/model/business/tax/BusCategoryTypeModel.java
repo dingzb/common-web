@@ -5,6 +5,7 @@ import com.tendyron.wifi.web.entity.business.tax.BusCategoryEntity;
 import com.tendyron.wifi.web.model.BaseModel;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -14,6 +15,7 @@ import java.util.Set;
 
 public class BusCategoryTypeModel extends BaseModel {
     private String name;
+    private List<BusCategoryMode> categories;
 
     public String getName() {
         return name;
@@ -21,5 +23,13 @@ public class BusCategoryTypeModel extends BaseModel {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<BusCategoryMode> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<BusCategoryMode> categories) {
+        this.categories = categories;
     }
 }

@@ -414,6 +414,9 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
 
         bQuery.setBusTimeStart(query.getBusTimeStart());
         bQuery.setBusTimeEnd(query.getBusTimeEnd());
+        if (!StringTools.isEmpty(query.getCategoryIdsStr())){
+            bQuery.setIncCategoryIds(query.getCategoryIds());
+        }
 
         List<XianjuModel> sms = new ArrayList<>();
 
@@ -540,7 +543,9 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
 
         bQuery.setBusTimeStart(query.getBusTimeStart());
         bQuery.setBusTimeEnd(query.getBusTimeEnd());
-
+        if (!StringTools.isEmpty(query.getCategoryIdsStr())){
+            bQuery.setIncCategoryIds(query.getCategoryIds());
+        }
         List<FenjuModel> fms = new ArrayList<>();
 
         try {
@@ -665,7 +670,9 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
 
         bQuery.setBusTimeStart(query.getBusTimeStart());
         bQuery.setBusTimeEnd(query.getBusTimeEnd());
-
+        if (!StringTools.isEmpty(query.getCategoryIdsStr())){
+            bQuery.setIncCategoryIds(query.getCategoryIds());
+        }
         bQuery.setCreateUserId(query.getUserId());
 
         List<StatisticsCategoryTypeModel> sctms = new ArrayList<>();

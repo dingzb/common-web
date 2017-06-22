@@ -4,7 +4,7 @@
 
 angular.module('ws.app').controller('taxXianjuCtrl', ['$rootScope', '$scope', '$http', function ($rootScope, $scope, $http) {
     $scope.searchParams = {};
-    $scope.issues ={};
+    $scope.issues = {};
     $scope.issueDetailSearchParams = {};
     //日期控件初始化
     $scope.initDtp = function (e) {
@@ -16,6 +16,16 @@ angular.module('ws.app').controller('taxXianjuCtrl', ['$rootScope', '$scope', '$
             $scope.searchParams.busTimeEnd = d;
         });
     };
+
+    $http.post('app/tax/business/category/list/all', {}).success(function (data) {
+        if (data.success) {
+            $scope.categoryTypes = data.data;
+        } else if (data.message) {
+            $scope.alert(data.message, 'error');
+        }
+    }).error(function (data) {
+        $scope.alert(data, 'error');
+    });
 
     $http.post('app/tax/agency/list', {}).success(function (data) {
         if (data.success) {
@@ -37,29 +47,46 @@ angular.module('ws.app').controller('taxXianjuCtrl', ['$rootScope', '$scope', '$
         $scope.alert(data, 'error');
     });
 
+    $scope.resetStatement = function () {
+        $scope.searchParams.busTimeStart = '';
+        $scope.searchParams.busTimeEnd = '';
+    };
+
     $scope.statement = function () {
 
         $scope.statementing = true;
 
-        userIds = [];
+        agencyIds = [];
         var ags = $('#agencies').find('input');
         $.each(ags, function (i) {
             var ag = $(ags[i]);
             if (ag.is(':checked')) {
-                userIds.push(ag.attr('id'));
+                agencyIds.push(ag.attr('id'));
             }
         });
-
         var agencyIdStr = '';
-
-        userIds.forEach(function (aId) {
+        agencyIds.forEach(function (aId) {
             agencyIdStr += (aId + ',');
         });
-
         agencyIdStr = agencyIdStr.substring(0, agencyIdStr.length - 1);
+
+        categoryIds = [];
+        var cas = $('#categories').find('input');
+        $.each(cas, function (i) {
+            var ca = $(cas[i]);
+            if (ca.is(':checked')) {
+                categoryIds.push(ca.attr('id'));
+            }
+        });
+        var categoryIdsStr = '';
+        categoryIds.forEach(function (cId) {
+            categoryIdsStr += (cId + ',');
+        });
+        categoryIdsStr = categoryIdsStr.substring(0, categoryIdsStr.length - 1);
 
         $http.post('app/tax/statistics/xianju', {
             agencyIdsStr: agencyIdStr,
+            categoryIdsStr: categoryIdsStr,
             busTimeStart: $scope.searchParams.busTimeStart,
             busTimeEnd: $scope.searchParams.busTimeEnd
         }).success(function (data) {
@@ -320,7 +347,7 @@ angular.module('ws.app').controller('taxXianjuCtrl', ['$rootScope', '$scope', '$
 
                 $('#issue_issues').find('input').prop('checked', false);
 
-                if ($scope.examineDetail.issues){
+                if ($scope.examineDetail.issues) {
                     $scope.examineDetail.issues.forEach(function (issue) {
                         $('#issue_issues').find('input[value=' + issue.id + ']').prop('checked', true);
                     });

@@ -19,6 +19,16 @@ angular.module('ws.app').controller('taxPersonCtrl', ['$rootScope', '$scope', '$
         });
     };
 
+    $http.post('app/tax/business/category/list/all', {}).success(function (data) {
+        if (data.success) {
+            $scope.categoryTypes = data.data;
+        } else if (data.message) {
+            $scope.alert(data.message, 'error');
+        }
+    }).error(function (data) {
+        $scope.alert(data, 'error');
+    });
+
     $http.post('app/tax/business/issue/list', {}).success(function (data) {
         if (data.success) {
             $.extend($scope.issues, data.data);
@@ -29,11 +39,30 @@ angular.module('ws.app').controller('taxPersonCtrl', ['$rootScope', '$scope', '$
         $scope.alert(data, 'error');
     });
 
+    $scope.resetStatement = function () {
+        $scope.searchParams.busTimeStart = '';
+        $scope.searchParams.busTimeEnd = '';
+    };
+
     $scope.person = function () {
         $scope.statementing = true;
 
+        categoryIds = [];
+        var cas = $('#categories').find('input');
+        $.each(cas, function (i) {
+            var ca = $(cas[i]);
+            if (ca.is(':checked')) {
+                categoryIds.push(ca.attr('id'));
+            }
+        });
+        var categoryIdsStr = '';
+        categoryIds.forEach(function (cId) {
+            categoryIdsStr += (cId + ',');
+        });
+        categoryIdsStr = categoryIdsStr.substring(0, categoryIdsStr.length - 1);
+
         $http.post('app/tax/statistics/person', {
-            // agencyIdsStr: agencyIdStr,
+            categoryIdsStr: categoryIdsStr,
             busTimeStart: $scope.searchParams.busTimeStart,
             busTimeEnd: $scope.searchParams.busTimeEnd
         }).success(function (data) {

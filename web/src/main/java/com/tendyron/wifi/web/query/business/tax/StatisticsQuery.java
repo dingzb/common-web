@@ -1,6 +1,7 @@
 package com.tendyron.wifi.web.query.business.tax;
 
 import com.tendyron.wifi.web.query.BaseQuery;
+import com.tendyron.wifi.web.utils.StringTools;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -22,6 +23,10 @@ public class StatisticsQuery extends BaseQuery {
     private String categoryTypeIdsStr;
     private String categoryIdsStr;
     private String issueIdStr;
+
+    public String[] getCategoryIds(){
+        return StringTools.isEmpty(categoryIdsStr) ? new String[0] : categoryIdsStr.split(",");
+    }
 
     public Date getStartCreate() {
         return startCreate;

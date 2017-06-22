@@ -1,10 +1,42 @@
 <div ng-controller="taxXianjuCtrl">
     <div>
-        <div class="collapse in" id="agencies" style="margin-bottom: 15px;">
-            <label style="font-weight: bold;">机构选择：</label>
-            <label ng-repeat="agency in agencies" class="checkbox-inline">
-                <input type="checkbox" id="{{agency.id}}"> {{agency.name}}
-            </label>
+        <div style="margin-bottom: 15px;">
+            <div class="collapse" id="agencies">
+                <table class="ws-search-group">
+                    <tbody>
+                    <tr>
+                        <th style="width: 100px;">业务类型选择</th>
+                        <td style="padding-top: 3px;">
+                            <div class="ws-search-group">
+                                <label ng-repeat="agency in agencies" class="checkbox-inline">
+                                    <input checked type="checkbox" id="{{agency.id}}"> {{agency.name}}
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div style="height: 10px;"></div>
+            </div>
+            <div class="collapse" id="categories">
+                <table class="ws-search-group">
+                    <tbody>
+                    <tr>
+                        <th rowspan="2" style="width: 100px;">业务类型选择</th>
+                        <th ng-repeat="categoryType in categoryTypes">{{categoryType.name}}</th>
+                    </tr>
+                    <tr>
+                        <td ng-repeat="categoryType in categoryTypes">
+                            <div class="checkbox" ng-repeat="category in categoryType.categories">
+                                <label>
+                                    <input checked type="checkbox" id="{{category.id}}">{{category.name}}
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
         <div>
             <form class="form-inline">
@@ -35,21 +67,26 @@
                         <button class="btn btn-info btn-sm" type="submit" ng-click="statement(searchParams.agencyId)">
                             查询
                         </button>
-                        <button class="btn btn-info btn-sm" type="button" ng-click="resetSearch()">清空</button>
-                        <!--<button class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#agencies">机关选择</button>-->
+                        <button class="btn btn-info btn-sm" type="button" ng-click="resetStatement()">清空</button>
+                        <button class="btn btn-success btn-sm" data-toggle="collapse" data-target="#agencies">机关选择
+                        </button>
+                        <button class="btn btn-success btn-sm" data-toggle="collapse" data-target="#categories">类型选择
+                        </button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
-    <div >
+    <div class="ws-search-area-split"></div>
+    <div>
         <div class="progress" style="margin-top: 50px;" ng-show="statementing === true">
-            <div class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+            <div class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar"
+                 aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
                 <span>正在查询</span>
             </div>
         </div>
     </div>
-    <div style="padding: 20px;" ng-show="statementing === false">
+    <div style="padding: 20px 0;" ng-show="statementing === false">
         <table class="ws-statement">
             <thead>
             <tr>
@@ -173,28 +210,30 @@
                             <tr>
                                 <th><label for="detail_taxpayer_code">纳税人识别号：</label></th>
                                 <td>
-                                    <input id="detail_taxpayer_code" class="form-control input-sm" type="text" name="taxpayerCode"
+                                    <input id="detail_taxpayer_code" class="form-control input-sm" type="text"
+                                           name="taxpayerCode"
                                            placeholder="纳税人识别号" readonly
                                            ng-model="detailObj.taxpayerCode">
                                 </td>
                                 <th><label for="detail_taxpayer_name">纳税人名称：</label></th>
                                 <td>
-                                    <input id="detail_taxpayer_name" class="form-control input-sm" type="text" name="taxpayerName"
+                                    <input id="detail_taxpayer_name" class="form-control input-sm" type="text"
+                                           name="taxpayerName"
                                            placeholder="纳税人名称" readonly
                                            ng-model="detailObj.taxpayerName">
                                 </td>
                             </tr>
                             <!--<tr>-->
-                                <!--<th><label for="detail_category_type">业务类型：</label></th>-->
-                                <!--<td>-->
-                                    <!--<input id="detail_category_type" class="form-control input-sm" name="categoryTypeId"-->
-                                           <!--ng-model="detailObj.categoryTypeName" readonly>-->
-                                <!--</td>-->
-                                <!--<th><label for="detail_category">业务项目：</label></th>-->
-                                <!--<td>-->
-                                    <!--<input id="detail_category" class="form-control input-sm" name="categoryId"-->
-                                           <!--ng-model="detailObj.categoryName" readonly>-->
-                                <!--</td>-->
+                            <!--<th><label for="detail_category_type">业务类型：</label></th>-->
+                            <!--<td>-->
+                            <!--<input id="detail_category_type" class="form-control input-sm" name="categoryTypeId"-->
+                            <!--ng-model="detailObj.categoryTypeName" readonly>-->
+                            <!--</td>-->
+                            <!--<th><label for="detail_category">业务项目：</label></th>-->
+                            <!--<td>-->
+                            <!--<input id="detail_category" class="form-control input-sm" name="categoryId"-->
+                            <!--ng-model="detailObj.categoryName" readonly>-->
+                            <!--</td>-->
                             <!--</tr>-->
                             <tr>
                                 <th><label for="detail_time">业务时间：</label></th>
@@ -210,9 +249,11 @@
                                 </td>
                                 <th><label for="detail_desc">业务描述：</label></th>
                                 <td>
-                                    <textarea id="detail_desc" class="form-control" type="text" name="description" readonly
+                                    <textarea id="detail_desc" class="form-control" type="text" name="description"
+                                              readonly
                                               style="resize: none; height: 100px; width: 250px; margin-top: 10px;"
-                                              placeholder="业务描述" ng-model="detailObj.description" maxlength="500" required></textarea>
+                                              placeholder="业务描述" ng-model="detailObj.description" maxlength="500"
+                                              required></textarea>
                                 </td>
                             </tr>
                         </table>
@@ -238,56 +279,56 @@
                 </div>
                 <div class="modal-body">
                     <!--<table class="ws-form-table input-long">-->
-                        <!--<tr>-->
-                            <!--<th><label for="issue_detail_taxpayer_code">纳税人识别号：</label></th>-->
-                            <!--<td>-->
-                                <!--<input id="issue_detail_taxpayer_code" class="form-control input-sm" type="text"-->
-                                       <!--name="taxpayerCode"-->
-                                       <!--placeholder="纳税人识别号" readonly-->
-                                       <!--ng-model="examineDetail.taxpayerCode">-->
-                            <!--</td>-->
-                            <!--<th><label for="issue_detail_taxpayer_name">纳税人名称：</label></th>-->
-                            <!--<td>-->
-                                <!--<input id="issue_detail_taxpayer_name" class="form-control input-sm" type="text"-->
-                                       <!--name="taxpayerName"-->
-                                       <!--placeholder="纳税人名称" readonly-->
-                                       <!--ng-model="examineDetail.taxpayerName">-->
-                            <!--</td>-->
-                        <!--</tr>-->
-                        <!--<tr>-->
-                            <!--<th><label for="issue_detail_category_type">业务类型：</label></th>-->
-                            <!--<td>-->
-                                <!--<input id="issue_detail_category_type" class="form-control input-sm"-->
-                                       <!--name="categoryTypeId"-->
-                                       <!--ng-model="detailObj.categoryTypeName" readonly>-->
-                            <!--</td>-->
-                            <!--<th><label for="issue_detail_category">业务项目：</label></th>-->
-                            <!--<td>-->
-                                <!--<input id="issue_detail_category" class="form-control input-sm" name="categoryId"-->
-                                       <!--ng-model="detailObj.categoryName" readonly>-->
-                            <!--</td>-->
-                        <!--</tr>-->
-                        <!--<tr>-->
-                            <!--<th><label for="issue_detail_time">业务时间：</label></th>-->
-                            <!--<td>-->
-                                <!--<div class="input-group input-group-sm ws-datetimepicker">-->
-                                        <!--<span class="input-group-addon">-->
-                                            <!--<span class="glyphicon glyphicon-calendar"></span>-->
-                                        <!--</span>-->
-                                    <!--<input size="16" type="text" id="issue_detail_time" name="busTime" readonly-->
-                                           <!--class="form-control input-sm" style="width: 215px;"-->
-                                           <!--placeholder="年-月-日 时:分" ng-model="examineDetail.busTime">-->
-                                <!--</div>-->
-                            <!--</td>-->
-                            <!--<th><label for="issue_detail_desc">业务描述：</label></th>-->
-                            <!--<td>-->
-                                    <!--<textarea id="issue_detail_desc" class="form-control" type="text" name="description"-->
-                                              <!--readonly-->
-                                              <!--style="resize: none; height: 100px; width: 250px; margin-top: 10px;"-->
-                                              <!--placeholder="业务描述" ng-model="examineDetail.description" maxlength="500"-->
-                                              <!--required></textarea>-->
-                            <!--</td>-->
-                        <!--</tr>-->
+                    <!--<tr>-->
+                    <!--<th><label for="issue_detail_taxpayer_code">纳税人识别号：</label></th>-->
+                    <!--<td>-->
+                    <!--<input id="issue_detail_taxpayer_code" class="form-control input-sm" type="text"-->
+                    <!--name="taxpayerCode"-->
+                    <!--placeholder="纳税人识别号" readonly-->
+                    <!--ng-model="examineDetail.taxpayerCode">-->
+                    <!--</td>-->
+                    <!--<th><label for="issue_detail_taxpayer_name">纳税人名称：</label></th>-->
+                    <!--<td>-->
+                    <!--<input id="issue_detail_taxpayer_name" class="form-control input-sm" type="text"-->
+                    <!--name="taxpayerName"-->
+                    <!--placeholder="纳税人名称" readonly-->
+                    <!--ng-model="examineDetail.taxpayerName">-->
+                    <!--</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                    <!--<th><label for="issue_detail_category_type">业务类型：</label></th>-->
+                    <!--<td>-->
+                    <!--<input id="issue_detail_category_type" class="form-control input-sm"-->
+                    <!--name="categoryTypeId"-->
+                    <!--ng-model="detailObj.categoryTypeName" readonly>-->
+                    <!--</td>-->
+                    <!--<th><label for="issue_detail_category">业务项目：</label></th>-->
+                    <!--<td>-->
+                    <!--<input id="issue_detail_category" class="form-control input-sm" name="categoryId"-->
+                    <!--ng-model="detailObj.categoryName" readonly>-->
+                    <!--</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                    <!--<th><label for="issue_detail_time">业务时间：</label></th>-->
+                    <!--<td>-->
+                    <!--<div class="input-group input-group-sm ws-datetimepicker">-->
+                    <!--<span class="input-group-addon">-->
+                    <!--<span class="glyphicon glyphicon-calendar"></span>-->
+                    <!--</span>-->
+                    <!--<input size="16" type="text" id="issue_detail_time" name="busTime" readonly-->
+                    <!--class="form-control input-sm" style="width: 215px;"-->
+                    <!--placeholder="年-月-日 时:分" ng-model="examineDetail.busTime">-->
+                    <!--</div>-->
+                    <!--</td>-->
+                    <!--<th><label for="issue_detail_desc">业务描述：</label></th>-->
+                    <!--<td>-->
+                    <!--<textarea id="issue_detail_desc" class="form-control" type="text" name="description"-->
+                    <!--readonly-->
+                    <!--style="resize: none; height: 100px; width: 250px; margin-top: 10px;"-->
+                    <!--placeholder="业务描述" ng-model="examineDetail.description" maxlength="500"-->
+                    <!--required></textarea>-->
+                    <!--</td>-->
+                    <!--</tr>-->
                     <!--</table>-->
 
 
@@ -297,11 +338,13 @@
                             <span>通过{{examineDetail.title}}是否发现问题：</span>
                             <span>
                                 <label class="radio-inline">
-                                    <input ng-model="examineDetail.hasIssue" type="radio" name="hasIssue" ng-value="true"
+                                    <input ng-model="examineDetail.hasIssue" type="radio" name="hasIssue"
+                                           ng-value="true"
                                            disabled>是
                                 </label>
                                 <label class="radio-inline">
-                                    <input ng-model="examineDetail.hasIssue" type="radio" name="hasIssue" ng-value="false"
+                                    <input ng-model="examineDetail.hasIssue" type="radio" name="hasIssue"
+                                           ng-value="false"
                                            disabled>否
                                 </label>
                             </span>

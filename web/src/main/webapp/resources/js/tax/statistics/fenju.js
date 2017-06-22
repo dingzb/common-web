@@ -17,6 +17,16 @@ angular.module('ws.app').controller('taxFenjuCtrl', ['$rootScope', '$scope', '$h
         });
     };
 
+    $http.post('app/tax/business/category/list/all', {}).success(function (data) {
+        if (data.success) {
+            $scope.categoryTypes = data.data;
+        } else if (data.message) {
+            $scope.alert(data.message, 'error');
+        }
+    }).error(function (data) {
+        $scope.alert(data, 'error');
+    });
+
     $http.post('app/tax/agency/user/list', {}).success(function (data) {
         if (data.success) {
             $scope.users = data.data;
@@ -47,29 +57,46 @@ angular.module('ws.app').controller('taxFenjuCtrl', ['$rootScope', '$scope', '$h
         $scope.alert(data, 'error');
     });
 
+    $scope.resetStatement = function () {
+        $scope.searchParams.busTimeStart = '';
+        $scope.searchParams.busTimeEnd = '';
+    };
+
     $scope.fenjuStatistics = function () {
 
         $scope.statementing = true;
 
         var userIds = [];
-        var ags = $('#users').find('input');
-        $.each(ags, function (i) {
-            var ag = $(ags[i]);
-            if (ag.is(':checked')) {
-                userIds.push(ag.attr('id'));
+        var users = $('#users').find('input');
+        $.each(users, function (i) {
+            var user = $(users[i]);
+            if (user.is(':checked')) {
+                userIds.push(user.attr('id'));
             }
         });
-
         var userIdsStr = '';
-
-        userIds.forEach(function (aId) {
-            userIdsStr += (aId + ',');
+        userIds.forEach(function (uId) {
+            userIdsStr += (uId + ',');
         });
-
         userIdsStr = userIdsStr.substring(0, userIdsStr.length - 1);
+
+        categoryIds = [];
+        var cas = $('#categories').find('input');
+        $.each(cas, function (i) {
+            var ca = $(cas[i]);
+            if (ca.is(':checked')) {
+                categoryIds.push(ca.attr('id'));
+            }
+        });
+        var categoryIdsStr = '';
+        categoryIds.forEach(function (cId) {
+            categoryIdsStr += (cId + ',');
+        });
+        categoryIdsStr = categoryIdsStr.substring(0, categoryIdsStr.length - 1);
 
         $http.post('app/tax/statistics/fenju', {
             userIdsStr: userIdsStr,
+            categoryIdsStr: categoryIdsStr,
             busTimeStart: $scope.searchParams.busTimeStart,
             busTimeEnd: $scope.searchParams.busTimeEnd
         }).success(function (data) {

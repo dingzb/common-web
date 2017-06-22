@@ -1,10 +1,42 @@
 <div ng-controller="taxFenjuCtrl">
     <div>
-        <div class="collapse in" id="users" style="margin-bottom: 15px;">
-            <label style="font-weight: bold;">用户选择：</label>
-            <label ng-repeat="user in users" class="checkbox-inline">
-                <input type="checkbox" id="{{user.id}}" type="checkbox"> {{user.name}}
-            </label>
+        <div style="margin-bottom: 15px;">
+            <div class="collapse" id="users">
+                <table class="ws-search-group">
+                    <tbody>
+                    <tr>
+                        <th style="width: 100px;">业务类型选择</th>
+                        <td style="padding-top: 3px;">
+                            <div class="ws-search-group">
+                                <label ng-repeat="user in users" class="checkbox-inline">
+                                    <input type="checkbox" checked id="{{user.id}}"> {{user.name}}
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div style="height: 10px;"></div>
+            </div>
+            <div class="collapse" id="categories">
+                <table class="ws-search-group">
+                    <tbody>
+                    <tr>
+                        <th rowspan="2" style="width: 100px;">业务类型选择</th>
+                        <th ng-repeat="categoryType in categoryTypes">{{categoryType.name}}</th>
+                    </tr>
+                    <tr>
+                        <td ng-repeat="categoryType in categoryTypes">
+                            <div class="checkbox" ng-repeat="category in categoryType.categories">
+                                <label>
+                                    <input checked type="checkbox" id="{{category.id}}">{{category.name}}
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
         <div>
             <form class="form-inline">
@@ -33,13 +65,16 @@
                     </div>
                     <div class="ws-search-btn-group ws-inline">
                         <button class="btn btn-info btn-sm" type="submit" ng-click="fenjuStatistics()">查询</button>
-                        <button class="btn btn-info btn-sm" type="button" ng-click="resetSearch()">清空</button>
-                        <!--<button class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#agencies">机关选择</button>-->
+                        <button class="btn btn-info btn-sm" type="button" ng-click="resetStatement()">清空</button>
+                        <button class="btn btn-success btn-sm" data-toggle="collapse" data-target="#users">用户选择</button>
+                        <button class="btn btn-success btn-sm" data-toggle="collapse" data-target="#categories">类型选择
+                        </button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
+    <div class="ws-search-area-split"></div>
     <div >
         <div class="progress" style="margin-top: 50px;" ng-show="statementing === true">
             <div class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
@@ -47,7 +82,7 @@
             </div>
         </div>
     </div>
-    <div style="padding: 20px;" ng-show="statementing === false">
+    <div style="padding: 20px 0;" ng-show="statementing === false">
         <table class="ws-statement">
             <thead>
             <tr>

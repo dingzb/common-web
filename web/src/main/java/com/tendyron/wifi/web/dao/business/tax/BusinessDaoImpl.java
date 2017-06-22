@@ -64,6 +64,10 @@ public class BusinessDaoImpl extends BaseDaoImpl<BusinessEntity> implements Busi
             hqlsb.append(" and {0}.category.id = :categoryId");
             params.put("categoryId", bQuery.getCategoryId());
         }
+        if (bQuery.getIncCategoryIds() != null && bQuery.getIncCategoryIds().length != 0){
+            hqlsb.append(" and {0}.category.id in (:categoryIds)");
+            params.put("categoryIds", bQuery.getIncCategoryIds());
+        }
         if (!StringTools.isEmpty(bQuery.getCategoryTypeId())) {
             hqlsb.append(" and {0}.category.type.id = :categoryTypeId");
             params.put("categoryTypeId", bQuery.getCategoryTypeId());

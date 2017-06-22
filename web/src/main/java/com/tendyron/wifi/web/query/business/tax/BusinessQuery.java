@@ -12,6 +12,7 @@ import java.util.Set;
 public class BusinessQuery extends PagingQuery {
     private String content;
     private String categoryId;
+    private String[] incCategoryIds;
     private String categoryTypeId;
 
     private Boolean hasIssue;
@@ -63,6 +64,14 @@ public class BusinessQuery extends PagingQuery {
 
     public void setCategoryId(String categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public String[] getIncCategoryIds() {
+        return incCategoryIds;
+    }
+
+    public void setIncCategoryIds(String[] incCategoryIds) {
+        this.incCategoryIds = incCategoryIds;
     }
 
     public String getCategoryTypeId() {
