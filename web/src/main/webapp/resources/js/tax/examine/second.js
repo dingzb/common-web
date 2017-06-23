@@ -201,6 +201,10 @@ angular.module('ws.app').controller('taxSecondCtrl', ['$rootScope', '$scope', '$
 
         if ($scope.hasIssue) {
             var issues = $('#issues').find('input:checked');
+            if (issues.length === 0){
+                $scope.alert('问题类型必选', 'error');
+                return;
+            }
             var issuesStr = '';
             $.each(issues, function (i) {
                 issuesStr = issuesStr + $(issues[i]).val() + ',';
@@ -217,6 +221,7 @@ angular.module('ws.app').controller('taxSecondCtrl', ['$rootScope', '$scope', '$
             if (data.success) {
                 // $scope.innerCtrl.load($scope.datagrid.params);
                 $scope.innerCtrl.reload();
+                $("#secondModal").modal('hide');
                 $scope.alert(data.message);
             } else
                 $scope.alert(data.message, 'error');
