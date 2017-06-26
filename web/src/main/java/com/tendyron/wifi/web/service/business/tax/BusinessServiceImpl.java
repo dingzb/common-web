@@ -72,7 +72,8 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
     @Override
     public PagingModel pagingFirst(BusinessQuery query) throws ServiceException {
         queryBasicAssert(query);
-        query.setIncludeStatus(new Integer[]{BUS_STATUS.FIRST, BUS_STATUS.SECOND, BUS_STATUS.THIRD, BUS_STATUS.HAS_ISSUE, BUS_STATUS.FINISH});
+//        query.setIncludeStatus(new Integer[]{BUS_STATUS.FIRST, BUS_STATUS.SECOND, BUS_STATUS.THIRD, BUS_STATUS.HAS_ISSUE, BUS_STATUS.FINISH});
+        query.setStatus(BUS_STATUS.FIRST);
         return pagingBaseUser(query);
     }
 
@@ -80,7 +81,8 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
     @Override
     public PagingModel pagingSecond(BusinessQuery query) throws ServiceException {
         queryBasicAssert(query);
-        query.setIncludeStatus(new Integer[]{BUS_STATUS.SECOND, BUS_STATUS.THIRD, BUS_STATUS.HAS_ISSUE, BUS_STATUS.FINISH});
+//        query.setIncludeStatus(new Integer[]{BUS_STATUS.SECOND, BUS_STATUS.THIRD, BUS_STATUS.HAS_ISSUE, BUS_STATUS.FINISH});
+        query.setStatus(BUS_STATUS.SECOND);
         return pagingBaseUser(query);
     }
 
@@ -88,7 +90,8 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
     @Override
     public PagingModel pagingThird(BusinessQuery query) throws ServiceException {
         queryBasicAssert(query);
-        query.setIncludeStatus(new Integer[]{BUS_STATUS.THIRD, BUS_STATUS.HAS_ISSUE, BUS_STATUS.FINISH});
+//        query.setIncludeStatus(new Integer[]{BUS_STATUS.THIRD, BUS_STATUS.HAS_ISSUE, BUS_STATUS.FINISH});
+        query.setStatus(BUS_STATUS.THIRD);
         return pagingBaseUser(query);
     }
 

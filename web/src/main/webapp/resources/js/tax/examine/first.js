@@ -88,20 +88,20 @@ angular.module('ws.app').controller('taxFirstCtrl', ['$rootScope', '$scope', '$h
         }, {
             field: 'busTime',
             title: '业务时间'
-        }, {
-            field: 'firstExamine',
-            title: '自控意见',
-            formatter: function (row) {
-                var str = JSON.stringify(row);
-                str = str.replace(/"/g, "'");
-                if (row.firstExamine) {
-                    return row.firstExamine.hasIssue ?
-                        '<button type="button" class="btn btn-link btn-sm" title="有问题" onClick="angular.custom.taxBusinessIssueDetail(' + str + ', 1)">有问题</button>' :
-                        '<button type="button" class="btn btn-link btn-sm" title="没问题" disabled>没问题</button>';
-                } else {
-                    return '';
-                }
-            }
+        // }, {
+        //     field: 'firstExamine',
+        //     title: '自控意见',
+        //     formatter: function (row) {
+        //         var str = JSON.stringify(row);
+        //         str = str.replace(/"/g, "'");
+        //         if (row.firstExamine) {
+        //             return row.firstExamine.hasIssue ?
+        //                 '<button type="button" class="btn btn-link btn-sm" title="有问题" onClick="angular.custom.taxBusinessIssueDetail(' + str + ', 1)">有问题</button>' :
+        //                 '<button type="button" class="btn btn-link btn-sm" title="没问题" disabled>没问题</button>';
+        //         } else {
+        //             return '';
+        //         }
+        //     }
         }, {
             field: 'id',
             title: '操作',
