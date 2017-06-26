@@ -27,5 +27,5 @@ INSERT INTO `tax`.`sys_role_action` (`role_id`, `action_id`) VALUES ('FD526FA490
 INSERT INTO `tax`.`sys_role_action` (`role_id`, `action_id`) VALUES ('E1051E05E4024667931522F5E213F80D', '982E2172736B4836999F71048A1C6D24');
 
 -- 修正记录中状态位错误
-update bus_tax_bus set `status` = 3 where id = 'BFCF34431BBA4892BAD27A01C9B9B078'
-update bus_tax_bus set `status` = 3 where id = '3C558F2E42F343FCA002A49DC3BC9C80'
+update bus_tax_bus set `status` = 3 where id = 'BFCF34431BBA4892BAD27A01C9B9B078';
+update bus_tax_bus set `status` = 3 where id = '3C558F2E42F343FCA002A49DC3BC9C80';
