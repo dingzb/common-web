@@ -9,7 +9,7 @@
                             <th ng-if="checkbox" style="width: 10px;">
                                 <input type="checkbox" ng-click="selectAll()" ng-model="checkall.is" ng-show="!singleSelect">
                             </th>
-                            <th ng-repeat="column in columns" ng-click="changeSort(column)" style="width: {{column.width}}%;">
+                            <th ng-repeat="column in columns" ng-click="changeSort(column)" style="width: {{column.width}}%; cursor: pointer;">
                                 <span>
                                     <span ng-bind="column.title" style="padding-right: 2px;"></span>
                                     <span class="glyphicon glyphicon-sort" style="opacity: .4" ng-show="column.sortable && column.field != params.sort"></span>
