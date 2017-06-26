@@ -93,11 +93,11 @@ angular.module('ws.app').controller('taxViewCtrl', ['$rootScope', '$scope', '$ht
                     case 0:
                         return '待提交';
                     case 1:
-                        return '待自查';
+                        return '待自控';
                     case 2:
-                        return '待审查';
+                        return '待防控';
                     case 3:
-                        return '待核查';
+                        return '待监控';
                     case 4:
                         return '待整改';
                     case 5:
