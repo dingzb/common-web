@@ -69,25 +69,32 @@ angular.module('ws.app').controller('taxViewCtrl', ['$rootScope', '$scope', '$ht
         params: {},
         columns: [{
             field: 'taxpayerCode',
-            title: '纳税人识别号'
+            title: '纳税人识别号',
+            sortable: true
         }, {
             field: 'taxpayerName',
-            title: '纳税人名称'
+            title: '纳税人名称',
+            sortable: true
         }, {
             field: 'categoryName',
-            title: '业务项目'
+            title: '业务项目',
+            sortable: true
         }, {
             field: 'agencyName',
-            title: '主管税务机关'
+            title: '主管税务机关',
+            sortable: true
         }, {
             field: 'createName',
-            title: '税收管理员'
+            title: '税收管理员',
+            sortable: true
         }, {
             field: 'busTime',
-            title: '业务时间'
+            title: '业务时间',
+            sortable: true
         }, {
             field: 'status',
             title: '状态',
+            sortable: true,
             translator: function (row) {
                 switch (row.status) {
                     case 0:
@@ -168,7 +175,9 @@ angular.module('ws.app').controller('taxViewCtrl', ['$rootScope', '$scope', '$ht
         }],
         checkbox: true,
         sizes: [10, 20, 50, 80],
-        pageSize: 10
+        pageSize: 10,
+        sortName:'busTime',
+        sortOrder: 'desc'
     };
 
     //查询

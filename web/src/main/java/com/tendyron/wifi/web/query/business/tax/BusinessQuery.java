@@ -28,6 +28,8 @@ public class BusinessQuery extends PagingQuery {
     private Date busTimeStart;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date busTimeEnd;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    private Date busTime;
 
     private String taxpayerCode;
     private String taxpayerName;
@@ -36,6 +38,8 @@ public class BusinessQuery extends PagingQuery {
     private Date createTimeStart;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date createTimeEnd;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    private Date createTime;
 
     /*
     * 为三层审查做权限区分
@@ -138,6 +142,14 @@ public class BusinessQuery extends PagingQuery {
         this.createTimeEnd = createTimeEnd;
     }
 
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
     public Date getBusTimeStart() {
         return busTimeStart;
     }
@@ -152,6 +164,14 @@ public class BusinessQuery extends PagingQuery {
 
     public void setBusTimeEnd(Date busTimeEnd) {
         this.busTimeEnd = busTimeEnd;
+    }
+
+    public Date getBusTime() {
+        return busTime;
+    }
+
+    public void setBusTime(Date busTime) {
+        this.busTime = busTime;
     }
 
     public Integer getStatus() {

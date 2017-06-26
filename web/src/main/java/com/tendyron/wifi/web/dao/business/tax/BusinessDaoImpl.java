@@ -7,6 +7,7 @@ import com.tendyron.wifi.web.query.business.tax.BusinessQuery;
 import com.tendyron.wifi.web.utils.StringTools;
 import org.springframework.stereotype.Repository;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,7 +65,7 @@ public class BusinessDaoImpl extends BaseDaoImpl<BusinessEntity> implements Busi
             hqlsb.append(" and {0}.category.id = :categoryId");
             params.put("categoryId", bQuery.getCategoryId());
         }
-        if (bQuery.getIncCategoryIds() != null && bQuery.getIncCategoryIds().length != 0){
+        if (bQuery.getIncCategoryIds() != null && bQuery.getIncCategoryIds().length != 0) {
             hqlsb.append(" and {0}.category.id in (:categoryIds)");
             params.put("categoryIds", bQuery.getIncCategoryIds());
         }
@@ -119,10 +120,29 @@ public class BusinessDaoImpl extends BaseDaoImpl<BusinessEntity> implements Busi
         return hqlsb;
     }
 
+    private String getOrderBy(BusinessQuery query, String alias) {
+        StringBuilder sb = new StringBuilder(" order by");
+        String sortField = query.getSort();
+        if (sortField == null) {
+            sortField = "busTime";
+        }
+        if ("createName".equals(sortField)) {
+            sb.append(" {0}.create.name");
+        } else if ("agencyName".equals(sortField)) {
+            sb.append(" {0}.agency.name");
+        } else if ("categoryName".equals(sortField)) {
+            sb.append(" {0}.category.name");
+        } else {
+            sb.append(" {0}.").append(sortField);
+        }
+        sb.append(" ").append(query.getOrder());
+        return MessageFormat.format(sb.toString(), alias);
+    }
+
     @Override
     public List<BusinessEntity> paging(BusinessQuery query) {
         Map<String, Object> params = new HashMap<>();
-        String hql = getHql(query, "business", params) + " order by business.busTime desc";
+        String hql = getHql(query, "business", params) + getOrderBy(query, "business");
         return getByHqlPaging(hql, params, query.getPage(), query.getSize());
     }
 
