@@ -135,7 +135,7 @@ public class BusinessDaoImpl extends BaseDaoImpl<BusinessEntity> implements Busi
         } else {
             sb.append(" {0}.").append(sortField);
         }
-        sb.append(" ").append(query.getOrder());
+        sb.append(" ").append(StringTools.isEmpty(query.getOrder()) ? "desc" : query.getOrder());
         return MessageFormat.format(sb.toString(), alias);
     }
 
