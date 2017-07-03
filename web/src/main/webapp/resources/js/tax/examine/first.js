@@ -114,7 +114,9 @@ angular.module('ws.app').controller('taxFirstCtrl', ['$rootScope', '$scope', '$h
         }],
         checkbox: true,
         sizes: [10, 20, 50, 80],
-        pageSize: 10
+        pageSize: 10,
+        sortName:'busTime',
+        sortOrder:'desc'
     };
 
     //查询
