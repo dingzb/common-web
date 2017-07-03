@@ -106,63 +106,93 @@ angular.module('ws.app').controller('taxViewCtrl', ['$rootScope', '$scope', '$ht
                     case 3:
                         return '待监控';
                     case 4:
-                        return '待整改';
-                    case 5:
                         return '完成';
+                    default:
+                        return '待整改';
                 }
             }
         },{
             field: 'firstExamine',
-            title: '自查意见',
+            title: '自控意见',
             formatter: function (row) {
                 var str = JSON.stringify(row);
                 str = str.replace(/"/g, "'");
                 if(row.firstExamine){
-                    return row.firstExamine.hasIssue ?
-                        '<button type="button" class="btn btn-link btn-sm" title="有问题" onClick="angular.custom.taxBusinessIssueDetail(' + str + ', 1)">有问题</button>' :
-                        '<button type="button" class="btn btn-link btn-sm" title="没问题" disabled>没问题</button>';
+                    var rt = '';
+                    if (row.firstExamine.hasIssue) {
+                        rt += '<button type="button" class="btn btn-link btn-sm" title="有问题" onClick="angular.custom.taxBusinessIssueDetail(' + str + ', 1)">有问题</button>';
+                        rt += '<span>/</span>';
+                        if ((row.amendmentCode & 4) === 4) {
+                            rt += '<button type="button" class="btn btn-link btn-sm" title="已整改" style="color: #95ff73;" disabled>已整改</button>';
+                        } else {
+                            rt += '<button type="button" class="btn btn-link btn-sm" title="未整改" style="color: #ff6e49;" disabled>未整改</button>';
+                        }
+                    } else {
+                        rt = '<button type="button" class="btn btn-link btn-sm" title="没问题" disabled>没问题</button>';
+                    }
+                    return rt;
                 } else {
                     return '';
                 }
             }
         }, {
             field: 'secondExamine',
-            title: '审查意见',
+            title: '防控意见',
             formatter: function (row) {
                 var str = JSON.stringify(row);
                 str = str.replace(/"/g, "'");
                 if(row.secondExamine){
-                    return row.secondExamine.hasIssue ?
-                        '<button type="button" class="btn btn-link btn-sm" title="有问题" onClick="angular.custom.taxBusinessIssueDetail(' + str + ', 2)">有问题</button>' :
-                        '<button type="button" class="btn btn-link btn-sm" title="没问题" disabled>没问题</button>';
+                    var rt = '';
+                    if (row.secondExamine.hasIssue) {
+                        rt += '<button type="button" class="btn btn-link btn-sm" title="有问题" onClick="angular.custom.taxBusinessIssueDetail(' + str + ', 2)">有问题</button>';
+                        rt += '<span>/</span>';
+                        if ((row.amendmentCode & 2) === 2) {
+                            rt += '<button type="button" class="btn btn-link btn-sm" title="已整改" style="color: #95ff73;" disabled>已整改</button>';
+                        } else {
+                            rt += '<button type="button" class="btn btn-link btn-sm" title="未整改" style="color: #ff6e49;" disabled>未整改</button>';
+                        }
+                    } else {
+                        rt = '<button type="button" class="btn btn-link btn-sm" title="没问题" disabled>没问题</button>';
+                    }
+                    return rt;
                 } else {
                     return '';
                 }
             }
         }, {
             field: 'thirdExamine',
-            title: '核查意见',
+            title: '监控意见',
             formatter: function (row) {
                 var str = JSON.stringify(row);
                 str = str.replace(/"/g, "'");
                 if(row.thirdExamine){
-                    return row.thirdExamine.hasIssue ?
-                        '<button type="button" class="btn btn-link btn-sm" title="有问题" onClick="angular.custom.taxBusinessIssueDetail(' + str + ', 3)">有问题</button>' :
-                        '<button type="button" class="btn btn-link btn-sm" title="没问题" disabled>没问题</button>';
+                    var rt = '';
+                    if (row.thirdExamine.hasIssue) {
+                        rt += '<button type="button" class="btn btn-link btn-sm" title="有问题" onClick="angular.custom.taxBusinessIssueDetail(' + str + ', 3)">有问题</button>';
+                        rt += '<span>/</span>';
+                        if ((row.amendmentCode & 1) === 1) {
+                            rt += '<button type="button" class="btn btn-link btn-sm" title="已整改" style="color: #95ff73;" disabled>已整改</button>';
+                        } else {
+                            rt += '<button type="button" class="btn btn-link btn-sm" title="未整改" style="color: #ff6e49;" disabled>未整改</button>';
+                        }
+                    } else {
+                        rt = '<button type="button" class="btn btn-link btn-sm" title="没问题" disabled>没问题</button>';
+                    }
+                    return rt;
                 } else {
                     return '';
                 }
             }
-        }, {
-            field: 'status',
-            title: '整改状态',
-            translator: function (row) {
-                if (row['firstHasIssue'] || row['secondHasIssue'] || row['thirdHasIssue']) {
-                    return row['status'] === 5 ? '已整改' : '未整改';
-                } else {
-                    return '';
-                }
-            }
+        // }, {
+        //     field: 'status',
+        //     title: '整改状态',
+        //     translator: function (row) {
+        //         if (row['firstHasIssue'] || row['secondHasIssue'] || row['thirdHasIssue']) {
+        //             return row['status'] === 4 ? '已整改' : '未整改';
+        //         } else {
+        //             return '';
+        //         }
+        //     }
         }, {
             field: 'id',
             title: '操作',

@@ -282,7 +282,7 @@ angular.module('ws.app').controller('taxAmendmentCtrl', ['$rootScope', '$scope',
 
     //=============== 提交整改 =====================
 
-    $scope.commit = function () {
+        $scope.commit = function () {
         var checkeds = $scope.innerCtrl.getChecked();
         if (checkeds.length <= 0) {
             $scope.alert("至少选择一条记录！", 'error');

@@ -73,14 +73,15 @@ public class BusinessController extends BaseController {
     @ResponseBody
     public Json pagingError(BusinessQuery query) {
 //        query.setStatus(BUS_STATUS.HAS_ISSUE);
-        if (query.getAmendmentIssue() != null && query.getAmendmentIssue()) { //当查询的是 整改后的业务时，这里自动添加 hasIssue = true 条件 以限定为【有错误的完成状态业务】
-            query.setStatus(BUS_STATUS.FINISH);
-            query.setHasIssue(true);
-        } else {
-            query.setIncludeStatus(new Integer[]{BUS_STATUS.HAS_ISSUE, BUS_STATUS.FINISH});  // 修改为包含已经整改的业务，这里添加状态 5 但是由于query中同时指定了 第一次、第二次或第三次检查是必须包含错误，这样就避免了把没有错误的 处于完成状态的业务也统计进来
-        }
+//        if (query.getAmendmentIssue() != null && query.getAmendmentIssue()) { //当查询的是 整改后的业务时，这里自动添加 hasIssue = true 条件 以限定为【有错误的完成状态业务】
+//            query.setStatus(BUS_STATUS.FINISH);
+//            query.setHasIssue(true);
+//        } else {
+//            query.setIncludeStatus(new Integer[]{BUS_STATUS.HAS_ISSUE, BUS_STATUS.FINISH});  // 修改为包含已经整改的业务，这里添加状态 5 但是由于query中同时指定了 第一次、第二次或第三次检查是必须包含错误，这样就避免了把没有错误的 处于完成状态的业务也统计进来
+//        }
         try {
-            if (query.getHasIssue() == null) {
+            if (query.getHasIssue() == null) {  // 查询已经整改的情况
+                query.setIncAmendmentCode(new Integer[]{7, 6, 5, 4, 3, 2, 1});  //只要整改状态码不为 0 既是进行过整改操作
                 return success(businessService.paging(query));
             } else {
                 return success(businessService.pagingError(query));

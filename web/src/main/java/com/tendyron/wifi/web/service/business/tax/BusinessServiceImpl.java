@@ -5,6 +5,7 @@ import com.tendyron.wifi.web.dao.business.tax.*;
 import com.tendyron.wifi.web.dao.system.UserDao;
 import com.tendyron.wifi.web.entity.business.tax.*;
 import com.tendyron.wifi.web.entity.business.tax.BusinessEntity.BUS_STATUS;
+import com.tendyron.wifi.web.entity.business.tax.BusinessEntity.BusAmendment;
 import com.tendyron.wifi.web.entity.system.UserEntity;
 import com.tendyron.wifi.web.model.PagingModel;
 import com.tendyron.wifi.web.model.business.tax.*;
@@ -99,13 +100,22 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
     @Override
     public PagingModel pagingAmendment(BusinessQuery query) throws ServiceException {
         queryBasicAssert(query);
-        query.setStatus(BUS_STATUS.HAS_ISSUE);
+//        query.setStatus(BUS_STATUS.HAS_ISSUE);
+        query.setIncludeStatus(new Integer[]{BUS_STATUS.ERROR_FIRST, BUS_STATUS.ERROR_SECOND, BUS_STATUS.ERROR_THIRD});
         return pagingBaseUser(query);
     }
 
     @Transactional
     @Override
     public PagingModel pagingError(BusinessQuery query) throws ServiceException {
+        //query预处理
+//        if (query.getAmendmentIssue() != null && query.getAmendmentIssue()) {   //统计已整改的记录，这里任何一个阶段完成整改均算作该业务记录整改过。
+//            query.setIncAmendmentCode(new Integer[]{7, 6, 5, 4, 3, 2, 1});
+//        } else {
+            query.setIncludeStatus(new Integer[]{BUS_STATUS.ERROR_FIRST, BUS_STATUS.ERROR_SECOND, BUS_STATUS.ERROR_THIRD, BUS_STATUS.FINISH});  // 修改为包含已经整改的业务，这里添加状态 5 但是由于query中同时指定了 第一次、第二次或第三次检查是必须包含错误，这样就避免了把没有错误的 处于完成状态的业务也统计进来
+//        }
+
+
         PagingModel result = new PagingModel();
         List<BusinessModel> businessModels = new ArrayList<>();
         result.setRows(businessModels);
@@ -417,7 +427,7 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
 
         bQuery.setBusTimeStart(query.getBusTimeStart());
         bQuery.setBusTimeEnd(query.getBusTimeEnd());
-        if (!StringTools.isEmpty(query.getCategoryIdsStr())){
+        if (!StringTools.isEmpty(query.getCategoryIdsStr())) {
             bQuery.setIncCategoryIds(query.getCategoryIds());
         }
 
@@ -493,7 +503,8 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
                         }
                         oldIssueNames.addAll(issueNames);
                         scmTmp.setFirstIssueCount(scmTmp.getFirstIssueCount() + 1);
-                    } else if (be.getSecondExamine() != null && be.getSecondExamine().getHasIssue()) {
+                    }
+                    if (be.getSecondExamine() != null && be.getSecondExamine().getHasIssue()) {
                         hasIssue = true;
                         Set<String> issueNames = new HashSet<>();
                         Set<BusIssueEntity> busIssueEntities = be.getSecondExamine().getIssues();
@@ -504,7 +515,8 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
                         }
                         oldIssueNames.addAll(issueNames);
                         scmTmp.setSecondIssueCount(scmTmp.getSecondIssueCount() + 1);
-                    } else if (be.getThirdExamine() != null && be.getThirdExamine().getHasIssue()) {
+                    }
+                    if (be.getThirdExamine() != null && be.getThirdExamine().getHasIssue()) {
                         hasIssue = true;
                         Set<String> issueNames = new HashSet<>();
                         Set<BusIssueEntity> busIssueEntities = be.getThirdExamine().getIssues();
@@ -517,8 +529,8 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
                         scmTmp.setThirdIssueCount(scmTmp.getThirdIssueCount() + 1);
                     }
 
-                    if (hasIssue && be.getStatus() == BUS_STATUS.FINISH) {
-                        scmTmp.setAmendmentCount(scmTmp.getAmendmentCount() + 1);
+                    if (hasIssue && be.getAmendmentCode() != 0) {
+                        scmTmp.setAmendmentCount(scmTmp.getAmendmentCount() + 1);   //已整改业务总数
                     }
                     if (hasIssue) {
                         scmTmp.setIssueCount(scmTmp.getIssueCount() + 1);      //问题业务总数
@@ -546,7 +558,7 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
 
         bQuery.setBusTimeStart(query.getBusTimeStart());
         bQuery.setBusTimeEnd(query.getBusTimeEnd());
-        if (!StringTools.isEmpty(query.getCategoryIdsStr())){
+        if (!StringTools.isEmpty(query.getCategoryIdsStr())) {
             bQuery.setIncCategoryIds(query.getCategoryIds());
         }
         List<FenjuModel> fms = new ArrayList<>();
@@ -620,7 +632,8 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
                         }
                         oldIssueNames.addAll(issueNames);
                         scmTmp.setFirstIssueCount(scmTmp.getFirstIssueCount() + 1);
-                    } else if (be.getSecondExamine() != null && be.getSecondExamine().getHasIssue()) {
+                    }
+                    if (be.getSecondExamine() != null && be.getSecondExamine().getHasIssue()) {
                         hasIssue = true;
                         Set<String> issueNames = new HashSet<>();
                         Set<BusIssueEntity> busIssueEntities = be.getSecondExamine().getIssues();
@@ -631,7 +644,8 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
                         }
                         oldIssueNames.addAll(issueNames);
                         scmTmp.setSecondIssueCount(scmTmp.getSecondIssueCount() + 1);
-                    } else if (be.getThirdExamine() != null && be.getThirdExamine().getHasIssue()) {
+                    }
+                    if (be.getThirdExamine() != null && be.getThirdExamine().getHasIssue()) {
                         hasIssue = true;
                         Set<String> issueNames = new HashSet<>();
                         Set<BusIssueEntity> busIssueEntities = be.getThirdExamine().getIssues();
@@ -644,7 +658,7 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
                         scmTmp.setThirdIssueCount(scmTmp.getThirdIssueCount() + 1);
                     }
 
-                    if (hasIssue && be.getStatus() == BUS_STATUS.FINISH) {
+                    if (hasIssue && be.getAmendmentCode() != 0) {
                         scmTmp.setAmendmentCount(scmTmp.getAmendmentCount() + 1);
                     }
                     if (hasIssue) {
@@ -673,7 +687,7 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
 
         bQuery.setBusTimeStart(query.getBusTimeStart());
         bQuery.setBusTimeEnd(query.getBusTimeEnd());
-        if (!StringTools.isEmpty(query.getCategoryIdsStr())){
+        if (!StringTools.isEmpty(query.getCategoryIdsStr())) {
             bQuery.setIncCategoryIds(query.getCategoryIds());
         }
         bQuery.setCreateUserId(query.getUserId());
@@ -742,7 +756,8 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
                     }
                     oldIssueNames.addAll(issueNames);
                     scmTmp.setFirstIssueCount(scmTmp.getFirstIssueCount() + 1);
-                } else if (be.getSecondExamine() != null && be.getSecondExamine().getHasIssue()) {
+                }
+                if (be.getSecondExamine() != null && be.getSecondExamine().getHasIssue()) {
                     hasIssue = true;
                     Set<String> issueNames = new HashSet<>();
                     Set<BusIssueEntity> busIssueEntities = be.getSecondExamine().getIssues();
@@ -753,7 +768,8 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
                     }
                     oldIssueNames.addAll(issueNames);
                     scmTmp.setSecondIssueCount(scmTmp.getSecondIssueCount() + 1);
-                } else if (be.getThirdExamine() != null && be.getThirdExamine().getHasIssue()) {
+                }
+                if (be.getThirdExamine() != null && be.getThirdExamine().getHasIssue()) {
                     hasIssue = true;
                     Set<String> issueNames = new HashSet<>();
                     Set<BusIssueEntity> busIssueEntities = be.getThirdExamine().getIssues();
@@ -766,7 +782,7 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
                     scmTmp.setThirdIssueCount(scmTmp.getThirdIssueCount() + 1);
                 }
 
-                if (hasIssue && be.getStatus() == BUS_STATUS.FINISH) {
+                if (hasIssue && be.getAmendmentCode() != 0) {
                     scmTmp.setAmendmentCount(scmTmp.getAmendmentCount() + 1);
                 }
                 if (hasIssue) {
@@ -821,13 +837,13 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
             throw new ServiceException("业务不存在");
         }
 
-        if (BUS_STATUS.HAS_ISSUE == business.getStatus()) {
-            throw new ServiceException("业务已经被标记为有问题");
-        }
+//        if (BUS_STATUS.HAS_ISSUE == business.getStatus()) {
+//            throw new ServiceException("业务已经被标记为有问题");
+//        }
 
-        if (examine.getStep() + 1 == business.getStatus()) {
-            throw new ServiceException("业务已经检查过");
-        }
+//        if (examine.getStep() + 1 == business.getStatus()) {
+//            throw new ServiceException("业务已经检查过");
+//        }
 
         ExamineEntity examineEntity = new ExamineEntity();
         examineEntity.setId(StringTools.randomUUID());
@@ -842,25 +858,30 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
         }
 
         switch (examine.getStep()) {
-            case 1:
+            case BUS_STATUS.FIRST:
                 business.setFirstExamine(examineEntity);
                 break;
-            case 2:
+            case BUS_STATUS.SECOND:
                 business.setSecondExamine(examineEntity);
                 break;
-            case 3:
+            case BUS_STATUS.THIRD:
                 business.setThirdExamine(examineEntity);
+                break;
+            default:
+                throw new ServiceException("业务阶段码错误");
         }
 
         if (examine.getHasIssue()) {
-            business.setStatus(BUS_STATUS.HAS_ISSUE);
-            business.setAmendment(false);
+            business.setStatus(-examine.getStep()); //设置为对应阶段的错误代码
+//            business.setAmendment(false);   //初始化整改状态为否
         } else {
-            business.setStatus((business.getStatus() + 1) > BUS_STATUS.THIRD ? BUS_STATUS.FINISH : business.getStatus() + 1);
+            business.setStatus(BUS_STATUS.next(examine.getStep()));
         }
 
-        try {
+        //设置业务整改状态为未整改（包含有问题和没问题）
+        business.setAmendmentCode(BusAmendment.setAmendment(examine.getStep(), business.getAmendmentCode(), false));
 
+        try {
             businessDao.update(business);
         } catch (Exception e) {
             logger.error("", e);
@@ -880,8 +901,10 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
                 if (business == null) {
                     throw new ServiceException("业务不存在");
                 }
-                business.setStatus(BUS_STATUS.FINISH);
-                business.setAmendment(true);
+                int step = -business.getStatus();
+                business.setStatus(BUS_STATUS.next(business.getStatus())); //错误状态到下一个状态
+//                business.setAmendment(true);
+                business.setAmendmentCode(BusAmendment.setAmendment(step, business.getAmendmentCode(), true));
                 businessDao.update(business);
             }
         } catch (Exception e) {
@@ -897,11 +920,11 @@ public class BusinessServiceImpl extends BaseServiceImpl<BusinessEntity> impleme
         try {
             BusinessEntity businessEntity = businessDao.getById(busId);
             ExamineEntity examineEntity = null;
-            if ("1".equals(step)) {
+            if (Integer.toString(BUS_STATUS.FIRST).equals(step)) {
                 examineEntity = businessEntity.getFirstExamine();
-            } else if ("2".equals(step)) {
+            } else if (Integer.toString(BUS_STATUS.SECOND).equals(step)) {
                 examineEntity = businessEntity.getSecondExamine();
-            } else if ("3".equals(step)) {
+            } else if (Integer.toString(BUS_STATUS.THIRD).equals(step)) {
                 examineEntity = businessEntity.getThirdExamine();
             }
             if (examineEntity != null) {

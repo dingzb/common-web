@@ -197,20 +197,20 @@ angular.module('ws.app').controller('taxPersonCtrl', ['$rootScope', '$scope', '$
                     case 0:
                         return '待提交';
                     case 1:
-                        return '待自查';
+                        return '待自控';
                     case 2:
-                        return '待审查';
+                        return '待防控';
                     case 3:
-                        return '待核查';
+                        return '待监控';
                     case 4:
-                        return '待整改';
-                    case 5:
                         return '完成';
+                    default:
+                        return '待整改';
                 }
             }
         }, {
             field: 'firstHasIssue',
-            title: '自查意见',
+            title: '自控意见',
             formatter: function (row) {
                 var str = JSON.stringify(row);
                 str = str.replace(/"/g, "'");
@@ -224,7 +224,7 @@ angular.module('ws.app').controller('taxPersonCtrl', ['$rootScope', '$scope', '$
             }
         }, {
             field: 'secondHasIssue',
-            title: '审查意见',
+            title: '防控意见',
             formatter: function (row) {
                 var str = JSON.stringify(row);
                 str = str.replace(/"/g, "'");
@@ -238,7 +238,7 @@ angular.module('ws.app').controller('taxPersonCtrl', ['$rootScope', '$scope', '$
             }
         }, {
             field: 'thirdExamine',
-            title: '核查意见',
+            title: '监控意见',
             formatter: function (row) {
                 var str = JSON.stringify(row);
                 str = str.replace(/"/g, "'");
@@ -250,16 +250,16 @@ angular.module('ws.app').controller('taxPersonCtrl', ['$rootScope', '$scope', '$
                     return '';
                 }
             }
-        }, {
-            field: 'status',
-            title: '整改状态',
-            translator: function (row) {
-                if (row['firstHasIssue'] || row['secondHasIssue'] || row['thirdHasIssue']) {
-                    return row['status'] === 5 ? '已整改' : '未整改';
-                } else {
-                    return '';
-                }
-            }
+        // }, {
+        //     field: 'status',
+        //     title: '整改状态',
+        //     translator: function (row) {
+        //         if (row['firstHasIssue'] || row['secondHasIssue'] || row['thirdHasIssue']) {
+        //             return row['status'] === 5 ? '已整改' : '未整改';
+        //         } else {
+        //             return '';
+        //         }
+        //     }
         }, {
             field: 'id',
             title: '操作',

@@ -47,6 +47,9 @@ public class BusinessQuery extends PagingQuery {
     private Integer status;
     private Integer[] includeStatus;
 
+    private Integer amendmentCode;
+    private Integer[] incAmendmentCode;
+
     /*
     * 为不同部门、职责，做权限区分
      */
@@ -244,5 +247,21 @@ public class BusinessQuery extends PagingQuery {
 
     public void setAmendmentIssue(Boolean amendmentIssue) {
         this.amendmentIssue = amendmentIssue;
+    }
+
+    public Integer getAmendmentCode() {
+        return amendmentCode;
+    }
+
+    public void setAmendmentCode(Integer amendmentCode) {
+        this.amendmentCode = amendmentCode;
+    }
+
+    public Integer[] getIncAmendmentCode() {
+        return incAmendmentCode;
+    }
+
+    public void setIncAmendmentCode(Integer[] incAmendmentCode) {
+        this.incAmendmentCode = incAmendmentCode;
     }
 }

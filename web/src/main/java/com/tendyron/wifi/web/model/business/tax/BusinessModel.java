@@ -48,6 +48,9 @@ public class BusinessModel extends BaseModel {
     private String checkName;
     private String finalCheckName;
 
+    private Integer amendmentCode;
+
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", locale = "zh", timezone = "GMT+8")
     private Date createTime;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", locale = "zh", timezone = "GMT+8")
@@ -286,5 +289,13 @@ public class BusinessModel extends BaseModel {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Integer getAmendmentCode() {
+        return amendmentCode;
+    }
+
+    public void setAmendmentCode(Integer amendmentCode) {
+        this.amendmentCode = amendmentCode;
     }
 }
