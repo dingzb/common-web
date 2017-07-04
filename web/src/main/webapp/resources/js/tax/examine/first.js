@@ -139,9 +139,18 @@ angular.module('ws.app').controller('taxFirstCtrl', ['$rootScope', '$scope', '$h
             $scope.detailObj = row;
             $scope.isFirsted = row.firstExamine !== null;
             $scope.hasIssue = false;
+            $scope.issueDesc = '';
+            initIssueTypes();
         });
         $("#firstModal").modal('show');
     };
+
+    function initIssueTypes() {
+        var issues = $('#issues').find('input[type=checkbox]');
+        $.each(issues, function(i){
+            $(issues[i]).prop('checked', false);
+        });
+    }
 
     angular.custom.taxBusinessIssueDetail = function (row, step) {
         var issues = null;

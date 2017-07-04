@@ -167,10 +167,18 @@ angular.module('ws.app').controller('taxThirdCtrl', ['$rootScope', '$scope', '$h
             $scope.detailObj = row;
             $scope.isThird = row.thirdExamine !== null; //是否进行过监控
             $scope.hasIssue = false;
-            console.info($scope.hasIssue)
+            $scope.issueDesc = '';
+            initIssueTypes();
         });
         $("#thirdModal").modal('show');
     };
+
+    function initIssueTypes() {
+        var issues = $('#issues').find('input[type=checkbox]');
+        $.each(issues, function(i){
+            $(issues[i]).prop('checked', false);
+        });
+    }
 
     angular.custom.taxBusinessIssueDetail = function (row, step) {
         var issues = null;
