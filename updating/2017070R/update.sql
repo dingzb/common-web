@@ -171,6 +171,7 @@ update bus_tax_bus set amendment_code = 4 where id = 'DE6DEB32A2D14676BE5D6ED273
 update bus_tax_bus set amendment_code = 4 where id = 'EBFD7C8D19564C9C86AE98B31C760687';
 update bus_tax_bus set amendment_code = 4 where id = 'F238C334EFA9450F8CB61F9FDE6FAFDF';
 update bus_tax_bus set amendment_code = 4 where id = 'F81B2CA316E84F6489CC61E4F1486A09';
+update bus_tax_bus set amendment_code = 4 where id = '4A3718A69D3B4297A8B6A4690D5361C7';
 
 -- 010
 update bus_tax_bus set amendment_code = 2 where id = '59DACAE5891849F88726ADF4C2B00A89';
@@ -253,3 +254,4 @@ update bus_tax_bus set amendment_code = 0 where id = 'FBDEFCD2D85848DBA887206809
 
 -- other
 update bus_tax_bus set amendment_code = 0 where id = '08E7E3055EBB46C3B9DDF81C7712E086';
+update bus_tax_bus set status = 2 where id = '4A3718A69D3B4297A8B6A4690D5361C7';
